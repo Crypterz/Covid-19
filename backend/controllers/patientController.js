@@ -2,10 +2,31 @@ const Patient=require('./../models/patientModel')
 exports.getAllPatients = async (req, res) => {
     try{
         const queryObj = {...req.query}
-        const excludeFields = ['page','sort','limit','fields']
+        const excludeFields = ['page','sort','limit','fields']  //FLITERRING
         excludeFields.forEach(el=>delete queryObj[el])
         console.log(queryObj)
-        const patients=await Patient.find(queryObj)
+
+        let queryStr=JSON.stringify(queryObj)                //localhost:8000/api/v1/patients?name=Nimsl&age[gte]=7
+        queryStr=queryStr.replace(/\b(gte|lte|gt|le)\b/g,match=>`$${match}`)
+        console.log(JSON.parse(queryStr))
+
+        let query=Patient.find(JSON.parse(queryStr))
+
+        if(req.query.sort){
+            const sortBy=req.query.sort.split(',').join(' ')         //localhost:8000/api/v1/patients?age[gte]=7&sort=age,no
+            query = query.sort(sortBy)      
+        }else{
+            query = query.sort('-createdAt')
+        }
+
+        if(req.query.fields){
+            const fields =req.query.fields.split(',').join(' ')
+            query.select(fields)
+        }else{
+            query.select('-__v')
+        }
+        
+        const patients=await query
         // const patients=await Patient.find().where('name').equals('nimal')
         res.status(200).json({
         status: 'success',
