@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=RocknRoll+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Akaya+Telivigala&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+main {
+  min-height: 80vh;
+}
+
+.back {
+  background-color: rgb(34, 110, 252);
+}
+
+.sitename {
+  color: rgb(11, 31, 68);
+  font-family: RocknRoll One;
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.barchart {
+  /* background-color: rgb(34, 110, 252); */
+  margin-top: 5vh;
+  /* margin-left: 50vh; */
+  justify-content: 'center';
+  height: 50vh;
+  width: 90vh;
+}
+
+.figures {
+  justify-content: 'center';
+  margin: 5vh 5vh 5vh 5vh;
+  height: 50vh;
+  width: 40vh;
+}
+
+.figures-div {
+  padding: 35px 15px !important;
+  border: 1px solid #dae1e7;
+  border-radius: 6px;
+  margin: 5%;
+}
