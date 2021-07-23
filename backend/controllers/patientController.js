@@ -125,15 +125,15 @@ exports.deletePatient=async (req,res)=>{
 }
 
 
-exports.getPatientStats = async (req, res)=>{
-    try{
-        const stats= Patient.aggregate([
-            $match:{}
-        ])
-    }catch(err){
-        res.status(404).json({
-            status:'fail',
-            message:err
-        })
-    }
-}
+// exports.getPatientStats = async (req, res)=>{
+//     try{
+//         const stats= Patient.aggregate([
+//             $match:{}
+//         ])
+//     }catch(err){
+//         res.status(404).json({
+//             status:'fail',
+//             message:err
+//         })
+//     }
+// }
