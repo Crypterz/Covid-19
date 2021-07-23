@@ -7,6 +7,11 @@ const patientSchema =new mongoose.Schema({
     },
     age:{
         type:Number
+    },
+    createdAt:{
+        type:Date,
+        default:Date.now(),
+        select:false
     }
 })
 const Patient=mongoose.model('Patient',patientSchema)
