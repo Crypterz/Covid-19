@@ -5,9 +5,12 @@ import FigureOne from '../components/common/FigureOne'
 import FigureTwo from '../components/common/FigureTwo';
 import { Card } from 'react-bootstrap'
 import Loader from '../components/Loader'
+import { loadPatients} from '../store/entities/patients';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const HomeScreen = () => {
+    const dispatch = useDispatch()
     const [overall, setOverall] = useState([])
     const [dates, setDates] =useState([])
     const [cases, setCases] =useState([])
@@ -16,6 +19,7 @@ const HomeScreen = () => {
     var [loading, setLoading ]= useState(true)
 
     useEffect(() => {
+        dispatch(loadPatients())
         const fetchOverall = async () => {
             const {data} = await axios.get('https://www.hpb.health.gov.lk/api/get-current-statistical')
             setOverall(data.data)
@@ -34,7 +38,7 @@ const HomeScreen = () => {
         fetchOverall()
         fetchGraph()
 
-    },[])
+    },[dispatch])
 
     return(
         <>
