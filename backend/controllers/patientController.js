@@ -1,5 +1,6 @@
 const Patient=require('./../models/patientModel')
 const APIfunctions=require('./../utils/apiFunctions')
+const msg = require('./../utils/msg')
 
 exports.getAllPatients = async (req, res) => {
     try{
@@ -41,7 +42,7 @@ exports.getAllPatients = async (req, res) => {
         
 
         // const patients=await Patient.find().where('name').equals('nimal')
-
+        msg.sendmsg('https://www.google.com/')
         const features=new APIfunctions(Patient.find(),req.query).filter().sort().select()
         const patients=await features.query
         res.status(200).json({

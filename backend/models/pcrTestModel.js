@@ -1,6 +1,5 @@
 const mongoose=require('mongoose')
-const slugify = require('slugify')
-const patientSchema =new mongoose.Schema({
+const pcrTestSchema =new mongoose.Schema({
     name:{
         type:String,
         required:[true,'A patient must have a name'],
@@ -15,41 +14,30 @@ const patientSchema =new mongoose.Schema({
         type:Date,
         default:Date.now(),
         select:false
-    },
-    confidential:Boolean
-// },{
-//     toJSON:{virtuals:true},
-//     toObject:{virtuals:true}
+    }
 })
 
 
-// patientSchema.virtual('#name').get(function(){
-//     return this.#filed/3
-// })
-
-patientSchema.pre('save',function(next){    //RUN BEFORE  .SAVE, AND .CREATE()
+pcrTestSchema.pre('save',function(next){    //RUN BEFORE  .SAVE, AND .CREATE()
     this.slug=slugify(this.name, {lower:true})
     console.log(this)
     next()
 })
-patientSchema.post('save', function(doc,next){
+pcrTestSchema.post('save', function(doc,next){
     console.log("pre fin post")
     next()
 })
-patientSchema.post('save', function(doc,next){      //document middleware
+pcrTestSchema.post('save', function(doc,next){      //document middleware
     console.log(doc)
     next()
 })
 
 // patientSchema.pre('find',function(next){   
-patientSchema.pre(/^find/,function(next){        //QUERY MIDDLEWARE
+pcrTestSchema.pre(/^find/,function(next){        //QUERY MIDDLEWARE
     this.find({confidential:{$ne:true}})                                 //this refre to query we can change query object from here
     next()
 })
 
-const Patient=mongoose.model('Patient',patientSchema)
+const PCRTest=mongoose.model('PCRTest',pcrTestSchema)
 
-module.exports=Patient
-
-
-//12 Vid
+module.exports=PCRTest
