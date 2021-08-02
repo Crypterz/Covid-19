@@ -54,14 +54,22 @@ exports.protect = catchAsync(async (req,res,next)=>{
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
         token= req.headers.authorization.split(' ')[1]
     }if(!token){
-        next(new AppError('Not Logged In',401))  //401-unathorized
+        return next(new AppError('Not Logged In',401))  //401-unathorized
     }
     //2. VERIFY TOKEN
     console.log(`token - ${token}`)
     const decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET)
     console.error(decode)
     //3 check if user exist
+    const fuser=await User.findById(decode.id)
+    if(!fuser){
+        return next(new AppError('User no longer exist',401))  //401-unathorized
+    }
     // 4. check if user chage pwd
-
+    const changed=fuser.changePasswordAfter(decode.iat)
+    if(changed){
+        return next(new AppError('Recently Password has changed',401))  //401-unathorized
+    }
+    req.user=fuser
     next()
 })

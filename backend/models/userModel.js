@@ -28,6 +28,10 @@ const userSchema=new mongoose.Schema({
                 return el===this.password
             }
         }
+    },
+    passwordChangedAt:{
+        type:Date,
+        default:Date.now
     }
 })
 
@@ -39,6 +43,12 @@ userSchema.pre('save',async function(next){
 
 userSchema.methods.correctPassword = async function(candidatePwd, userPwd) {
     return await bcrypt.compare(candidatePwd,userPwd)
+}
+userSchema.methods.changePasswordAfter = function(JWTtime){
+    console.log(JWTtime)
+    console.log(this.passwordChangedAt)
+    console.log(this.passwordChangedAt.getTime()/1000)
+    return (this.passwordChangedAt.getTime()/1000)>JWTtime
 }
 
 const User=mongoose.model('User',userSchema)
