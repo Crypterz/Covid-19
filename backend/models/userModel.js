@@ -35,7 +35,11 @@ userSchema.pre('save',async function(next){
     if(!this.isModified('password')) return next();     //Only run this if password was modified
     this.password=await bcrypt.hash(this.password,12)
     this.passwordConfirm=undefined
-})
+});
+
+userSchema.methods.correctPassword = async function(candidatePwd, userPwd) {
+    return await bcrypt.compare(candidatePwd,userPwd)
+}
 
 const User=mongoose.model('User',userSchema)
 module.exports=User

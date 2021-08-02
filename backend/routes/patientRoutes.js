@@ -1,11 +1,12 @@
 const express = require('express');
 const patientController = require('../controllers/patientController');
+const authController = require('./../controllers/authController')
 
 const router = express.Router();
 
 router
   .route('/')
-  .get(patientController.getAllPatients)
+  .get(authController.protect, patientController.getAllPatients)
   .post(patientController.createPatient)
 
 router

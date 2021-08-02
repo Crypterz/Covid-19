@@ -1,6 +1,10 @@
 const Patient=require('./../models/patientModel')
+
 const APIfunctions=require('./../utils/apiFunctions')
 const msg = require('./../utils/msg')
+const catchAsync= require('./../utils/catchAsync');
+const AppError = require('../utils/appError');
+
 
 exports.getAllPatients = async (req, res) => {
     try{
@@ -58,25 +62,30 @@ exports.getAllPatients = async (req, res) => {
         })
     }
 };
-exports.getPatient = async (req, res) => {
-    try{
+
+
+exports.getPatient = catchAsync(async (req, res,next) => {
+    // try{
         const patient=await Patient.findById(req.params.id)     //Patient.findOne({_id:req.params.id})
+        if(!patient){
+            return next(new AppError("No patient found with that ID",404))    //used return statement to avoid executing code below
+        }
         res.status(200).json({
         status: 'success',
         data: {patient}
       });
-    }catch(err){                 //if schema doent stisfy error may occur VALIDATIO ERROR
-        res.status(404).json({
-            status:'fail',
-            message:err
-        })
-    }
-};
+    // }catch(err){                 //if schema doent stisfy error may occur VALIDATIO ERROR
+    //     res.status(404).json({
+    //         status:'fail',
+    //         message:err
+    //     })
+    // }
+})
 
-exports.createPatient= async (req,res)=>{
+exports.createPatient= catchAsync(async (req,res)=>{
     // const newPatient=new Patient({})
     // newPatient.save()
-    try{
+    // try{
         const newPatient=await Patient.create(req.body)
         res.status(201).json({
             status:'success',
@@ -84,19 +93,22 @@ exports.createPatient= async (req,res)=>{
                 patient:newPatient
             }
         })
-    }catch(err){                 //if schema doent stisfy error may occur VALIDATIO ERROR
-        res.status(400).json({
-            status:'fail',
-            message:err
-        })
-    }
-}
+    // }catch(err){                 //if schema doent stisfy error may occur VALIDATIO ERROR
+    //     res.status(400).json({
+    //         status:'fail',
+    //         message:err
+    //     })
+    // }
+})
 exports.updatePatient=async (req,res)=>{
     try{
         const patient=await Patient.findByIdAndUpdate(req.params.id,req.body,{
             new:true,
             runValidators:true
         })
+        if(!patient){
+            return next(new AppError("No patient found with that ID",404))    //used return statement to avoid executing code below
+        }
         res.status(200).json({
             status:'success',
             data:{
@@ -112,7 +124,10 @@ exports.updatePatient=async (req,res)=>{
 }
 exports.deletePatient=async (req,res)=>{
     try{
-        await Patient.findByIdAndDelete(req.params.id)
+        const patient = await Patient.findByIdAndDelete(req.params.id)
+        if(!patient){
+            return next(new AppError("No patient found with that ID",404))    //used return statement to avoid executing code below
+        }
         res.status(204).json({
             status:'success',
             data:null
