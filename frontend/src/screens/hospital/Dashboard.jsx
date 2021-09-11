@@ -1,11 +1,27 @@
-import React from 'react'
+import React, {useEffect, useState, Component} from 'react'
 import FigureOne from '../../components/hospitalComponents/FigureOne'
 import FigureTwo from '../../components/hospitalComponents/FigureTwo'
 import PieChart from '../../components/PieChart'
 import BarChart from '../../components/BarChart'
 import { Card } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux';
+import { loadPatients, getAllPatients, getPatientsLoadingStatus } from '../../store/entities/patients';
 
 const Dashboard = () => {
+    const dispatch = useDispatch()
+
+    //const {patients} = useSelector(getAllPatients);
+
+    useEffect(() => {
+        //dispatch(listPatients())
+       // dispatch(loadPatients())
+
+        //  const updatedFiltered = getFilteredPatients(patients, categories, selectedCategory);
+        //  setFiltered(updatedFiltered);
+        //   //console.log(patients)
+        //  setPaginated(paginate(updatedFiltered, currentPage, pageSize));
+    },[dispatch])
+
     return (
         <div>
             <div style={{display:'flex', marginLeft:'0%', width:'100%', position:'relative'}}>

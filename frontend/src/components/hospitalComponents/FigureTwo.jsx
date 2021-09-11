@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const FigureTwo = () => {
    // console.log(details);
@@ -10,10 +11,14 @@ const FigureTwo = () => {
             <div style={{margin:'1%',justifyContent:'center'}}>
                 <div className='figures-div' style={{display:'flex'}}>
                     <div>
-                        <i className='fa fa-hospital-alt' style={{fontSize:'30px', color:'#6b85de',margin:'20px'}}></i>
+                        <Link to={{ pathname :"/hospital/patients" ,  category : "Transffered" }}>
+                            <i className='fa fa-hospital-alt' style={{fontSize:'30px', color:'#6b85de',margin:'20px'}}></i>
+                        </Link>
                     </div>
                     <div>
-                        <h3 style={{fontSize:'14px'}}>Transfered Patients</h3>
+                        <Link to={{ pathname :"/hospital/patients" ,  category : "Transffered" }}>
+                            <h3 style={{fontSize:'14px', color:'#444444'}}>Transfered Patients</h3>
+                        </Link>
                         {/* <h1 style={{color:'#6b85de'}}>{formatNumber(details['local_new_cases'])}</h1>    */}
                     </div>
                 </div>
@@ -28,10 +33,14 @@ const FigureTwo = () => {
                 </div>
                 <div className='figures-div' style={{display:'flex'}}>
                     <div>
-                        <i className='fa fa-procedures' style={{fontSize:'30px', color:'#fdb01a',margin:'20px'}}></i>
+                        <Link to={{ pathname :"/hospital/patients" ,  category : "Active" }}>
+                            <i className='fa fa-procedures' style={{fontSize:'30px', color:'#fdb01a',margin:'20px'}}></i>
+                        </Link>
                     </div>
                     <div>
-                        <h3 style={{fontSize:'14px'}}>Receiving Treatment</h3>
+                        <Link to={{ pathname :"/hospital/patients" ,  category : "Active" }}>
+                            <h3 style={{fontSize:'14px', color:'#444444'}}>Receiving Treatment</h3>
+                        </Link>
                         {/* <h1 style={{color:'#fdb01a'}}>{formatNumber(details['local_total_number_of_individuals_in_hospitals'])}</h1> */}
                     </div>
                 </div>
