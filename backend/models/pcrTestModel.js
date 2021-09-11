@@ -1,4 +1,5 @@
 const mongoose=require('mongoose')
+const slugify = require('slugify')
 const pcrTestSchema =new mongoose.Schema({
     name:{
         type:String,
@@ -14,6 +15,15 @@ const pcrTestSchema =new mongoose.Schema({
         type:Date,
         default:Date.now(),
         select:false
+    },
+    location:{
+        type:{
+            type:String,
+            default:'Point',
+            enum:['Point']
+        },
+        cordinates:[Number],
+        address:String
     }
 })
 

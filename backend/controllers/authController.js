@@ -12,12 +12,14 @@ const signToken = id =>{
 }
 
 exports.signup =catchAsync( async (req,res, next)=>{
+    console.log(req)
         // const newUser=await User.create(req.body)  //if we go this way, any user can change other fields too. ex: type of user
         const newUser = await User.create({
             name:req.body.name,
             email:req.body.email,
             password:req.body.password,
-            passwordConfirm:req.body.passwordConfirm
+            passwordConfirm:req.body.passwordConfirm,
+            role:req.body.role
         })
         const token = signToken(newUser._id)
         res.status(201).json({
@@ -71,5 +73,15 @@ exports.protect = catchAsync(async (req,res,next)=>{
         return next(new AppError('Recently Password has changed',401))  //401-unathorized
     }
     req.user=fuser
+    console.log(req.user)
     next()
 })
+
+exports.restrictTo = (...roles)=>{
+    return (req,res,next)=>{
+        if(!roles.includes(req.user.role)){
+            return next(new AppError('You dont have permission to perform this action',403))
+        }
+        next()
+    }
+}

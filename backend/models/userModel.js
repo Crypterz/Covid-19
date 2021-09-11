@@ -32,6 +32,10 @@ const userSchema=new mongoose.Schema({
     passwordChangedAt:{
         type:Date,
         default:Date.now
+    },
+    role:{
+        type:String,
+        enum:['patient','admin','medicalOfficer']
     }
 })
 
@@ -45,8 +49,8 @@ userSchema.methods.correctPassword = async function(candidatePwd, userPwd) {
     return await bcrypt.compare(candidatePwd,userPwd)
 }
 userSchema.methods.changePasswordAfter = function(JWTtime){
+    console.log(this)
     console.log(JWTtime)
-    console.log(this.passwordChangedAt)
     console.log(this.passwordChangedAt.getTime()/1000)
     return (this.passwordChangedAt.getTime()/1000)>JWTtime
 }
