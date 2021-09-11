@@ -19,7 +19,9 @@ import AddPatient from './screens/hospital/AddPatient'
 import AddHospitalStaff from './screens/hospital/AddHospitalStaff'
 import './bootstrap.min.css';
 import './App.css';
-
+import AddWard from './screens/hospital/wards/AddWards'
+import Ward from './screens/hospital/wards/Ward'
+import WardsList from './screens/hospital/wards/WardsList'
 
 const App = () =>{
   return (
@@ -54,6 +56,9 @@ const App = () =>{
           <Route path='/hospital/addPatient' component={AddPatient}/>
           <Route path='/' component={HomeScreen} exact/>
           <Route path='/login' component={Login}/>
+           <Route path='/hospital/wards/:id' component={Ward}/>
+           <Route path='/hospital/add_wards' component={AddWard}/>
+           <Route path='/hospital/wards' component={WardsList}/>
 >>>>>>> ab9469549ab2db697facb8a91c100aaa0d40d181
         {/* </Container> */}
           </switch>
