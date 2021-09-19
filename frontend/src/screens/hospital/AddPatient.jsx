@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import Container from 'react-bootstrap/Container';
 import {Form, Button, Col, FormControl} from 'react-bootstrap';
+import {registerPatients} from '../../store/entities/patients'
+import { toastAction } from '../../store/toastActions';
+import { connect } from 'react-redux'
 
 //validating empty fields for NHospital
 function validate(first_name, last_name, dob, contact_number, address, city, district) {
@@ -89,7 +92,9 @@ export default class AddPatient extends Component {
             alert("ENTER VALID CONTACT NUMBER!!!")
         }
         else{
-            alert('Submitted: ' + this.state);
+            //alert('Submitted: ' + this.state);
+           // registerPatients(this.state)
+          // this.props.registerPatients(this.state)
             console.log(this.state)
         }
         
@@ -241,3 +246,15 @@ export default class AddPatient extends Component {
         );
     }
 }
+
+// const mapStateToProps = state => ({
+//     patients: state.entities.users,
+// });
+
+
+// const mapDispatchToProps = dispatch => ({
+//     registerPatients: (data) => dispatch(registerPatients(data)),
+//    // registerSuccessful: () => dispatch(toastAction({ message: "User Added Successfully...", type: 'info' }))
+// });
+
+// export default connect(mapStateToProps, mapDispatchToProps)(AddPatient);

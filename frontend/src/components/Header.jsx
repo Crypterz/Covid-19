@@ -34,17 +34,18 @@ function Header() {
                                     <Nav.Link ><span>Patients</span></Nav.Link>
                             </LinkContainer></Dropdown.Item>
                             
-                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '#'>
-                                    <Nav.Link ><span>Manage Orders</span></Nav.Link>
+                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/acceptanceWaiting'>
+                                    <Nav.Link ><span>Acceptance Waiting</span></Nav.Link>
                             </LinkContainer></Dropdown.Item>
 
-                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '#'>
-                                    <Nav.Link ><span>Manage Customers</span></Nav.Link>
+                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/addPcrResults'>
+                                    <Nav.Link ><span>Add PCR Results</span></Nav.Link>
                             </LinkContainer></Dropdown.Item>
 
-                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '#'>
-                                    <Nav.Link ><span>Manage Users</span></Nav.Link>
+                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/aprovePcrResults'>
+                                    <Nav.Link ><span>Aprove PCR Results</span></Nav.Link>
                             </LinkContainer></Dropdown.Item>
+
 
                         </Dropdown.Menu>
                     </Dropdown>

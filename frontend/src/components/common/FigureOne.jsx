@@ -4,7 +4,7 @@ const FigureOne = ({ details }) => {
     return (
         <div>
             <div style={{justifyContent:'center'}}>
-                <h4 style={{textAlign:'center',margin:'1%'}}>SL Figures</h4>
+                <h4 style={{textAlign:'center',margin:'1%'}}>Total Figures</h4>
             </div>
             <div style={{margin:'1%',justifyContent:'center'}}>
                 <div className='figures-div' style={{display:'flex'}}>
@@ -12,7 +12,7 @@ const FigureOne = ({ details }) => {
                         <i className='fa fa-hospital-alt' style={{fontSize:'30px', color:'#6b85de',margin:'20px'}}></i>
                     </div>
                     <div>
-                        <h3 style={{fontSize:'14px'}}>Total Confirmed Cases</h3>
+                        <h3 style={{fontSize:'14px'}}>Total Confirm Cases</h3>
                         <h1 style={{color:'#6b85de'}}>{formatNumber(details['local_total_cases'])}</h1>
                     </div>
                 </div>
@@ -30,7 +30,7 @@ const FigureOne = ({ details }) => {
                         <i className='fa fa-running' style={{fontSize:'30px', color:'#7dca53',margin:'20px'}}></i>
                     </div>
                     <div>
-                        <h3 style={{fontSize:'14px'}}>Recovered</h3>
+                        <h3 style={{fontSize:'14px'}}>Total Recovered</h3>
                         <h1 style={{color:'#7dca53'}}>{formatNumber(details['local_recovered'])}</h1>
                     </div>
                 </div>

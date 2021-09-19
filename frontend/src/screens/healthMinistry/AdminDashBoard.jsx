@@ -7,50 +7,69 @@ import HorizontalBarChart from '../../components/HorizontalBarChart'
 import { Card } from 'react-bootstrap'
 
 const Dashboard = () => {
+
+    const hospitals = [ 'National Hospital of Sri Lanka', 'Lady Ridgeway Hospital for Children',
+                        'Castle Street Hospital for Women', 'Base Hospital Mulleriyawa',
+                        'North Colombo Teaching Hospital','District General Hospital Negombo',
+                        'District General Hospital Gampaha','National Hospital Kandy',
+                        'Teaching Hospital Karapitiya','District General Hospital Hambantota']
+    const districts = ['Colombo','Gampaha','Kalutara','Galle','Kandy','Matara','Kurunegala','Jaffna','Anuradhapura','Puttalam']
+
     return (
         <div>
-            <div style={{display:'flex', marginLeft:'0%', width:'100%', position:'relative'}}>
-                <div className="vs-col vs-xs vs-sm-12 vs-lg-3" style={{margin:'1%',width:'50%'}}>
-                    <Card>
-                        <FigureOne></FigureOne>
-                    </Card>
-                </div>
-                <Card className="vs-col chart-wrap vs-xs vs-sm-12 vs-lg-6" style={{margin:'1%',width:'100%'}}>
-                    <div>
-                        <h3 style={{textAlign:'center', margin:'2%'}}>Total vs Active Cases (SL)</h3>
-                    </div>
-                    <div style={{position:'relative' ,margin:'2%'}}>
-                        <PieChart/>
-                    </div> 
-                </Card>
+            <div className="vs-row top-content" style={{display:'flex', width:'100%'}}>
+                    <div className="vs-col vs-xs- vs-sm-12 vs-lg-3"style={{margin:'0%',width:'100%', position:'relative'}}>
+                         <div className="set-animation from-left animate">
+                            <Card className='m-2 con-vs-card text-center'>
+                                <FigureOne></FigureOne>
+                            </Card>
+                         </div>
 
-                <div className="vs-col vs-xs vs-sm-12 vs-lg-3" style={{margin:'1%',width:'50%'}}>
-                    <Card>
-                    <FigureTwo></FigureTwo>
+                     </div>
+
+                    <Card className="vs-col vs-xs vs-sm-12 vs-lg-6 mt-2 mb-2" style={{margin:'0%',width:'100%'}}>
+                         <div>
+                             <h3 style={{textAlign:'center', margin:'2%'}}>Total vs Active Cases (SL)</h3>
+                         </div>
+                         <div style={{position:'relative' ,margin:'2%'}}>
+                            <PieChart/>
+                         </div> 
                     </Card>
-                </div>
+        
+                     <div className="vs-col vs-xs- vs-sm-12 vs-lg-3" style={{margin:'0%',width:'100%', position:'relative'}}>
+                        <div className="set-animation from-left animate">
+                            <Card className='m-2 con-vs-card text-center'>
+                                <FigureTwo></FigureTwo>
+                            </Card>
+                         </div>
+                     </div>
             </div>
 
-            <div style={{display:'flex', marginLeft:'0%', width:'100%', position:'relative'}}>
-                <Card className="vs-col vs-xs vs-sm-12 vs-lg-3" style={{marginLeft:'1%',marginRight:'1%',width:'50%'}}>
-                    <div style={{position:'relative' ,margin:'2%'}}>
-                    <h3 style={{textAlign:'center', margin:'2%'}}>Most Covid Patient Admitted Hospitals</h3>
-                    </div>
-                    <div style={{position:'relative' ,margin:'2%'}}>
-                        <HorizontalBarChart></HorizontalBarChart>
-                    </div>
-                </Card>
-                <Card className="vs-col vs-xs vs-sm-12 vs-lg-3" style={{marginRight:'1%',width:'50%'}}>
-                    <div style={{position:'relative' ,margin:'2%'}}>
+            <div className="vs-row top-content" style={{display:'flex', width:'100%'}}>
+                <div className="vs-col vs-xs vs-sm-12 vs-lg-6" style={{marginLeft:'0%',marginRight:'0%',width:'100%'}}>
+                    <Card className='m-2'>
+                        <div style={{position:'relative' ,margin:'2%'}}>
+                        <h3 style={{textAlign:'center', margin:'2%'}}>Most Covid Patient Admitted Hospitals</h3>
+                        </div>
+                        <div style={{position:'relative' ,margin:'2%'}}>
+                            <HorizontalBarChart myProp1={hospitals}></HorizontalBarChart>
+                        </div>
+                    </Card>
+                </div>
+
+
+                <div className="vs-col vs-xs vs-sm-12 vs-lg-6" style={{marginLeft:'0%',marginRight:'0%',width:'100%'}}>
+                    <Card className='m-2'>
+                        <div style={{position:'relative' ,margin:'2%'}}>
                         <h3 style={{textAlign:'center', margin:'2%'}}>Most Covid Patient Recorded Districts</h3>
-                    </div>
-                    <div style={{position:'relative' ,margin:'2%'}}>
-                        <HorizontalBarChart></HorizontalBarChart>
-                    </div>
-                </Card>
-
-                
+                        </div>
+                        <div style={{position:'relative' ,margin:'2%'}}>
+                            <HorizontalBarChart myProp1={hospitals}></HorizontalBarChart>
+                        </div>
+                    </Card>
+                </div>
             </div>
+
          </div>
     )
 }
