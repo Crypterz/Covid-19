@@ -16,6 +16,7 @@ const patientSchema =new mongoose.Schema({
         default:Date.now,
         select:false
     },
+    pcrTest:Array,
     confidential:Boolean
 // },{
 //     toJSON:{virtuals:true},

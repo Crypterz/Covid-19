@@ -6,7 +6,10 @@ const AppError = require('./utils/appError')
 const globalErrorHandler = require('./controllers/errorController')
 
 const patientRouter=require('./routes/patientRoutes')
+const pcrTestRouter=require('./routes/pcrTestRoutes')
 const userRouter=require('./routes/userRoutes')
+const AdminRouter=require('./routes/adminRoutes')
+const HospitalRouter=require('./routes/hospitalRoutes')
 
 const app=express();
 
@@ -27,6 +30,9 @@ app.use((req, res, next)=>{
 
 app.use('/api/v1/patients',patientRouter)
 app.use('/api/v1/users',userRouter)
+app.use('/api/v1/pcr',pcrTestRouter)
+app.use('/api/v1/staff',AdminRouter)
+app.use('/api/v1/hospital',HospitalRouter)
 
 app.all('*',(req,res,next)=>{
     // res.status(404).json({
