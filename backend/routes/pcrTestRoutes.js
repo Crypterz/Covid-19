@@ -7,8 +7,11 @@ const router = express.Router();
 router
   .route('/')
   .get(/*authController.protect,*/ pcrTestController.getAllTest)
-  .post(pcrTestController.createPCRTest)
+  .post(authController.protect,pcrTestController.createPCRTest)
 
+router
+  .route('/confirm')
+  .post(authController.protect, pcrTestController.confirmPCRTest)
 // router
 //   .route('/:id')
 //   .get(patientController.getPatient)

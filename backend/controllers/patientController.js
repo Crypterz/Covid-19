@@ -47,7 +47,12 @@ exports.getAllPatients = async (req, res) => {
 
         // const patients=await Patient.find().where('name').equals('nimal')
         msg.sendmsg('https://www.google.com/')
-        const features=new APIfunctions(Patient.find(),req.query).filter().sort().select()
+        const features=new APIfunctions(Patient.find()
+        // .populate({
+        //     path:'pcrTest',
+        //     select:'-slug -age'
+        // })
+        ,req.query).filter().sort().select()
         const patients=await features.query
         res.status(200).json({
         status: 'success',
@@ -66,7 +71,7 @@ exports.getAllPatients = async (req, res) => {
 
 exports.getPatient = catchAsync(async (req, res,next) => {
     // try{
-        const patient=await Patient.findById(req.params.id)     //Patient.findOne({_id:req.params.id})
+        const patient=await Patient.findById(req.params.id).populate('pcrTest')    //Patient.findOne({_id:req.params.id})
         if(!patient){
             return next(new AppError("No patient found with that ID",404))    //used return statement to avoid executing code below
         }

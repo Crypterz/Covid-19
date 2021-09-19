@@ -1,5 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
+const helmet = require('helmet')
 const cors = require('cors');
 
 const AppError = require('./utils/appError')
@@ -19,8 +20,9 @@ if(process.env.NODE_ENV==='development'){
     app.use(morgan('dev'))
 }
 
+app.use(helmet())   //SET SECURITY HTTP
 app.use(cors());
-app.use(express.json());
+app.use(express.json());  //BODY PARSER -> READING DATA FROM BODY INTO req.body
 
 app.use((req, res, next)=>{
     // console.log(req.headers)

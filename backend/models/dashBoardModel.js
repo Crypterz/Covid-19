@@ -1,0 +1,56 @@
+const mogoose = require('mongoose')
+const dashBoardSchema = new mongoose.Schema({
+    totalCovidPatients:{
+        type:Number
+    },
+    totalDeaths:{
+        type:Number
+    },
+    totalActiveCases:{
+        type:Number
+    },
+    deaths:[{
+        count:{
+            type:Number
+        },
+        createdAt:{
+            type:Date,
+            default:Date.now()
+        },
+        createdBy:{
+            name:{
+                type:String
+            }
+        }
+    }],
+    recovered:[{
+        count:{
+            type:Number
+        },
+        createdAt:{
+            type:Date,
+            default:Date.now()
+        },
+        createdBy:{
+            name:{
+                type:String
+            }
+        }
+    }],
+    cases:[{
+        count:{
+            type:Number
+        },
+        createdAt:{
+            type:Date,
+            default:Date.now()
+        },
+        createdBy:{
+            name:{
+                type:String
+            }
+        }
+    }]
+})
+const DashBoard = mongoose.model('DashBoard',dashBoardSchema)
+mdule.exports=DashBoard
