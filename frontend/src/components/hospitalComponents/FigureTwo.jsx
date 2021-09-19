@@ -6,7 +6,7 @@ const FigureTwo = () => {
     return (
         <div>
             <div style={{justifyContent:'center'}}>
-                <h4 style={{textAlign:'center',margin:'1%'}}>SL Figures</h4>
+                <h4 style={{textAlign:'center',margin:'1%'}}>Hospital Figures</h4>
             </div>
             <div style={{margin:'1%',justifyContent:'center'}}>
                 <div className='figures-div' style={{display:'flex'}}>

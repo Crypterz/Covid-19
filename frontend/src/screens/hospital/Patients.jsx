@@ -48,7 +48,12 @@ const Patients = ({history}) => {
             {patientsLoading ? (<Loader></Loader>) :
 
             <Container>
-                <h1 style={{textAlign:'center', marginBottom:'40px'}}>Patients Details</h1>
+                <h2 style={{textAlign:'center', marginBottom:'40px', fontWeight:'600'}}>PATIENTS DETAILS</h2>
+
+                <Button 
+                    style={{float:'right',padding:'10px'}}
+                    onClick = { () => history.push('/hospital/addPatient')}
+                >+ add new patient</Button>
 
                 <InputGroup id = 'product-search-bar' style={{padding:'0px 200px 20px 200px', color:'blue'}}>
                             <FormControl
@@ -110,7 +115,7 @@ const Patients = ({history}) => {
                             <td>
                                 <Button 
                                     value = {p._id}
-                                    onClick = { () => history.push(`/hospital/patientProfile/${p._id}`)}
+                                    onClick = { () => history.push(`/hospital/Profile/${p._id}`)}
                                     className="btn btn-primary">Profile</Button>
                             </td>
                         </tr>
@@ -141,8 +146,6 @@ function getFilteredPatients(patients, categories, filter){
    // console.log(patients)
     if(filter === "All") return patients;
     const category = categories.find(c => c === filter);
-  //  const selectedCategoryId = category.category.categoryId;
-   // return patients.filter(p => p.status.includes(category));
    return patients;
 }
 
