@@ -6,10 +6,17 @@ import {patientListReducer, patientDetailsReducer} from './reducers/patientReduc
 
 const reducer = combineReducers({
     patientList: patientListReducer,
-    patientDetails: patientDetailsReducer
+    patientDetails: patientDetailsReducer,
+    userSignin: userSigninReducer,
 })
 
-const initialState = {}
+const initialState = {
+    // userSignin: {
+    //     data: localStorage.getItem('user')
+    //       ? JSON.parse(localStorage.getItem('user'))
+    //       : null,
+    //   },
+}
 
 const middleware = [thunk]
 
