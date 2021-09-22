@@ -40,9 +40,10 @@ const slice = createSlice({
 
     // payload: [message: , data: ]
         patientsReceived(patients, action){
-            patients.list = action.payload.patients;
+            patients.list = action.payload.data.patients;
             patients.loading = false;
             patients.lastFetch = Date.now();
+            console.log(patients.list)
         },
 
         patientSymptomsUpdated(patients, action){
@@ -112,7 +113,7 @@ export const loadPatients = () => (dispatch, getState) => {
 };
 
 export const getAllPatients= createSelector(
-    state => state.entities.patients.list,
+    state => state.entities.patients,
     patients => patients,
    // console.log(patients)
 );

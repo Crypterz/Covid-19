@@ -23,6 +23,9 @@ import './App.css';
 import AddWard from './screens/hospital/wards/AddWards'
 import Ward from './screens/hospital/wards/Ward'
 import WardsList from './screens/hospital/wards/WardsList'
+import SigninScreen from './screens/SigninScreen';
+import Logout from './components/Logout';
+//import Login from './screens/Login'
 
 
 
@@ -57,24 +60,24 @@ const App = () =>{
             <Route path='/hospital/editProfile/:id' component={EditProfile}/>
             <Route path='/hospital/profile' component={Profile}/>
             <Route path='/hospital/aprovePcrResults' component={AprovePcrResults}/>
+            <Route path='/hospitals/editProfile' component={EditProfile}/>
           {/* <Route path='/login' component={Login}/> */}
+            <Route path='/logout' component={Logout}/>
             <Route path='/' component={HomeScreen} exact/>
             {/* <Route path='/' exact component={HomeScreen} /> */}
-<<<<<<< HEAD
-=======
-=======
-          <Route path='/hospital/dashboard' component={Dashboard}/>
-          <Route path='/healthMinistry/dashboard' component={AdminDashboard}/>
-          <Route path='/healthMinistry/addHospital' component={AddHospital}/>
-          <Route path='/hospital/addHospitalStaff' component={AddHospitalStaff}/>
-          <Route path='/hospital/addPatient' component={AddPatient}/>
-          <Route path='/' component={HomeScreen} exact/>
-          <Route path='/login' component={Login}/>
+
+          {/* <Route path='/hospital/dashboard' component={Dashboard}/>
+          <Route path='/healthMinistry/dashboard' component={AdminDashboard}/> */}
+          {/* <Route path='/healthMinistry/addHospital' component={AddHospital}/> */}
+          {/* <Route path='/hospital/addHospitalStaff' component={AddHospitalStaff}/> */}
+          {/* <Route path='/hospital/addPatient' component={AddPatient}/> */}
+          {/* <Route path='/' component={HomeScreen} exact/> */}
+          {/* <Route path='/login' component={Login}/> */}
+          <Route path='/signin' component={SigninScreen}/>
            <Route path='/hospital/wards/:id' component={Ward}/>
            <Route path='/hospital/add_wards' component={AddWard}/>
            <Route path='/hospital/wards' component={WardsList}/>
->>>>>>> ab9469549ab2db697facb8a91c100aaa0d40d181
->>>>>>> 0ad3ba0449617ff699d2be7863b2184a4eb23c95
+
         {/* </Container> */}
           </switch>
       </main>

@@ -10,6 +10,10 @@ const Profile =  ({value, history}) => {
     const dispatch = useDispatch()
     const patientId = (window.location.href.split('/')).pop()
 
+    const auth = useSelector(state => state.auth);
+
+    //const userType = 'admin'
+
     const patients = useSelector(getPatientById(patientId))
 
     const [ symptoms, setSymptoms ] = useState(['']);
@@ -28,7 +32,8 @@ const Profile =  ({value, history}) => {
 
     const [hospitalName, setTransferHospital] = useState(hospitals[0].name)
 
-   const patient = useSelector(getAllPatients);
+   const patientDetails = useSelector(getAllPatients);
+   const patient = patientDetails.list
    const patientsLoading = useSelector(getPatientsLoadingStatus);
    const [filteredHistory, setFilteredHistory] = useState([])
    const [patientHistory, changeHistory ] = useState(filteredHistory) 
@@ -41,6 +46,7 @@ const Profile =  ({value, history}) => {
                 transferState : TransferState
             }
         }
+        console.log(transferUpdate)
         dispatch(updateTransferPatient(transferUpdate));
         if(TransferState == 'pending'){
             transferState(TransferState)
@@ -88,10 +94,10 @@ const Profile =  ({value, history}) => {
     }, [dispatch])
 
     return (
-
         <Container>
+            {auth.loggedIn ? 
             <div>
-                <h2 style={{textAlign:'center', fontWeight:'600'}}>PATIENT PROFILE</h2>
+                <h4 style={{textAlign:'center', fontWeight:'700'}}>PATIENT PROFILE</h4>
                 <div className="vs-row top-content" style={{display:'flex', width:'100%'}}>
                     
                     <div className="vs-col vs-xs- vs-sm-12 vs-lg-3"style={{margin:'0%',width:'100%', position:'relative'}}>
@@ -134,7 +140,7 @@ const Profile =  ({value, history}) => {
                     <div className="vs-col vs-xs- vs-sm-12 vs-lg-6"style={{margin:'0%',width:'100%', position:'relative'}}>
                         <div className="set-animation from-left animate">
                             <Card className='m-2 con-vs-card'>
-                            <h4 className="text-center mt-2">CURRENT DETAILS</h4>
+                            <h5 className="text-center mt-2 font-weight-bold">CURRENT DETAILS</h5>
                                 <div style={{overflow:'auto',overflowX: 'hidden'}}>
                                     <ul className="profile-info-list">
                                         <li className='current' style={{width:'50%',float:'left',position:'relative'}}>
@@ -167,7 +173,7 @@ const Profile =  ({value, history}) => {
                                             </li>
                                             <li>
                                                 <div className="field">Transfer Date:</div>
-                                                <div className="value m-2">Hospital Name: {'National Hospital of Sri Lanka'} </div>
+                                                <div className="value m-2">Hospital Name: {hospitalName} </div>
                                                 <div className="value m-2">Transfer State: </div>
                                                 <div className="value m-2">Transfer Date</div>
                                             </li>
@@ -199,11 +205,13 @@ const Profile =  ({value, history}) => {
                             <div className="set-animation from-left animate">
                             {currentHospital_id === userHospital_id ? 
                                 <Card className='m-2 con-vs-card text-center'>
-                                    <br/><Button 
+                                    <br></br>
+                                    <div className='text-center' >
+                                    <Button 
                                         type='submit'  
-                                        className='btn btn-primary m-2' 
+                                        className=' w-50 text-center' 
                                         onClick = { () => history.push(`/hospital/editCurrentDetails/${patients._id}`)}
-                                    >Discharge</Button>
+                                    >Discharge</Button></div>
                                     <hr style={{color: '#000000',backgroundColor: '#000000',height: .25,borderColor : '#000000'}}/>
                                         <Col>
                                             <h5>Change Ward</h5>
@@ -245,7 +253,7 @@ const Profile =  ({value, history}) => {
                 <div className="vs-row top-content" style={{display:'flex', width:'100%'}}>
                     <div className="vs-col vs-xs vs-sm-12 vs-lg-3" style={{marginLeft:'0%',marginRight:'0%',width:'100%'}}>
                         <Card className='m-2'>
-                            <h4 className="m-2" style={{textAlign:'center'}}>SEARCH MEDICAL HISTORY</h4>
+                            <h5 className="m-2 font-weight-bold" style={{textAlign:'center'}}>SEARCH MEDICAL HISTORY</h5>
                             <Form.Group as={Col} controlId='sd'>
                                 <Form.Label class="float-left" className = 'form-label'>Start Date:</Form.Label>
                                 <Form.Control 
@@ -330,7 +338,7 @@ const Profile =  ({value, history}) => {
                                             </li>
                                             <li>
                                                 <div className="field">Transfer Date:</div>
-                                                <div className="value m-2">Hospital Name: {'National Hospital of Sri Lanka'} </div>
+                                                <div className="value m-2">Hospital Name: {hospitalName}</div>
                                                 <div className="value m-2">Transfer State: </div>
                                                 <div className="value m-2">Transfer Date</div>
                                             </li>
@@ -348,7 +356,7 @@ const Profile =  ({value, history}) => {
                     <Card className='m-2'>
                         {filteredHistory.length !== 0 ?
                         <div>
-                            <h4 className='text-center m-2'>MEDICAL HISTORY LIST</h4>
+                            <h5 className='text-center m-2 font-weight-bold'>MEDICAL HISTORY LIST</h5>
                             <Scrollbars style={{ width: '100%',minHeight:'15rem', height:'auto', overflowX:'hidden', border:'1px black'}}>
                                 <ul className="m-2">
                                 {filteredHistory.map( p=> 
@@ -366,7 +374,7 @@ const Profile =  ({value, history}) => {
                     </div>
 
                 </div>
-            </div>
+            </div>: history.push('/')}
         </Container>    
     
     )

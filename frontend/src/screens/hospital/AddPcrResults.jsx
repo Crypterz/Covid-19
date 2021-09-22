@@ -3,8 +3,15 @@ import React, {useEffect, useState} from 'react'
 import {  Formik, yupToFormErrors } from 'formik';
 import {Container, Button, Card, Row, Col, Nav, Form, FormControl} from 'react-bootstrap';
 import * as Yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { toastAction } from '../../store/toastActions';
+import { addPcr, getPcrAddedStatus } from '../../store/entities/pcr';
 
-const AddPcrResults = () => {
+const AddPcrResults = ({history}) => {
+    const dispatch = useDispatch()
+
+    const auth = useSelector(state => state.auth);
+
     const [nic, setnic] = useState(Yup.string().max(10, "'Invalid NIC Number. Ex:- 1234567V'")
              .matches(/[3-9]+[0-9]{8,8}(v|x)$/, 'Invalid NIC Number. Ex:- 1234567V').required('NIC number is required...'))
 
@@ -35,16 +42,18 @@ const AddPcrResults = () => {
         const {first_name, last_name, Tel_number, NIC_number, age } = values;
         if(selectedResult !== ""){
             const Result = {
-                first_name,
-                last_name,
-                Tel_number,
-                NIC_number,
-                age,
-                selectedResult
+                name: first_name,
+                age
+                // first_name,
+                // last_name,
+                // Tel_number,
+                // NIC_number,
+                // age,
+                // selectedResult
         }
 
-        //dispatch(updateSymptomsInDB(symUpdate));
-            console.log(Result)
+        dispatch(addPcr(Result));
+           // console.log(Result)
         }else{
             alert('Please select correct PCR result')
         }
@@ -67,24 +76,22 @@ const AddPcrResults = () => {
         }
     }
 
+    const pcrAdded = useSelector(getPcrAddedStatus);
     useEffect(() => {
-        
-    // const handleSelected =(check) =>{
-    //     if(check = true){
-    //         schema.NIC_number = Yup.string().max(12, "'Invalid NIC Number. Ex:- 199812345678'")
-    //          .matches(/19[3-9][0-9]{9,9}$|200[0-3][0-9]{8,8}$/, 'Invalid NIC Number. Ex:- 199812345678').required('NIC number is required...')
-    //         SetNIClength(12)
-    //     }if(check== false){
-    //         schema.NIC_number = Yup.string().max(10, "'Invalid NIC Number. Ex:- 1234567V'")
-    //          .matches(/[3-9]+[0-9]{8,8}(v|x)$/, 'Invalid NIC Number. Ex:- 1234567V').required('NIC number is required...')
-    //         SetNIClength(10)
-    //     }
-    // }
+       if(pcrAdded.pcrAdded){
+           console.log(pcrAdded);
+           dispatch(toastAction({ message: "PCR added successfully..." , type: 'info'}))
+       }else{
+           console.log(pcrAdded)
+       }
 
-    },[nic])
+
+    }/*,[nic]*/)
 
     return (
-        <Container>
+        <>
+        {auth.loggedIn ? 
+        <Container className=' formContainer mt-3'>
         <Formik
             validationSchema = {Yup.object().shape(schema)}
             onSubmit = {submitForm}
@@ -101,7 +108,7 @@ const AddPcrResults = () => {
                 errors
             }) => (
             <Form noValidate onSubmit={handleSubmit}>
-            <h2 style={{textAlign:'center'}}>Update PCR Results</h2>
+            <h2 style={{textAlign:'center', fontWeight:'700'}}>UPDATE PCR RESULTS</h2>
 
             {/* <Col>
                 <Row> */}
@@ -112,6 +119,7 @@ const AddPcrResults = () => {
                     <Form.Group controlId = 'firstName' className='m-2' style={{width:'100%'}}>
                         <Form.Label className = 'form-label m-2'>First Name</Form.Label>
                             <Form.Control 
+                                className='textBox'
                                 type='text'
                                 name='first_name'
                                 value={values.first_name}
@@ -133,6 +141,7 @@ const AddPcrResults = () => {
                     <Form.Group controlId = 'lastName' className='m-2 float-right' style={{width:'100%', float:'right'}}>
                     <Form.Label className = 'form-label m-2'>Last Name</Form.Label>
                         <Form.Control 
+                            className='textBox'
                             type='text'
                             name='last_name'
                             value={values.last_name}
@@ -158,6 +167,7 @@ const AddPcrResults = () => {
                     <Form.Group controlId = 'telNumber' className='m-2 float-right' style={{width:'100%', float:'right'}}>
                         <Form.Label className = 'form-label'>Telephone Number</Form.Label>
                             <Form.Control 
+                                className='textBox'
                                 type='text'
                                 name='Tel_number'
                                 value={values.Tel_number}
@@ -180,17 +190,18 @@ const AddPcrResults = () => {
                             <Row>
                                 <input 
                                     type='checkbox'
-                                    className='mr-2 ml-5'
+                                    style={{width:'5%', marginTop:'5px', marginLeft:'50px'}}
                                     onChange={(e) =>{
                                         let checked = e.target.checked;
                                         handleSelected(checked)
                                     }}
                                 />
-                                <Form.Label className = 'form-label'>Please select here if new NIC Number</Form.Label> 
+                                <Form.Label className = 'form-label w-75'>Please select here if new NIC Number</Form.Label> 
                             </Row>
 
                             <div>
                                 <Form.Control 
+                                    className='textBox'
                                     type='text'
                                     maxLength={NIClength}
                                     name='NIC_number'
@@ -220,7 +231,7 @@ const AddPcrResults = () => {
                    <Form.Group controlId = 'PcrResult' className='m-2 float-right' style={{width:'100%', float:'right'}}>
                         <Form.Label className = 'form-label'>PCR test result</Form.Label>
                         <Form.Control 
-                                className ='m-1'
+                                style={{height:'48px'}}
                                 name='Test_result' 
                                 onChange = {(e) => {
                                     setSelectedResult(e.target.value)
@@ -239,6 +250,7 @@ const AddPcrResults = () => {
                     <Form.Group controlId = 'lastName' className='m-2 float-right' style={{width:'100%', float:'right'}}>
                     <Form.Label className = 'form-label'>Age</Form.Label>
                         <Form.Control 
+                            className='textBox'
                             type='text'
                             name='age'
                             value={values.age}
@@ -261,16 +273,17 @@ const AddPcrResults = () => {
             <div class="col-md-12 text-center">
                 <Button 
                     type='submit'
+                    className='mb-3'
                     style={{float:'center'}}
                 >
                 Add PCR Results
                 </Button>
             </div>
-            <br/><br/>
             </Form>
             )}
         </Formik>
-        </Container>
+        </Container> : history.push('/')}
+        </>
     )
 }
 

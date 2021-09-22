@@ -12,7 +12,11 @@ import { useDispatch, useSelector } from 'react-redux';
 const Patients = ({history}) => {
     const dispatch = useDispatch()
 
-    const patients = useSelector(getAllPatients);
+    const auth = useSelector(state => state.auth);
+
+    const patientsDetails = useSelector(getAllPatients);
+    const patients = patientsDetails.list;
+   // console.log(patients)
     const patientsLoading = useSelector(getPatientsLoadingStatus);
 
     const location = useLocation()
@@ -45,19 +49,22 @@ const Patients = ({history}) => {
 
     return (
         <>
-            {patientsLoading ? (<Loader></Loader>) :
+            {auth.loggedIn && patientsLoading && (<Loader></Loader>)}
+            {auth.loggedIn ? 
 
             <Container>
-                <h2 style={{textAlign:'center', marginBottom:'40px', fontWeight:'600'}}>PATIENTS DETAILS</h2>
+                <h3 style={{textAlign:'center', marginBottom:'40px', fontWeight:'700'}}>PATIENTS DETAILS</h3>
 
                 <Button 
+                    className="btn btn-success"
                     style={{float:'right',padding:'10px'}}
                     onClick = { () => history.push('/hospital/addPatient')}
                 >+ add new patient</Button>
 
                 <InputGroup id = 'product-search-bar' style={{padding:'0px 200px 20px 200px', color:'blue'}}>
                             <FormControl
-                                placeholder="Search Patient by Using Name Or NIC..."
+                                className='textBox'
+                                placeholder="search patient by using name or NIC..."
                                 aria-label="searchPatient"
                                 aria-describedby="basic-addon2"
                                 size = 'lg'
@@ -103,10 +110,8 @@ const Patients = ({history}) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {/* {patients.map( p=> */}
                     {paginated.map( p =>
                         <tr>
-                            {/* <td>{p._id}</td> */}
                             <td>{p.name}</td>
                             <td>{p.age}</td>
                             <td>{p.name}</td>
@@ -136,7 +141,7 @@ const Patients = ({history}) => {
             />
 
             </Container>
-            }
+            : history.push('/')}
 
         </>
     )

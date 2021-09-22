@@ -4,6 +4,8 @@ import {Form, Button, Col, FormControl} from 'react-bootstrap';
 import {registerPatients} from '../../store/entities/patients'
 import { toastAction } from '../../store/toastActions';
 import { connect } from 'react-redux'
+import auth from '../../store/auth';
+import { useDispatch, useSelector } from 'react-redux';
 
 //validating empty fields for NHospital
 function validate(first_name, last_name, dob, contact_number, address, city, district) {
@@ -45,6 +47,8 @@ export default class AddPatient extends Component {
         this.onChangeCity = this.onChangeCity.bind(this);
        
         this.handleSubmit = this.handleSubmit.bind(this);
+
+       // const auth = useSelector(state => state.auth);
     }
 
     onChangeFirstName(e) {
@@ -108,6 +112,8 @@ export default class AddPatient extends Component {
 
         
         return (
+            <>
+            {/* {auth.loggedIn ?  */}
             <div class="container-fluid">
                 <div class="row max-height justify-content-center align-items-center">
                     <div class="col-10 mx-auto banner text-center">
@@ -242,7 +248,8 @@ export default class AddPatient extends Component {
             </div>
             </div>
             </div>
-            
+             {/* : window.location('/')}  */}
+            </>
         );
     }
 }

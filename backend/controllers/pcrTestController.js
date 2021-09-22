@@ -9,12 +9,19 @@ const AppError = require('../utils/appError');
 exports.getAllTest = async (req, res) => {
     try{
         const features=new APIfunctions(PCRTest.find(),req.query).filter().sort().select()
-        const tests=await features.query
+        // const tests=await features.query
+        // res.status(200).json({
+        // status: 'success',
+        // requestedAt: req.requestTime,
+        // results: tests.length,
+        // data: {tests}
+        const pcr=await features.query
         res.status(200).json({
         status: 'success',
         requestedAt: req.requestTime,
-        results: tests.length,
-        data: {tests}
+        results: pcr.length,
+        data: {pcr}
+        
     });
     }catch(err){                 //if schema doent stisfy error may occur VALIDATIO ERROR
         res.status(404).json({
