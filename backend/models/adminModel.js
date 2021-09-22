@@ -35,6 +35,16 @@ const adminSchema =new mongoose.Schema({
         },
         cordinates:[Number],
         address:String
+    },
+    creation:{
+        createdBy:{
+            type:String
+        },
+        createdAt:{
+            type:Date,
+            default:Date.now(),
+            select:false
+        }
     }
 })
 

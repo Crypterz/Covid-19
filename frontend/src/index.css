@@ -220,6 +220,7 @@ main {
   float: right;
 }
 
+<<<<<<< HEAD
 /* .figures-div > Link {
   style
 } */
@@ -232,4 +233,43 @@ main {
 .textBox {
   height: 20px;
   font-size: 10px;
+=======
+/* Form */
+.form {
+  max-width: 60rem;
+  margin: 0 auto;
+}
+.form > div {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+}
+.form label {
+  margin: 1rem 0;
+  display: block;
+}
+.loginTitle{
+  align-content: center;
+}
+
+/* Dropdown */
+.dropdown {
+  display: inline-block;
+  position: relative;
+}
+.dropdown-content {
+  position: absolute;
+  display: none;
+  right: 0;
+  min-width: 12rem;
+  padding: 1rem;
+  z-index: 1;
+  background-color: #203040;
+  margin: 0;
+  margin-top: 0.4rem;
+  border-radius: 0.5rem;
+}
+.dropdown:hover .dropdown-content {
+  display: block;
+>>>>>>> f00af258141f37324a7d11c4f9b6a1946a706d80
 }

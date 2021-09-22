@@ -1,8 +1,8 @@
 const func=fn=>{
     fn()
-    console.log('jjjjjjj')
+    // console.log('jjjjjjj')
 }
 const pk=func(()=>{
-    console.log('kkkkkkkkkkk')
+    // console.log('kkkkkkkkkkk')
 })
 // pk()

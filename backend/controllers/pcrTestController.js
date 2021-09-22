@@ -32,7 +32,11 @@ exports.getAllTest = async (req, res) => {
 };
 
 exports.createPCRTest= catchAsync(async (req,res)=>{
-    const newTest=await PCRTest.create(req.body)
+    req.body.creation={
+        createdBy:req.user.name
+    }
+    const r=req.body
+    const newTest=await PCRTest.create(r)
     res.status(201).json({
         status:'success',
         data:{
@@ -41,57 +45,20 @@ exports.createPCRTest= catchAsync(async (req,res)=>{
     })
 })
 
-
-
-
-// exports.getPatient = catchAsync(async (req, res,next) => {
-//         const patient=await Patient.findById(req.params.id)     //Patient.findOne({_id:req.params.id})
-//         if(!patient){
-//             return next(new AppError("No patient found with that ID",404))    //used return statement to avoid executing code below
-//         }
-//         res.status(200).json({
-//         status: 'success',
-//         data: {patient}
-//       });
-// })
-
-
-// exports.updatePatient=async (req,res)=>{
-//     try{
-//         const patient=await Patient.findByIdAndUpdate(req.params.id,req.body,{
-//             new:true,
-//             runValidators:true
-//         })
-//         if(!patient){
-//             return next(new AppError("No patient found with that ID",404))    //used return statement to avoid executing code below
-//         }
-//         res.status(200).json({
-//             status:'success',
-//             data:{
-//                 patient:patient
-//             }
-//         })
-//     }catch(err){                 //if schema doent stisfy error may occur VALIDATIO ERROR
-//         res.status(404).json({
-//             status:'fail',
-//             message:err
-//         })
-//     }
-// }
-// exports.deletePatient=async (req,res)=>{
-//     try{
-//         const patient = await Patient.findByIdAndDelete(req.params.id)
-//         if(!patient){
-//             return next(new AppError("No patient found with that ID",404))    //used return statement to avoid executing code below
-//         }
-//         res.status(204).json({
-//             status:'success',
-//             data:null
-//         })
-//     }catch(err){                 //if schema doent stisfy error may occur VALIDATIO ERROR
-//         res.status(404).json({
-//             status:'fail',
-//             message:err
-//         })
-//     }
-// }
+exports.confirmPCRTest=catchAsync(async (req,res)=>{
+    console.log(req.body.ids)
+    const test=await PCRTest.updateMany({_id:{
+        $in:req.body.ids
+    }},{
+        confirm:{confirmBy:req.user.name}
+    })
+    if(!test){
+        return next(new AppError("No patient found with that ID",404))    //used return statement to avoid executing code below
+    }
+    res.status(200).json({
+        status:'success',
+        data:{
+            test
+        }
+    })
+})

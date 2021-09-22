@@ -16,35 +16,45 @@ const patientSchema =new mongoose.Schema({
         default:Date.now,
         select:false
     },
-    pcrTest:Array,
+    pcrTest:[{
+        type:mongoose.Schema.ObjectId,
+        ref: 'PCRTest'
+    }],
     confidential:Boolean
 // },{
 //     toJSON:{virtuals:true},
 //     toObject:{virtuals:true}
 })
 
-
-// patientSchema.virtual('#name').get(function(){
+// derive informations from existing informations stored in DB. this will send data when we request. we have to specify in modal that we need virtual info.
+// patientSchema.virtual('#name').get(function(){  
 //     return this.#filed/3
 // })
 
 patientSchema.pre('save',function(next){    //RUN BEFORE  .SAVE, AND .CREATE()
     this.slug=slugify(this.name, {lower:true})
-    console.log(this)
+    // console.log(this)
     next()
 })
 patientSchema.post('save', function(doc,next){
-    console.log("pre fin post")
+    // console.log("pre fin post")
     next()
 })
 patientSchema.post('save', function(doc,next){      //document middleware
-    console.log(doc)
+    // console.log(doc)
     next()
 })
 
 // patientSchema.pre('find',function(next){   
 patientSchema.pre(/^find/,function(next){        //QUERY MIDDLEWARE
     this.find({confidential:{$ne:true}})                                 //this refre to query we can change query object from here
+    next()
+})
+patientSchema.pre(/^find/,function(next){        //QUERY MIDDLEWARE
+    this.populate({
+        path:'pcrTest',
+        select:'-slug -age'
+    })                                 //this refre to query we can change query object from here
     next()
 })
 
