@@ -243,30 +243,30 @@ export default class AddPatient extends Component {
                                 onChange={this.handleChange}
                                 aria-label="Default select example">
                                     <option>Select Here </option>
-                                    <option value="colombo">Colombo</option>
-                                    <option value="gampaha">Gampaha</option>
-                                    <option value="kalutara">Kalutara</option>
-                                    <option value="kandy">Kandy </option>
-                                    <option value="matale">Matale </option>
-                                    <option value="nuwera-Eliya">Nuwera-Eliya</option>
-                                    <option value="galle">Galle </option>
-                                    <option value="matara">Matara</option>
-                                    <option value="hambantota">Hambantota </option>
-                                    <option value="jaffna">Jaffna </option>
-                                    <option value="mannar">Mannar</option>
-                                    <option value="mA">Vauniya </option>
-                                    <option value="vauniya">Mulathivu </option>
-                                    <option value="kilinochchi">Kilinochchi </option>
-                                    <option value="batticaloa">Batticaloa</option>
-                                    <option value="trincomalee">Trincomalee  </option>
-                                    <option value="kurunegala">Kurunegala   </option>
-                                    <option value="puttalam">Puttalam  </option>
-                                    <option value="anuradhapura">Anuradhapura   </option>
-                                    <option value="polonnaruwa">Polonnaruwa   </option>
-                                    <option value="badulla">Badulla  </option>
-                                    <option value="monaragala">Monaragala   </option>
-                                    <option value="rathnapura">Rathnapura   </option>
-                                    <option value="kegalle">Kegalle </option>
+                                    <option value="Colombo">Colombo</option>
+                                    <option value="Gampaha">Gampaha</option>
+                                    <option value="Kalutara">Kalutara</option>
+                                    <option value="Kandy">Kandy </option>
+                                    <option value="Matale">Matale </option>
+                                    <option value="Nuwera-Eliya">Nuwera-Eliya</option>
+                                    <option value="Galle">Galle </option>
+                                    <option value="Matara">Matara</option>
+                                    <option value="Hambantota">Hambantota </option>
+                                    <option value="Jaffna">Jaffna </option>
+                                    <option value="Mannar">Mannar</option>
+                                    <option value="Vauniya">Vauniya </option>
+                                    <option value="Mulathivu">Mulathivu </option>
+                                    <option value="Kilinochchi">Kilinochchi </option>
+                                    <option value="Batticaloa">Batticaloa</option>
+                                    <option value="Trincomalee">Trincomalee  </option>
+                                    <option value="Kurunegala">Kurunegala   </option>
+                                    <option value="Puttalam">Puttalam  </option>
+                                    <option value="Anuradhapura">Anuradhapura   </option>
+                                    <option value="Polonnaruwa">Polonnaruwa   </option>
+                                    <option value="Badulla">Badulla  </option>
+                                    <option value="Monaragala">Monaragala   </option>
+                                    <option value="Rathnapura">Rathnapura   </option>
+                                    <option value="Kegalle">Kegalle </option>
                                     
                                     </Form.Control>
                             </Form.Group>
