@@ -1,123 +1,55 @@
-import React, { Component } from 'react';
 import Container from 'react-bootstrap/Container';
-import {Form, Button, Col, FormControl} from 'react-bootstrap';
+import {Form, Button, Col, FormControl, Row} from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-//validating empty fields for NHospital
-function validate(name, contact, city) {
-    return {
-        name: name.length ===0,
-        contact: contact.length ===0,
-        city: city.length ===0,        
+export default function AddHospital(props) {
+    const [name, setName] = useState('');
+    const [contact, setContact] = useState('');
+    const [district, setDistrict] = useState('');
+    const [city, setCity] = useState('');
+    const [province, setProvince] = useState('');
+
+    const dispatch = useDispatch();
+
+    const submitHandler = (e) => {
+      e.preventDefault();
+      // TODO: sign in action
+      
     };
-}
-
-//validate tel
-function validate_contactNo(tel) {
-    const reg = /^(0)([0-9]{9})$/; 
-    return reg.test(tel);
-}
-
-
-
-export default class AddHospital extends Component {
-    constructor(props){
-        super(props);
-        this.state = {name: '',
-                      contact:'',
-                        district:'',
-                        city:'',
-                        province:'',
-                      
-    };
-
-        this.onChangeHospitalName = this.onChangeHospitalName.bind(this);
-        this.onChangeContactNumber = this.onChangeContactNumber.bind(this);
-        this.onChangeCity = this.onChangeCity.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    onChangeHospitalName(e) {
-        const re = /^[A-Za-z\b]+$/;
-        if (e.target.value === '' || re.test(e.target.value)) {
-            this.setState({ name: e.target.value })
-        }
-    }
-
-    onChangeContactNumber(e) {
-        const re = /^[0-9\b]+$/; 
-        if (e.target.value === '' || re.test(e.target.value)) {
-            this.setState({ contact: e.target.value })
-        }
-    }
-
-    onChangeCity(e) {
-        const re = /^[A-Za-z\b]+$/;
-        if (e.target.value === '' || re.test(e.target.value)) {
-            this.setState({ city: e.target.value })
-        }
-    }
-
-    handleChange(e){
-        this.setState({
-            [e.target.name]: e.target.value
-  });
-    }
-
-    handleSubmit(e){
-        e.preventDefault();
-
-        if(!validate_contactNo(this.state.contact)){
-            alert("ENTER VALID CONTACT NUMBER!!!")
-        }
-        else{
-            alert('Submitted: ' + this.state);
-            console.log(this.state)
-        }
         
-    }
-    
-
-    render() {
-        //validating the fields in the nurse form whether filled or not
-        const errors = validate(this.state.name, this.state.contact, this.state.city);
-        const isDisabled = Object.keys(errors).some(x => errors[x]);
-
-        
-        return (
+    return (
             <div class="container-fluid">
-                <div class="row max-height justify-content-center align-items-center">
                     <div class="col-10 mx-auto banner text-center">
-                        <h3 class="text-capitalize">
-                            <strong class="banner-title">Want to Add new Hospital?</strong></h3>
-                            <div class="card-body register-card-body"></div>
+                    <h3 class="text-capitalize">
+                            <strong class="banner-title">Want to Add new Hospital?</strong></h3></div>
             <Container >
-                
-                <Form >
+                <Form className="form" onSubmit={submitHandler}>
+                    <Form.Row>
                     <Form.Group controlId='name'>
                     <Form.Label class="float-left" className = 'form-label'>Hospital Name:</Form.Label>
                     <Form.Control 
                         type='text'
-                        name='name' 
-                        value={this.state.name} 
-                        onChange={this.onChangeHospitalName}
+                        id='name' 
                         placeholder='Enter Hospital Name'
+                        onChange={(e) => setName(e.target.value)}
                         required
                     />
-                    <FormControl.Feedback type='invalid'>This field is required!</FormControl.Feedback>
                     </Form.Group>
 
                     <Form.Group  controlId='contact'>
                     <Form.Label class="float-left" className = 'form-label' >Contact Number:</Form.Label>
                     <Form.Control 
-                        type='text'
+                        type='tel'
+                        id='contact'
+                        placeholder="123-45-678"  
+                        pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" 
                         required
-                        name='contact' 
-                        value={this.state.contact} 
-                        onChange={this.onChangeContactNumber}
-                        placeholder='Enter Contact Number'
-                        
+                        onChange={(e) => setContact(e.target.value)} 
                     />
+                    
+                    <small>Format: 123-45-678</small> 
+
                     <FormControl.Feedback type='invalid'>This field only takes text!</FormControl.Feedback>
                     </Form.Group>
 
@@ -125,21 +57,18 @@ export default class AddHospital extends Component {
                                 <Form.Label class="float-left" className = 'form-label'>City:</Form.Label>
                                 <Form.Control
                                 type="text"
-                                name="city"
-                                required
-                                value={this.state.city} 
+                                id="city"
+                                required 
                                 placeholder='Enter City'
-                                onChange={this.onChangeCity}/>
+                                onChange={(e) => setCity(e.target.value)}/>
                                 </Form.Group>
-
-                    <Form.Row>
-                            <Form.Group  as={Col} controlId="formDistrict">
+                    
+                    <Form.Group  as={Col} controlId="formDistrict">
                                 <Form.Label class="float-left" className = 'form-label'>District:</Form.Label>
                                 <Form.Control 
                                 as="select" 
-                                name="district" 
-                                value={this.state.district} 
-                                onChange={this.handleChange}
+                                id="district" 
+                                onChange={(e) => setDistrict(e.target.value)}
                                 aria-label="Default select example">
                                     <option>Select Here </option>
                                     <option value="Colombo">Colombo</option>
@@ -166,17 +95,15 @@ export default class AddHospital extends Component {
                                     <option value="Monaragala">Monaragala   </option>
                                     <option value="Rathnapura">Rathnapura   </option>
                                     <option value="Kegalle">Kegalle </option>
-                                    
                                     </Form.Control>
                             </Form.Group>
 
-                            <Form.Group as = {Col} controlId="formProvince">
+                            <Form.Group as={Col}  controlId="formProvince">
                                 <Form.Label class="float-left" className = 'form-label' >Province:</Form.Label>
                                 <Form.Control 
                                 as="select" 
-                                name="province" 
-                                value={this.state.province} 
-                                onChange={this.handleChange}
+                                id="province" 
+                                onChange={(e) => setProvince(e.target.value)}
                                 aria-label="Default select example">
                                     <option>Select Here </option>
                                     <option value="Central">Central Province</option>
@@ -191,18 +118,16 @@ export default class AddHospital extends Component {
                                     
                                     </Form.Control>
                                 </Form.Group>
-
-                        </Form.Row>
-                        
-                    <br/>
-                    <Button variant="primary" disabled={isDisabled} onClick={this.handleSubmit}>Submit</Button>
-                    
+                            </Form.Row>
+                        <div>
+                        <label />
+                        <Button variant="primary" type="submit">Submit</Button>
+                        </div>
                 </Form>
             </Container>
+            
             </div>
-            </div>
-            </div>
+            
             
         );
     }
-}
