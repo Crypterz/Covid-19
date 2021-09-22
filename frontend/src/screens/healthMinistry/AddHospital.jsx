@@ -3,14 +3,11 @@ import Container from 'react-bootstrap/Container';
 import {Form, Button, Col, FormControl} from 'react-bootstrap';
 
 //validating empty fields for NHospital
-function validate(hospital_name, contact_number, address, city, district, small_description) {
+function validate(name, contact, city) {
     return {
-        hospital_name: hospital_name.length ===0,
-        contact_number: contact_number.length ===0,
-        address: address.length ===0,
-        city: city.length ===0,
-        district: district.length ===0,
-        small_description: small_description.length ===0
+        name: name.length ===0,
+        contact: contact.length ===0,
+        city: city.length ===0,        
     };
 }
 
@@ -25,19 +22,17 @@ function validate_contactNo(tel) {
 export default class AddHospital extends Component {
     constructor(props){
         super(props);
-        this.state = {hospital_name: '',
-                      contact_number:'',
-                      address:'',
-                      city:'',
-                      district:'',
-                      small_description:''
-
+        this.state = {name: '',
+                      contact:'',
+                        district:'',
+                        city:'',
+                        province:'',
+                      
     };
 
         this.onChangeHospitalName = this.onChangeHospitalName.bind(this);
         this.onChangeContactNumber = this.onChangeContactNumber.bind(this);
         this.onChangeCity = this.onChangeCity.bind(this);
-        
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -45,14 +40,14 @@ export default class AddHospital extends Component {
     onChangeHospitalName(e) {
         const re = /^[A-Za-z\b]+$/;
         if (e.target.value === '' || re.test(e.target.value)) {
-            this.setState({ hospital_name: e.target.value })
+            this.setState({ name: e.target.value })
         }
     }
 
     onChangeContactNumber(e) {
         const re = /^[0-9\b]+$/; 
         if (e.target.value === '' || re.test(e.target.value)) {
-            this.setState({ contact_number: e.target.value })
+            this.setState({ contact: e.target.value })
         }
     }
 
@@ -63,8 +58,6 @@ export default class AddHospital extends Component {
         }
     }
 
-
-
     handleChange(e){
         this.setState({
             [e.target.name]: e.target.value
@@ -74,7 +67,7 @@ export default class AddHospital extends Component {
     handleSubmit(e){
         e.preventDefault();
 
-        if(!validate_contactNo(this.state.contact_number)){
+        if(!validate_contactNo(this.state.contact)){
             alert("ENTER VALID CONTACT NUMBER!!!")
         }
         else{
@@ -87,7 +80,7 @@ export default class AddHospital extends Component {
 
     render() {
         //validating the fields in the nurse form whether filled or not
-        const errors = validate(this.state.hospital_name, this.state.contact_number, this.state.address, this.state.city, this.state.district, this.state.small_description);
+        const errors = validate(this.state.name, this.state.contact, this.state.city);
         const isDisabled = Object.keys(errors).some(x => errors[x]);
 
         
@@ -101,12 +94,12 @@ export default class AddHospital extends Component {
             <Container >
                 
                 <Form >
-                    <Form.Group controlId='hospital_name'>
+                    <Form.Group controlId='name'>
                     <Form.Label class="float-left" className = 'form-label'>Hospital Name:</Form.Label>
                     <Form.Control 
                         type='text'
-                        name='hospital_name' 
-                        value={this.state.hospital_name} 
+                        name='name' 
+                        value={this.state.name} 
                         onChange={this.onChangeHospitalName}
                         placeholder='Enter Hospital Name'
                         required
@@ -114,13 +107,13 @@ export default class AddHospital extends Component {
                     <FormControl.Feedback type='invalid'>This field is required!</FormControl.Feedback>
                     </Form.Group>
 
-                    <Form.Group  controlId='contact_number'>
+                    <Form.Group  controlId='contact'>
                     <Form.Label class="float-left" className = 'form-label' >Contact Number:</Form.Label>
                     <Form.Control 
                         type='text'
                         required
-                        name='contact_number' 
-                        value={this.state.contact_number} 
+                        name='contact' 
+                        value={this.state.contact} 
                         onChange={this.onChangeContactNumber}
                         placeholder='Enter Contact Number'
                         
@@ -128,21 +121,7 @@ export default class AddHospital extends Component {
                     <FormControl.Feedback type='invalid'>This field only takes text!</FormControl.Feedback>
                     </Form.Group>
 
-                    <Form.Group  controlId="formAddress">
-                            <Form.Label class="float-left" className = 'form-label'>Address:</Form.Label>
-                            <Form.Control
-                                type="textarea"
-                                name="address"
-                                required
-                                value={this.state.address} 
-                                onChange={this.handleChange}
-                                placeholder='Enter Address'
-                            />
-                    <FormControl.Feedback type='invalid'>This field is required!</FormControl.Feedback>
-                    </Form.Group>
-
-                    <Form.Row>
-                            <Form.Group as={Col} controlId="formCity">
+                    <Form.Group controlId="formCity">
                                 <Form.Label class="float-left" className = 'form-label'>City:</Form.Label>
                                 <Form.Control
                                 type="text"
@@ -150,10 +129,11 @@ export default class AddHospital extends Component {
                                 required
                                 value={this.state.city} 
                                 placeholder='Enter City'
-                                onChange={this.onChangeCity}
-                    /></Form.Group>
+                                onChange={this.onChangeCity}/>
+                                </Form.Group>
 
-<Form.Group  as={Col} controlId="formDistrict">
+                    <Form.Row>
+                            <Form.Group  as={Col} controlId="formDistrict">
                                 <Form.Label class="float-left" className = 'form-label'>District:</Form.Label>
                                 <Form.Control 
                                 as="select" 
@@ -161,45 +141,59 @@ export default class AddHospital extends Component {
                                 value={this.state.district} 
                                 onChange={this.handleChange}
                                 aria-label="Default select example">
-                                    <option>Select the District </option>
-                                    <option value="CO">Colombo</option>
-                                    <option value="AI">Kilinochchi</option>
-                                    <option value="VA">Vavunia</option>
-                                    <option value="JA">Jaffna</option>
-                                    <option value="MU">Mullaitheevu</option>
-                                    <option value="AN">Anuradhapura</option>
-                                    <option value="KA">Kalutara</option>
-                                    <option value="GA">Gampaha</option>
-                                    <option value="HA">Hampantota</option>
-                                    <option value="KU">Kurunagal</option>
-                                    <option value="PU">Puttalam</option>
-                                    <option value="MA">Matara</option>
-                                    <option value="KA">Kandy</option>
-                                    <option value="GA">Galle</option>
-                                    <option value="PO">Polonaruwa</option>
-                                    <option value="NU">Nuwaraeliya</option>
+                                    <option>Select Here </option>
+                                    <option value="Colombo">Colombo</option>
+                                    <option value="Gampaha">Gampaha</option>
+                                    <option value="Kalutara">Kalutara</option>
+                                    <option value="Kandy">Kandy </option>
+                                    <option value="Matale">Matale </option>
+                                    <option value="Nuwera-Eliya">Nuwera-Eliya</option>
+                                    <option value="Galle">Galle </option>
+                                    <option value="Matara">Matara</option>
+                                    <option value="Hambantota">Hambantota </option>
+                                    <option value="Jaffna">Jaffna </option>
+                                    <option value="Mannar">Mannar</option>
+                                    <option value="Vavuniya">Vauniya </option>
+                                    <option value="Mulathivu">Mulathivu </option>
+                                    <option value="Kilinochchi">Kilinochchi </option>
+                                    <option value="Batticaloa">Batticaloa</option>
+                                    <option value="Trincomalee">Trincomalee  </option>
+                                    <option value="Kurunegala">Kurunegala   </option>
+                                    <option value="Puttalam">Puttalam  </option>
+                                    <option value="Anuradhapura">Anuradhapura   </option>
+                                    <option value="Polonnaruwa">Polonnaruwa   </option>
+                                    <option value="Badulla">Badulla  </option>
+                                    <option value="Monaragala">Monaragala   </option>
+                                    <option value="Rathnapura">Rathnapura   </option>
+                                    <option value="Kegalle">Kegalle </option>
                                     
                                     </Form.Control>
                             </Form.Group>
 
-                            
+                            <Form.Group as = {Col} controlId="formProvince">
+                                <Form.Label class="float-left" className = 'form-label' >Province:</Form.Label>
+                                <Form.Control 
+                                as="select" 
+                                name="province" 
+                                value={this.state.province} 
+                                onChange={this.handleChange}
+                                aria-label="Default select example">
+                                    <option>Select Here </option>
+                                    <option value="Central">Central Province</option>
+                                    <option value="Eastern">Eastern Province</option>
+                                    <option value="Northern">Northern Province</option>
+                                    <option value="Southern">Southern Province </option>
+                                    <option value="Western">Western Province </option>
+                                    <option value="North Western">North Western Province </option>
+                                    <option value="North Central">North Central Province </option>
+                                    <option value="Uva">Uva Province </option>
+                                    <option value="Sabaragamuwa">Sabaragamuwa Province </option>
+                                    
+                                    </Form.Control>
+                                </Form.Group>
+
                         </Form.Row>
                         
-
-                    <Form.Group  controlId='small_description'>
-                    <Form.Label class="float-left" className = 'form-label'>Small Description:</Form.Label>
-                    <Form.Control 
-                        type='text area'
-                        name='small_description' 
-                        value={this.state.small_description} 
-                        onChange={this.handleChange}
-                        placeholder='Type Small Description:' 
-                        cols={5}
-                          
-                    />
-                    <FormControl.Feedback type='invalid'></FormControl.Feedback>
-                    </Form.Group>
-
                     <br/>
                     <Button variant="primary" disabled={isDisabled} onClick={this.handleSubmit}>Submit</Button>
                     
