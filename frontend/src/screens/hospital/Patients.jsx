@@ -37,6 +37,10 @@ const Patients = ({history}) => {
 
 
     useEffect(() => {
+        if(!auth.loggedIn){
+           // window.location('/')
+           history.push('/')
+        }
         dispatch(loadPatients())
 
         const updatedSearchFiltered = getFilteredSearchedPatients(patients, searchKeyword)
@@ -49,9 +53,9 @@ const Patients = ({history}) => {
 
     return (
         <>
-            {auth.loggedIn && patientsLoading && (<Loader></Loader>)}
-            {auth.loggedIn ? 
-
+            {/* {auth.loggedIn && patientsLoading && (<Loader></Loader>)}
+            {auth.loggedIn ?  */}
+            { patientsLoading && (<Loader></Loader>)}
             <Container>
                 <h3 style={{textAlign:'center', marginBottom:'40px', fontWeight:'700'}}>PATIENTS DETAILS</h3>
 
@@ -141,7 +145,7 @@ const Patients = ({history}) => {
             />
 
             </Container>
-            : history.push('/')}
+            {/* : history.push('/')} */}
 
         </>
     )

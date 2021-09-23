@@ -74,7 +74,6 @@ const App = () =>{
           {/* <Route path='/hospital/addPatient' component={AddPatient}/> */}
           {/* <Route path='/' component={HomeScreen} exact/> */}
           {/* <Route path='/login' component={Login}/> */}
-          <Route path='/signin' component={SigninScreen}/>
            <Route path='/hospital/wards/:id' component={Ward}/>
            <Route path='/hospital/add_wards' component={AddWard}/>
            <Route path='/hospital/wards' component={WardsList}/>

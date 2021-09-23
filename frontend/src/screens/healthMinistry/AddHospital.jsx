@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Container from 'react-bootstrap/Container';
 import {Form, Button, Col, FormControl} from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { addHospital} from '../../store/entities/hospitals'
 
 //validating empty fields for NHospital
 function validate(name, contact, city) {
@@ -17,6 +19,13 @@ function validate_contactNo(tel) {
     return reg.test(tel);
 }
 
+//function withMyHook(Component) {
+     function WrappedComponent(b) {
+      const dispatch = useDispatch();
+      console.log(b)
+    //   return <Component {...props} myHookValue={myHookValue} />;
+    }
+//  }
 
 
 export default class AddHospital extends Component {
@@ -35,7 +44,9 @@ export default class AddHospital extends Component {
         this.onChangeCity = this.onChangeCity.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+
     }
+
 
     onChangeHospitalName(e) {
         const re = /^[A-Za-z\b]+$/;
@@ -71,8 +82,11 @@ export default class AddHospital extends Component {
             alert("ENTER VALID CONTACT NUMBER!!!")
         }
         else{
-            alert('Submitted: ' + this.state);
-            console.log(this.state)
+            WrappedComponent(this.state)
+            //withMyHook(Form)
+           // dis
+           // alert('Submitted: ' + this.state);
+           // console.log(this.state)
         }
         
     }

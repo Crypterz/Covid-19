@@ -16,7 +16,8 @@ store.subscribe(() => {
     auth: store.getState().auth, 
     entities: {
       patients: store.getState().entities.patients,
-      pcr: store.getState().entities.pcr
+      pcr: store.getState().entities.pcr,
+      hospital: store.getState().entities.hospital
     }
   });
 });
