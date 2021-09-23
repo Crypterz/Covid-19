@@ -11,6 +11,7 @@ const pcrTestRouter=require('./routes/pcrTestRoutes')
 const userRouter=require('./routes/userRoutes')
 const AdminRouter=require('./routes/adminRoutes')
 const HospitalRouter=require('./routes/hospitalRoutes')
+const medicalHistoryRouter=require('./routes/medicalHistoryRoutes')
 
 const app=express();
 
@@ -35,6 +36,7 @@ app.use('/api/v1/users',userRouter)
 app.use('/api/v1/pcr',pcrTestRouter)
 app.use('/api/v1/staff',AdminRouter)
 app.use('/api/v1/hospital',HospitalRouter)
+app.use('/api/v1/med',medicalHistoryRouter)
 
 app.all('*',(req,res,next)=>{
     // res.status(404).json({

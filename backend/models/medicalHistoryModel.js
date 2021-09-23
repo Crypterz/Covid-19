@@ -1,5 +1,14 @@
 const mongoose=require('mongoose')
+const Patient=require('./patientModel')
 const medicalHistorySchema=new mongoose.Schema({
+    patient:{
+        type:mongoose.Schema.ObjectId,
+        ref:'Patient'
+    },
+    hospital:{
+        type:mongoose.Schema.ObjectId,
+        ref:'Hospital'
+    },
     symptoms:[{
         date:{
             type:Date,
@@ -32,6 +41,14 @@ const medicalHistorySchema=new mongoose.Schema({
         }
     }
 })
+
+// medicalHistorySchema.post('save',async function(doc,next){
+//     await Patient.findByIdAndUpdate(this.patient,   
+//         {$push:{medicalHistory:this._id}},
+//         {upsert: true}
+//     )
+//     next()
+// })
 
 const MedicalHistory=mongoose.model('MedicalHistory',medicalHistorySchema)
 module.exports=MedicalHistory

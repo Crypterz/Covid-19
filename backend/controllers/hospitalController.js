@@ -3,7 +3,6 @@ const APIfunctions=require('../utils/apiFunctions')
 const catchAsync= require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
-
 exports.getAllHospitals = async (req, res) => {
     try{
         // const patients=await Patient.find().where('name').equals('nimal')
