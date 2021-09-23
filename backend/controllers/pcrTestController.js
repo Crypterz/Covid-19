@@ -1,9 +1,10 @@
 const PCRTest=require('./../models/pcrTestModel')
-
+const dashBoard=require('./../models/dashBoardModel')
 const APIfunctions=require('./../utils/apiFunctions')
 const msg = require('./../utils/msg')
 const catchAsync= require('./../utils/catchAsync');
 const AppError = require('../utils/appError');
+const dashBoardController = require('./dashBoardController')
 
 
 exports.getAllTest = async (req, res) => {
@@ -46,12 +47,19 @@ exports.createPCRTest= catchAsync(async (req,res)=>{
 })
 
 exports.confirmPCRTest=catchAsync(async (req,res)=>{
-    console.log(req.body.ids)
     const test=await PCRTest.updateMany({_id:{
         $in:req.body.ids
     }},{
         confirm:{confirmBy:req.user.name}
     })
+    const positive =await PCRTest.where({confirm:{$exists:true},_id:{$in:req.body.ids}, result:"positive"}).countDocuments();
+    const negative =await PCRTest.where({confirm:{$exists:true},_id:{$in:req.body.ids}, result:"negative"}).countDocuments();
+    // await dashBoard.create({
+    //     positive:positive,
+    //     negative:negative,
+    //     creation:req.user
+    // })
+    await dashBoardController.addPCRResults(Date.now(),4,5,req.user)
     if(!test){
         return next(new AppError("No patient found with that ID",404))    //used return statement to avoid executing code below
     }

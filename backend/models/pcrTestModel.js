@@ -11,6 +11,10 @@ const pcrTestSchema =new mongoose.Schema({
         type:Number,
         required:[true, 'A patient must hae a age']
     },
+    result:{
+        type:String,
+        enum:['positive','negative']
+    },
     createdAt:{
         type:Date,
         default:Date.now(),
@@ -46,15 +50,20 @@ pcrTestSchema.pre('save',function(next){    //RUN BEFORE  .SAVE, AND .CREATE()
     next()
 })
 pcrTestSchema.post('save', function(doc,next){
+    console.log("lllllllll")
     next()
 })
 pcrTestSchema.post('save', function(doc,next){      //document middleware
     next()
 })
+pcrTestSchema.post('updateMany', function(doc,next){ 
+    // console.log(doc)     //document middleware
+    next()
+})
 
 // patientSchema.pre('find',function(next){   
 pcrTestSchema.pre(/^find/,function(next){        //QUERY MIDDLEWARE
-    this.find({confidential:{$ne:true}})                           //this refre to query we can change query object from here
+    this.find({confidential:{$ne:true}})                         //this refre to query we can change query object from here
     next()
 })
 

@@ -1,4 +1,5 @@
 const express = require('express');
+const cookieParser= require('cookie-parser')
 const morgan = require('morgan');
 const helmet = require('helmet')
 const cors = require('cors');
@@ -11,6 +12,7 @@ const pcrTestRouter=require('./routes/pcrTestRoutes')
 const userRouter=require('./routes/userRoutes')
 const AdminRouter=require('./routes/adminRoutes')
 const HospitalRouter=require('./routes/hospitalRoutes')
+const medicalHistoryRouter=require('./routes/medicalHistoryRoutes')
 
 const app=express();
 
@@ -20,6 +22,7 @@ if(process.env.NODE_ENV==='development'){
     app.use(morgan('dev'))
 }
 
+app.use(cookieParser())
 app.use(helmet())   //SET SECURITY HTTP
 app.use(cors());
 app.use(express.json());  //BODY PARSER -> READING DATA FROM BODY INTO req.body
@@ -35,6 +38,7 @@ app.use('/api/v1/users',userRouter)
 app.use('/api/v1/pcr',pcrTestRouter)
 app.use('/api/v1/staff',AdminRouter)
 app.use('/api/v1/hospital',HospitalRouter)
+app.use('/api/v1/med',medicalHistoryRouter)
 
 app.all('*',(req,res,next)=>{
     // res.status(404).json({

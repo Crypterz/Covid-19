@@ -1,5 +1,8 @@
-const mogoose = require('mongoose')
+const mongoose = require('mongoose')
 const dashBoardSchema = new mongoose.Schema({
+    date:{
+        type:Date
+    },
     totalCovidPatients:{
         type:Number
     },
@@ -38,7 +41,10 @@ const dashBoardSchema = new mongoose.Schema({
         }
     }],
     cases:[{
-        count:{
+        positive:{
+            type:Number
+        },
+        negative:{
             type:Number
         },
         createdAt:{
@@ -52,5 +58,11 @@ const dashBoardSchema = new mongoose.Schema({
         }
     }]
 })
+
+dashBoardSchema.pre('save',function(next){
+    console.log(this)
+    // console.log(this)
+    next()
+})
 const DashBoard = mongoose.model('DashBoard',dashBoardSchema)
-mdule.exports=DashBoard
+module.exports=DashBoard

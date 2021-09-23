@@ -8,7 +8,6 @@ import Dashboard from './screens/hospital/Dashboard'
 import Patient from './screens/hospital/Patients'
 import PatientProfile from './screens/hospital/PatientProfile'
 import AdminDashboard from './screens/healthMinistry/AdminDashBoard'
-
 import AddHospital from './screens/healthMinistry/AddHospital'
 import AddPatient from './screens/hospital/AddPatient'
 import AddHospitalStaff from './screens/hospital/AddHospitalStaff'
