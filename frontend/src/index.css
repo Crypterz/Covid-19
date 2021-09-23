@@ -220,20 +220,6 @@ main {
   float: right;
 }
 
-<<<<<<< HEAD
-/* .figures-div > Link {
-  style
-} */
-
-.formContainer {
-  box-shadow: 0 0 0 2px #cecece;
-  padding: 10px;
-}
-
-.textBox {
-  height: 20px;
-  font-size: 10px;
-=======
 /* Form */
 .form {
   max-width: 60rem;
@@ -271,5 +257,4 @@ main {
 }
 .dropdown:hover .dropdown-content {
   display: block;
->>>>>>> f00af258141f37324a7d11c4f9b6a1946a706d80
 }
