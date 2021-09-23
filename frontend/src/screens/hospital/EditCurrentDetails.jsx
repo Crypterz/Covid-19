@@ -7,15 +7,17 @@ import * as Yup from 'yup';
 //import { listPatientDetails } from '../../actions/patientActions'
 import { loadPatients , getPatientById, getAllPatients, getPatientsLoadingStatus, updateSymptomsInDB, updateDrugsInDB} from '../../store/entities/patients';
 
-const EditCurrentDetails = () => {
+const EditCurrentDetails = ({history}) => {
     const dispatch = useDispatch()
     const patientId = (window.location.href.split('/')).pop()
-    const [ selectedMainCategories, setSelectedMainCategories ] = useState(['']);
+   // const [ selectedMainCategories, setSelectedMainCategories ] = useState(['']);
 
-    const patient = useSelector(getPatientById(patientId))
+    const auth = useSelector(state => state.auth);
+
+   // const patient = useSelector(getPatientById(patientId))
     const patients = useSelector(getAllPatients);
    // console.log(patients)
-    const patientsLoading = useSelector(getPatientsLoadingStatus);
+  //  const patientsLoading = useSelector(getPatientsLoadingStatus);
 
     const [ schema, setSchema ] = useState({ 
         symptom0: Yup.string().required("Symptom is required..."),
@@ -252,8 +254,9 @@ const EditCurrentDetails = () => {
 
 
     return (
-        
-        <Container>
+        <>
+        {auth.loggedIn ? 
+        <Container className=' formContainer mt-3'>
         <Formik
             validationSchema = {Yup.object().shape(schema)}
             onSubmit = {submitForm}
@@ -269,15 +272,16 @@ const EditCurrentDetails = () => {
                 dirty,
                 errors
             }) => (
-            <Form noValidate onSubmit={handleSubmit}>
-            <h2 className = 'heading my-2 text-center font-weight-bold'>UPDATE PATIENT MEDICAL DATA</h2>
+            <Form className='mt-2' noValidate onSubmit={handleSubmit}>
+            <h2 className = 'heading text-center font-weight-bold mt-4'>UPDATE PATIENT MEDICAL DATA</h2>
 
 
             <Row className='m-3'>
-                <Form.Group>
+                <div style={{width:'50%'}}>
+                <Form.Group style={{width:'100%'}}>
                 <Form.Label >Assign doctor for the patient</Form.Label>
                     <Form.Control 
-                        className='w-150'
+                         style={{height:'40px'}}
                         onChange = {(e) => {
                         if(e.target.value !== "Select Hospital"){
                             //setTransferHospital(e.target.value);
@@ -285,20 +289,24 @@ const EditCurrentDetails = () => {
                         }} as="select">
                         {hospitals.map((c,index) => <option selected={index === 0? 'slected': null}>{`${c.name}`}</option>)}
                     </Form.Control>
+                    {/* <Button className='mt-4 w-50'>Assign doctor</Button> */}
                 </Form.Group>
-                <Button className='m-4 ml-5'>Assign doctor</Button>
+                </div>
+                <div className='w-50'>
+                <Button style={{marginTop:'32px'}}>Assign doctor</Button></div>
             </Row>
-            <Row>
+            <Row className='m-3'>
                 <Col>
                 {symptoms.map( v =>{
                     const index = symptoms.findIndex(va => va === v );
                     return (
                     <>
-                        <Row className='m-2'>
+                        <Row className=''>
                             <Col>
                                 <Form.Group controlId= {`validationFormik${formElements + index + 1 >= 10 ? `${formElements + index + 1}`: `0${formElements + index + 1}` }`}>
                                     <Form.Label >Symptoms</Form.Label>
                                     <Form.Control 
+                                        className = 'textBox'
                                         type='text'
                                         name={`symptom${index}`}
                                         value={values[`symptom${index}`]}
@@ -332,7 +340,7 @@ const EditCurrentDetails = () => {
                             </div>}
                         </Col></Row></> */}
 
-                        <Col>
+                        <Col className='mt-2'>
                             { index === 0 && <div>
                             <Button onClick= {() => handleSymptomsAdded()} className='mx-2 my-4' variant='primary'>+</Button>
                             { symptoms.length >1 && index ===0 && <Button onClick= {() => handleSymptomsDeleted(values)} className='mx-2 my-4' variant='danger'>-</Button>}
@@ -355,11 +363,12 @@ const EditCurrentDetails = () => {
                     const index = drugs.findIndex(va => va === v );
                     return (
                     <>
-                        <Row className='m-2'>
+                        <Row className='ml-2'>
                             <Col>
                             <Form.Group controlId= {`validationFormik${formElements + index + 1 >= 10 ? `${formElements + index + 1}`: `0${formElements + index + 1}` }`}>
                                 <Form.Label className = 'form-label'>Drugs</Form.Label>
                                 <Form.Control 
+                                    className = 'textBox'
                                     type='text'
                                     name={`drug${index}`}
                                     value={values[`drug${index}`]}
@@ -391,7 +400,7 @@ const EditCurrentDetails = () => {
                             { index !==0 && <Button onClick= {() => handleDrugsDeleted(values)} className='mx-2 my-4' variant='danger'>-</Button>}
                             </div>}
                         </Col></Row></> */}
-                        <Col>
+                        <Col className='mt-2'>
                             { index === 0 && <div>
                             <Button onClick= {() => handleDrugsAdded()} className='mx-2 my-4' variant='primary'>+</Button>
                             { drugs.length >1 && index ===0 && <Button onClick= {() => handleDrugsDeleted(values)} className='mx-2 my-4' variant='danger'>-</Button>}
@@ -413,8 +422,8 @@ const EditCurrentDetails = () => {
             </Form>
             )}
         </Formik> 
-        </Container>
-    
+        </Container>: history.push('/')}
+        </>
     )
 }
             

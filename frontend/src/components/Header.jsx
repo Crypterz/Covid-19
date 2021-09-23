@@ -1,8 +1,13 @@
 import React from 'react'
 import { Navbar, Nav, Container, NavDropdown, Dropdown} from 'react-bootstrap'
 import { LinkContainer,Link } from 'react-router-bootstrap';
+import { useSelector } from 'react-redux';
+import { useHistory } from "react-router-dom";
 
 function Header() {
+    let history = useHistory();
+    const auth = useSelector(state => state.auth);
+
     return (
         <header>
             <Navbar className="back" >
@@ -21,11 +26,16 @@ function Header() {
                         <NavDropdown.Divider />
                         <NavDropdown.Item href="#action/3.4">Log Out</NavDropdown.Item>
                         </NavDropdown> */}
-                        <LinkContainer to = '/login'>
+                        {!auth.loggedIn && <LinkContainer to = '/signin'>
                             <Nav.Link className = 'navbar-item'><span>Login</span></Nav.Link>
-                        </LinkContainer>
+                        </LinkContainer>}
+
+                        {auth.loggedIn && <LinkContainer to = '/logout'>
+                            <Nav.Link className = 'navbar-item'><span>Log Out</span></Nav.Link>
+                        </LinkContainer>}
+
                         
-                        <Dropdown className="my-2 dropdown">
+                        {auth.loggedIn && <Dropdown className="my-2 dropdown">
                         
                         <Dropdown.Toggle   className='dropdown-toogle'>Admin</Dropdown.Toggle>
 
@@ -48,7 +58,7 @@ function Header() {
 
 
                         </Dropdown.Menu>
-                    </Dropdown>
+                    </Dropdown>}
 
                     </Nav>
                     </Navbar.Collapse>

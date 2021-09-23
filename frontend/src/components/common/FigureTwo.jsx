@@ -5,7 +5,7 @@ const FigureTwo = ({ details }) => {
     return (
         <div>
             <div style={{justifyContent:'center'}}>
-                <h4 style={{textAlign:'center',margin:'1%'}}>{details.update_date_time.split(" ")[0]} Figures</h4>
+                <h4 style={{textAlign:'center',margin:'1%'}}>{/*details.update_date_time.split(" ")[0]*/} Figures</h4>
             </div>
             <div style={{margin:'1%',justifyContent:'center'}}>
                 <div className='figures-div' style={{display:'flex'}}>

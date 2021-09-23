@@ -1,4 +1,5 @@
 const express = require('express');
+const cookieParser= require('cookie-parser')
 const morgan = require('morgan');
 const helmet = require('helmet')
 const cors = require('cors');
@@ -21,6 +22,7 @@ if(process.env.NODE_ENV==='development'){
     app.use(morgan('dev'))
 }
 
+app.use(cookieParser())
 app.use(helmet())   //SET SECURITY HTTP
 app.use(cors());
 app.use(express.json());  //BODY PARSER -> READING DATA FROM BODY INTO req.body

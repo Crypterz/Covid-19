@@ -4,17 +4,19 @@ import {Form, Button, Col, FormControl} from 'react-bootstrap';
 import {registerPatients} from '../../store/entities/patients'
 import { toastAction } from '../../store/toastActions';
 import { connect } from 'react-redux'
+import auth from '../../store/auth';
+import { useDispatch, useSelector } from 'react-redux';
 
 //validating empty fields for NHospital
-function validate(first_name, last_name, dob, contact_number, address, city, district) {
+function validate(first_name, last_name, dob, nic, contact_number, address, city, district) {
     return {
         first_name: first_name.length ===0,
         last_name: last_name.length ===0,
         dob: dob.length ===0,
+        nic: nic.length ===0,
         contact_number: contact_number.length ===0,
         address: address.length ===0,
         city: city.length ===0,
-        district: district.length ===0,
         };
 }
 
@@ -24,6 +26,19 @@ function validate_contactNo(tel) {
     return reg.test(tel);
 }
 
+//NIC syntax
+function validateNIC(nic) {
+    const regex = /^([0-9]{9})(V|v)$/;
+    const regex2 = /^([0-9]{12})$/;
+
+    if (regex.test(nic)) {
+        return regex.test(nic);
+    }
+
+    else if (regex2.test(nic)) {
+        return regex2.test(nic);
+    }
+}
 
 export default class AddPatient extends Component {
     constructor(props){
@@ -31,6 +46,7 @@ export default class AddPatient extends Component {
         this.state = {first_name: '',
                       last_name:'',
                       dob:'',
+                      nic:'',
                       contact_number:'',
                       address:'',
                       city:'',
@@ -43,8 +59,10 @@ export default class AddPatient extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.onChangeContactNumber = this.onChangeContactNumber.bind(this);
         this.onChangeCity = this.onChangeCity.bind(this);
-       
+        this.onChangeNIC = this.onChangeNIC.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+
+       // const auth = useSelector(state => state.auth);
     }
 
     onChangeFirstName(e) {
@@ -69,15 +87,18 @@ export default class AddPatient extends Component {
         }
     }
 
-    
     onChangeCity(e) {
         const re = /^[A-Za-z\b]+$/;
         if (e.target.value === '' || re.test(e.target.value)) {
             this.setState({ city: e.target.value })
         }
     }
-
-
+    
+    onChangeNIC(e) {
+        this.setState({
+            nic: e.target.value
+        });
+    }
 
     handleChange(e){
         this.setState({
@@ -91,6 +112,9 @@ export default class AddPatient extends Component {
         if(!validate_contactNo(this.state.contact_number)){
             alert("ENTER VALID CONTACT NUMBER!!!")
         }
+        else if (!validateNIC(this.state.nic)) {
+            alert("Enter valid NIC number");
+        }
         else{
             //alert('Submitted: ' + this.state);
            // registerPatients(this.state)
@@ -103,11 +127,13 @@ export default class AddPatient extends Component {
 
     render() {
         //validating the fields in the nurse form whether filled or not
-        const errors = validate(this.state.first_name,this.state.last_name, this.state.dob, this.state.contact_number, this.state.address, this.state.city, this.state.district, this.state.small_description);
+        const errors = validate(this.state.first_name,this.state.last_name, this.state.dob, this.state.nic, this.state.contact_number, this.state.address, this.state.city, this.state.district, this.state.small_description);
         const isDisabled = Object.keys(errors).some(x => errors[x]);
 
         
         return (
+            <>
+            {/* {auth.loggedIn ?  */}
             <div class="container-fluid">
                 <div class="row max-height justify-content-center align-items-center">
                     <div class="col-10 mx-auto banner text-center">
@@ -143,16 +169,15 @@ export default class AddPatient extends Component {
                     />
                     <FormControl.Feedback type='invalid'>This field is required!</FormControl.Feedback>
                     </Form.Group>
-                    
-
-                  
+                    </Form.Row>
+                    <Form.Row>
                     <Form.Group as={Col} controlId='dob'>
                     <Form.Label class="float-left" className = 'form-label'>Date of Birth:</Form.Label>
                     <Form.Control 
                         type='date'
                         name='dob' 
                         min="1910-01-01"
-                        max= '2021-10-01'
+                        max="2021-10-01"
                         value={this.state.dob} 
                         onChange={this.handleChange}
                         placeholder='Enter Date of Birth'
@@ -161,8 +186,21 @@ export default class AddPatient extends Component {
                     <FormControl.Feedback type='invalid'>This field is required!</FormControl.Feedback>
                     </Form.Group>
                     </Form.Row>
-
-                    <Form.Group controlId='contact_number'>
+                    <Form.Row>
+                    <Form.Group as={Col}  controlId="formNIC">
+                            <Form.Label class="float-left" className = 'form-label'>NIC Number:</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="nic"
+                                required
+                                value={this.state.nic} 
+                                onChange={this.handleChange}
+                                placeholder='Enter NIC Number'
+                            />
+                    <FormControl.Feedback type='invalid'>This field is required!</FormControl.Feedback>
+                    </Form.Group>
+                    
+                    <Form.Group as={Col} controlId='contact_number'>
                     <Form.Label class="float-left" className = 'form-label' >Contact Number:</Form.Label>
                     <Form.Control 
                         type='text'
@@ -175,7 +213,7 @@ export default class AddPatient extends Component {
                     />
                     <FormControl.Feedback type='invalid'>This field only takes text!</FormControl.Feedback>
                     </Form.Group>
-                    
+                    </Form.Row>
 
                     <Form.Group  controlId="formAddress">
                             <Form.Label class="float-left" className = 'form-label'>Address:</Form.Label>
@@ -202,7 +240,7 @@ export default class AddPatient extends Component {
                                 onChange={this.onChangeCity}
                     /></Form.Group>
 
-<Form.Group  as={Col} controlId="formDistrict">
+                  <Form.Group  as={Col} controlId="formDistrict">
                                 <Form.Label class="float-left" className = 'form-label'>District:</Form.Label>
                                 <Form.Control 
                                 as="select" 
@@ -210,23 +248,31 @@ export default class AddPatient extends Component {
                                 value={this.state.district} 
                                 onChange={this.handleChange}
                                 aria-label="Default select example">
-                                    <option>Select the District </option>
-                                    <option value="CO">Colombo</option>
-                                    <option value="AI">Kilinochchi</option>
-                                    <option value="VA">Vavunia</option>
-                                    <option value="JA">Jaffna</option>
-                                    <option value="MU">Mullaitheevu</option>
-                                    <option value="AN">Anuradhapura</option>
-                                    <option value="KA">Kalutara</option>
-                                    <option value="GA">Gampaha</option>
-                                    <option value="HA">Hampantota</option>
-                                    <option value="KU">Kurunagal</option>
-                                    <option value="PU">Puttalam</option>
-                                    <option value="MA">Matara</option>
-                                    <option value="KA">Kandy</option>
-                                    <option value="GA">Galle</option>
-                                    <option value="PO">Polonaruwa</option>
-                                    <option value="NU">Nuwaraeliya</option>
+                                    <option>Select Here </option>
+                                    <option value="Colombo">Colombo</option>
+                                    <option value="Gampaha">Gampaha</option>
+                                    <option value="Kalutara">Kalutara</option>
+                                    <option value="Kandy">Kandy </option>
+                                    <option value="Matale">Matale </option>
+                                    <option value="Nuwera-Eliya">Nuwera-Eliya</option>
+                                    <option value="Galle">Galle </option>
+                                    <option value="Matara">Matara</option>
+                                    <option value="Hambantota">Hambantota </option>
+                                    <option value="Jaffna">Jaffna </option>
+                                    <option value="Mannar">Mannar</option>
+                                    <option value="Vauniya">Vauniya </option>
+                                    <option value="Mulathivu">Mulathivu </option>
+                                    <option value="Kilinochchi">Kilinochchi </option>
+                                    <option value="Batticaloa">Batticaloa</option>
+                                    <option value="Trincomalee">Trincomalee  </option>
+                                    <option value="Kurunegala">Kurunegala   </option>
+                                    <option value="Puttalam">Puttalam  </option>
+                                    <option value="Anuradhapura">Anuradhapura   </option>
+                                    <option value="Polonnaruwa">Polonnaruwa   </option>
+                                    <option value="Badulla">Badulla  </option>
+                                    <option value="Monaragala">Monaragala   </option>
+                                    <option value="Rathnapura">Rathnapura   </option>
+                                    <option value="Kegalle">Kegalle </option>
                                     
                                     </Form.Control>
                             </Form.Group>
@@ -242,7 +288,8 @@ export default class AddPatient extends Component {
             </div>
             </div>
             </div>
-            
+             {/* : window.location('/')}  */}
+            </>
         );
     }
 }

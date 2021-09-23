@@ -12,7 +12,10 @@ import { useDispatch, useSelector } from 'react-redux';
 const AcceptanceWaiting = ({history}) => {
     const dispatch = useDispatch()
 
-    const patientsList = useSelector(getAllPatients);
+    const auth = useSelector(state => state.auth);
+
+    const patientsDetails = useSelector(getAllPatients);
+    const patientsList = patientsDetails.list
     const [patients, setPatients] = useState([...patientsList]);
     const [patientState, setPatientState] = useState([...patientsList]);
     const [selected, setSelected] = useState([]);
@@ -96,25 +99,26 @@ const AcceptanceWaiting = ({history}) => {
 
     return (
         <>
-        {patientsLoading ? (<Loader></Loader>) :
+        {auth.loggedIn && patientsLoading && (<Loader></Loader>)}
+        {auth.loggedIn ? 
 
         <Container>
            
-            <h1 style={{textAlign:'center', marginBottom:'40px'}}>Patients Waiting for Aproval</h1>
+            <h2 style={{textAlign:'center', marginBottom:'40px', fontWeight:'700'}}>PATIENTS WAITING FOR APROVAL</h2>
         {patientState.length === 0 ? <Card style={{backgroundColor:'#fca8a4', color:'#b73333', opacity:'0.5', padding:'10px'}}>No data</Card>:
         <div>
-            <Row className='ml-3'>
+            <Row className='ml-3 mb-2'>
                 <Button
                     value = {selected}
                     disabled={selected.length === 0}
                     onClick = { () => AproveSelected('accept')}
-                    className="btn btn-primary mr-2 ml-2 mb-3"
+                    className="btn btn-primary w-25 mr-2"
                 >Accept Selected</Button>
                 <Button
                     value = {selected}
                     disabled={selected.length === 0}
                     onClick = { () => AproveSelected('declined')}
-                    className="btn btn-danger mb-3"
+                    className="btn btn-danger w-25"
                     style={{opacity:'0.7'}}
                 >Decline Selected</Button>
             </Row>
@@ -168,20 +172,22 @@ const AcceptanceWaiting = ({history}) => {
                             <td>
                                 <Button 
                                     value = {p._id}
-                                    onClick = { () => history.push(`/hospital/patientProfile/${p._id}`)}
-                                    className="btn btn-secondary mr-2 ml-2">Profile</Button>
+                                    onClick = { () => history.push(`/hospital/profile/${p._id}`)}
+                                    className="btn btn-light mr-2 ml-2">Profile</Button>
                             </td>
                             <td>
                                 <Row>
                                     <Button 
                                         value = {p._id}
                                         onClick = { () => Aproval('accept', p._id)}
-                                        className="btn btn-primary mr-2 ml-2">Accept</Button>
+                                        className="btn btn-primary mr-2 ml-2 text-center"
+                                        style={{width:'40%'}}>Accept</Button>
                                     <Button 
                                         value = {p._id}
                                         style={{opacity:'0.8'}}
                                         onClick = { () => Aproval('declined',p._id)}
-                                        className="btn btn-danger">Decline</Button>
+                                        className="btn btn-danger text-center"
+                                        style={{width:'40%',opacity:'0.7'}}>Decline</Button>
                                 </Row>
                             </td>
                         </tr>
@@ -203,7 +209,7 @@ const AcceptanceWaiting = ({history}) => {
         /> */}
         
         </Container>
-       }
+        : history.push('/')}
 
     </>
     )
