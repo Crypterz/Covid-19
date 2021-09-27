@@ -3,10 +3,11 @@ import {Container, Button, Card, Row, Col, Nav, Form,FormControl} from 'react-bo
 import Loader from '../../components/Loader'
 import { useDispatch, useSelector } from 'react-redux';
 //import { listPatientDetails } from '../../actions/patientActions'
-import patients, { loadPatients , getPatientById, getAllPatients, getPatientsLoadingStatus, updateTransferPatient} from '../../store/entities/patients';
+import { loadPatients , getPatientById, getAllPatients, getPatientsLoadingStatus, updateTransferPatient} from '../../store/entities/patients';
+import {getAllHospitals, loadHospitals} from '../../store/entities/hospitals'
 import { Scrollbars } from 'react-custom-scrollbars';
 
-const Profile =  ({value, history}) => {
+const Profile =  ({ history}) => {
     const dispatch = useDispatch()
     const patientId = (window.location.href.split('/')).pop()
 
@@ -15,6 +16,8 @@ const Profile =  ({value, history}) => {
     //const userType = 'admin'
 
     const patients = useSelector(getPatientById(patientId))
+    const hospitals = useSelector(getAllHospitals)
+    //console.log(hospitals)
 
     const [ symptoms, setSymptoms ] = useState(['']);
     const [ drugs, setDrugs ] = useState(['']);
@@ -24,8 +27,8 @@ const Profile =  ({value, history}) => {
 
     const [tranferSt, transferState ] = useState('false');
 
-    const hospitals = [{id:'1', name:'National Hospital of Sri Lanka'},{ id:'2', name:'Lady Ridgeway Hospital for Children'},
-    {id:'3',name:'Castle Street Hospital for Women'}]
+   // const hospitals = [{id:'1', name:'National Hospital of Sri Lanka'},{ id:'2', name:'Lady Ridgeway Hospital for Children'},
+   // {id:'3',name:'Castle Street Hospital for Women'}]
 
     const currentHospital_id = '4';
     const userHospital_id = '4'
@@ -76,6 +79,7 @@ const Profile =  ({value, history}) => {
 
     useEffect(() => {
         dispatch(loadPatients())
+        dispatch(loadHospitals())
 
         if(symptoms.length ===1 && symptoms[0] ===''){
             if(patient.length !==0){

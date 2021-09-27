@@ -1,5 +1,6 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 import { apiCallBegan } from './apiActions';
+import Cookies from 'js-cookie';
 //Auth Slice
 
 const slice = createSlice({
@@ -25,7 +26,8 @@ const slice = createSlice({
             user.logging = false;
             delete user.error;
             user.data = action.payload.data;
-            user.token = action.payload.token;  
+            user.token = action.payload.token; 
+            Cookies.set("token", user.token) 
             user.loggedIn = true;
         },
 

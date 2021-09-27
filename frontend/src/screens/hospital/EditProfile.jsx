@@ -1,12 +1,10 @@
 import React, {useEffect, useState} from 'react'
 import {Container, Button, Card, Row, Col, Nav, Form, FormControl} from 'react-bootstrap'
-import Loader from '../../components/Loader'
 import { useDispatch, useSelector } from 'react-redux';
 import {  Formik } from 'formik';
 import * as Yup from 'yup';
-//import { listPatientDetails } from '../../actions/patientActions'
-import patients, { loadPatients , getPatientById, getAllPatients, getPatientsLoadingStatus, updateSymptomsInDB, updateDrugsInDB} from '../../store/entities/patients';
-import { current } from '@reduxjs/toolkit';
+import  { getPatientById,  updatePatient} from '../../store/entities/patients';
+import { toastAction } from '../../store/toastActions';
 
 const EditProfile = ({history}) => {
 
@@ -17,8 +15,8 @@ const EditProfile = ({history}) => {
 
     const patient = useSelector(getPatientById(patientId))
    // console.log(patients)
-    const patientsLoading = useSelector(getPatientsLoadingStatus);
-    const date = new Date("1998-05-18")
+   // const patientsLoading = useSelector(getPatientsLoadingStatus);
+  //  const date = new Date("1998-05-18")
 
     const districts = [{id:'0', name:'Ampara'},{ id:'1', name:'Anuradhapura'},{id:'2',name:'Badulla'},
     {id:'3', name:'Batticaloa'},{id:'4', name:'Colombo'},{id:'5', name:'Galle'},{id:'6', name:'Gampaha'}, 
@@ -50,7 +48,7 @@ const EditProfile = ({history}) => {
         address: patient.age,
         city: patient.name,
        // birthday: Date.parse('1998-05-19'),
-        birthday: new Date("1998-05-18"),
+        birthday: "1998-05-18",
         district: currentDistrict
     });
 
@@ -73,14 +71,15 @@ const EditProfile = ({history}) => {
                 patientDistrict ,
                 age,
         }
-        console.log(Result)
+       // console.log(Result)
 
-        //dispatch(updateSymptomsInDB(symUpdate));
+        dispatch(updatePatient(Result, patientId));
+        dispatch(toastAction({ message: "Profile Updated Successfully", type: 'info' }))
     }
 
 
     useEffect(() => {
-        dispatch(loadPatients())
+       // dispatch(loadPatients())
 
     }, [dispatch])
 
@@ -295,7 +294,7 @@ const EditProfile = ({history}) => {
                         className='mb-3'
                         style={{float:'center'}}
                     >
-                    Add PCR Results
+                    Submit
                     </Button>
                 </div>
                 </Form>

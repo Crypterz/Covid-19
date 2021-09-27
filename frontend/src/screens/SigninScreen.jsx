@@ -41,8 +41,8 @@ export default function SigninScreen(props) {
     useEffect(() => {
         if (loggedIn === true) {
            //props.history.push(redirect);
-            console.log('logged in suceessfully');
-           // dispatch(toastAction({ message: "Logged in Success...", type: 'info' }));
+           // console.log('logged in suceessfully');
+            dispatch(toastAction({ message: "Logged in Success...", type: 'info' }));
             window.location ='/hospital/dashboard';
         }else{
            // console.log('not logged in suceessfully');

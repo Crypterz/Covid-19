@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {  Formik } from 'formik';
 import * as Yup from 'yup';
 //import { listPatientDetails } from '../../actions/patientActions'
-import { loadPatients , getPatientById, getAllPatients, getPatientsLoadingStatus, updateSymptomsInDB, updateDrugsInDB} from '../../store/entities/patients';
+import {  getAllPatients, updateSymptomsInDB, updateDrugsInDB, updatePatient} from '../../store/entities/patients';
 
 const EditCurrentDetails = ({history}) => {
     const dispatch = useDispatch()
@@ -207,28 +207,28 @@ const EditCurrentDetails = ({history}) => {
     }
 
 
-    const submitForm = (values) => {
-     // console.log(values)
-      console.log(symptoms);
-      console.log(drugs)
+    // const submitForm = (values) => {
+    //  // console.log(values)
+    //   console.log(symptoms);
+    //   console.log(drugs)
  
-    }
+    // }
 
     const updateSymptom = () =>{
         const symUpdate = {
-            patientId,
-            symptoms
+            //patientId,
+            symptoms: symptoms
         }
-        dispatch(updateSymptomsInDB(symUpdate));
+        dispatch(updatePatient(symUpdate,patientId ));
        // console.log(symptoms);
     } 
 
     const updateDrug = () =>{
         const drugUpdate = {
-            patientId,
-            drugs
+            //patientId,
+            drugs: drugs
         }
-        dispatch(updateDrugsInDB(drugUpdate));
+        dispatch(updatePatient(drugUpdate,patientId));
        // console.log(drugs);
     }
 
@@ -259,7 +259,7 @@ const EditCurrentDetails = ({history}) => {
         <Container className=' formContainer mt-3'>
         <Formik
             validationSchema = {Yup.object().shape(schema)}
-            onSubmit = {submitForm}
+           // onSubmit = {submitForm}
             initialValues = {initialValues}
         >
             {({

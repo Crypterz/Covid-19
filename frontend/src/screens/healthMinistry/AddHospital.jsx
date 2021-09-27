@@ -2,20 +2,39 @@ import Container from 'react-bootstrap/Container';
 import {Form, Button, Col, FormControl, Row} from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { addHospital, getHospitalAddedStatus} from '../../store/entities/hospitals';
+import { toastAction } from '../../store/toastActions';
 
 export default function AddHospital(props) {
+    const dispatch = useDispatch();
+    const hospitalAddedStatus = useSelector(getHospitalAddedStatus);
+
     const [name, setName] = useState('');
     const [contact, setContact] = useState('');
     const [district, setDistrict] = useState('');
     const [city, setCity] = useState('');
     const [province, setProvince] = useState('');
 
-    const dispatch = useDispatch();
 
     const submitHandler = (e) => {
       e.preventDefault();
+      let hospital= {
+          name: name,
+          Contact: [contact],
+          address: {
+              district : district,
+              city : city,
+              province : province
+          },
+      }
       // TODO: sign in action
-      
+      dispatch(addHospital(hospital))
+      if(hospitalAddedStatus.hospitalAdded){
+        dispatch(toastAction({ message: "Hospital Added Successfully", type: 'info' }))
+      }else{
+        dispatch(toastAction({ message: "Hospital Adding Failed", type: 'error' }))
+      }
+      //console.log(hospital)
     };
         
     return (
@@ -40,10 +59,10 @@ export default function AddHospital(props) {
                     <Form.Group  controlId='contact'>
                     <Form.Label class="float-left" className = 'form-label' >Contact Number:</Form.Label>
                     <Form.Control 
-                        type='tel'
+                        type='number'
                         id='contact'
                         placeholder="123-45-678"  
-                        pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" 
+                        //pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" 
                         required
                         onChange={(e) => setContact(e.target.value)} 
                     />

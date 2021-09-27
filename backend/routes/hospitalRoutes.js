@@ -6,7 +6,8 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(authController.protect, authController.restrictTo('patient'), hospitalController.getAllHospitals)
+  //.get(authController.protect, authController.restrictTo('patient'), hospitalController.getAllHospitals)
+  .get( hospitalController.getAllHospitals)
   .post(hospitalController.createHospital)
 
 // router

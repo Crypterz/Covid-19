@@ -1,6 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router,Route, Switch } from 'react-router-dom'
- import { ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Header from './components/Header'
 import Footer from './components/Footer'
 import HomeScreen from './screens/HomeScreen'
@@ -80,7 +81,6 @@ const App = () =>{
            <Route path='/hospital/wards' component={WardsList}/>
            <Route path= '/healthMinistry/hospital' component={Hospitals}/>
            <Route path='/hospital/staffs' component={StaffList}/>
-           <Route path='/hospital/addHospitalStaff' component={AddHospitalStaff}/>
 
         {/* </Container> */}
           </switch>

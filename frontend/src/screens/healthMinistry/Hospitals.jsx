@@ -215,7 +215,7 @@ const WardsList = (props) => {
 export default WardsList*/
 
 
-import React from "react";
+import React, {useEffect} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -227,6 +227,8 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import { DeleteOutline, AddCircleOutline, Edit} from "@material-ui/icons";
 import {Link} from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllHospitals, getHospitalLoadingStatus, loadHospitals} from '../../store/entities/hospitals';
 import './hospitals.css';
 
 import { useState } from "react";
@@ -258,12 +260,22 @@ const rows = [
 ];
 
 export default function Hospitals() {
-  const [data, setData] = useState(rows)
+  const dispatch = useDispatch()
+
+  const hospital = useSelector(getAllHospitals)
+  const hospitalsLoading = useSelector(getHospitalLoadingStatus);
+
+  const [data, setData] = useState(hospital)
   const classes = useStyles();
 
   const handleDelete = (hospital_id)=>{
     setData(data.filter((item)=>item.hospital_id !== hospital_id));
   };
+
+  useEffect(() => {
+    dispatch(loadHospitals())
+
+},[dispatch, hospital])
 
   return (
     <TableContainer component={Paper}>
@@ -282,22 +294,22 @@ export default function Hospitals() {
         </TableHead>
         <TableBody>
           {data.map(row => (
-            <TableRow key={row.hospital_id}>
+            <TableRow key={row._id}>
               <TableCell component="th" scope="row">
-                {row.hospital_id}
+                {row._id}
               </TableCell>
               <TableCell align="left">{row.name}</TableCell>
-              <TableCell align="left">{row.contact}</TableCell>
-              <TableCell align="left">{row.city}</TableCell>
-              <TableCell align="left">{row.district}</TableCell>
-              <TableCell align="left">{row.province}</TableCell>
+              <TableCell align="left">{row.Contact[0]}</TableCell>
+              <TableCell align="left">{row.address.district}</TableCell>
+              <TableCell align="left">{row.address.city}</TableCell>
+              <TableCell align="left">{row.address.province}</TableCell>
 
               <>
               <TableCell align="left">
-                <Link to={"/wards/"+row.hospital_id}>
+                <Link to={"/wards/"+row._id}>
                 <button className="wardListEdit" aria-label="edit" >
                   <Edit/>Edit 
-                </button></Link><DeleteOutline className="wardListDelete" onclick={()=>handleDelete(data.hospital_id)}/>
+                </button></Link><DeleteOutline className="wardListDelete" onclick={()=>handleDelete(data._id)}/>
               </TableCell></>
             </TableRow>
           ))}

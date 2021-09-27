@@ -4,5 +4,6 @@ const func=fn=>{
 }
 const pk=func(()=>{
     // console.log('kkkkkkkkkkk')
+        //"test": "react-scripts test",
 })
 // pk()

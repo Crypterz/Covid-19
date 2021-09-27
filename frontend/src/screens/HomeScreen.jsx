@@ -38,7 +38,7 @@ const HomeScreen = () => {
         fetchOverall()
         fetchGraph()
 
-        console.log(overall)
+       // console.log(overall)
 
 
     },[dispatch])

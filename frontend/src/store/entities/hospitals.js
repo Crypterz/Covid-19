@@ -5,11 +5,13 @@ import configData from '../../config.json';
 import moment from 'moment';
 
 const slice = createSlice({
-    name: "hospital",
+    name: "hospitals",
     initialState: {
         list: [],
         loading: false,
-        lastFetch: null
+        lastFetch: null,
+        hospitalAdded: false,
+        wardAdded: false
     },
 
     reducers: {
@@ -27,6 +29,20 @@ const slice = createSlice({
             hospital.hospitalAdded = true
         },
 
+        wardCreateRequested(hospital, action) {
+            hospital.loading = true;
+            hospital.wardAdded = false;
+        },
+
+        wardCreateRequestFailed(hospital, action){
+            hospital.loading = false;
+        },
+
+        wardCreateRequestSucceeded(hospital, action){
+            hospital.loading = false;
+            hospital.wardAdded = true
+        },
+
         
         hospitalRequested(hospital, action){
             hospital.loading = true;
@@ -38,16 +54,22 @@ const slice = createSlice({
             
         },
 
-        hospitalReceived(hospital, action){
+        hospitalReceived(hospitals, action){
             //pcr.list = action.payload.pcr;
-            hospital.list = action.payload.data.pcr;
-            hospital.loading = false;
-            hospital.lastFetch = Date.now();
-            //console.log(pcr.list)
+            hospitals.list = action.payload.data.hospitals;
+            hospitals.loading = false;
+            hospitals.lastFetch = Date.now();
+            //console.log(hospitals.list)
         },
 
         hospitalUpdated(hospital, action){
             
+        },
+
+        wardUpdated(hospitals, action){
+            const wardId = action.payload.data.hospitals.wards;
+            const index = hospitals.list.wards.findIndex(c => c._id === wardId );
+            hospitals.list.wards[index] = action.payload.data.hospital;
         }
     }
 });
@@ -61,9 +83,13 @@ export const {
     hospitalCreateRequested,
     hospitalCreateRequestFailed,
     hospitalCreateRequestSucceeded,
+    wardUpdated,
+    wardCreateRequested,
+    wardCreateRequestFailed,
+    wardCreateRequestSucceeded,
 } =slice.actions;
 
-const pcrURL = "/api/v1/";
+const hospitalURL = "/api/v1/";
 const refreshTime = configData.REFRESH_TIME;
 
 export const loadHospitals = () => (dispatch, getState) => {
@@ -74,7 +100,7 @@ export const loadHospitals = () => (dispatch, getState) => {
     
     return dispatch(
         apiCallBegan({
-            url: pcrURL + 'hospital',
+            url: hospitalURL + 'hospital',
             onStart: hospitalRequested.type,
             onSuccess: hospitalReceived.type,
             onError: hospitalRequestFailed.type
@@ -83,9 +109,10 @@ export const loadHospitals = () => (dispatch, getState) => {
 };
 
 export const addHospital = (hospital) => (dispatch) => {
+    console.log(hospital)
     return dispatch(
         apiCallBegan({
-            url: pcrURL + 'hospital',
+            url: hospitalURL + 'hospital',
             method: "post",
             data: hospital,
             onStart: hospitalCreateRequested,
@@ -108,8 +135,36 @@ export const getHospitalAddedStatus = createSelector(
 
 export const getAllHospitals = createSelector(
     state => state.entities.hospital,
-    hospital => hospital
+    hospital => hospital.list
 );
+
+export const addWard = (ward, hospitalId) => (dispatch) => {
+   // console.log(hospital)
+    return dispatch(
+        apiCallBegan({
+            url: hospitalURL + `hospital/wards/${hospitalId}`,
+            method: "post",
+            data: ward,
+            onStart: wardCreateRequested,
+            onSuccess: wardCreateRequestSucceeded.type,
+            onError: wardCreateRequestFailed
+        })
+    );
+}
+
+export const updateWard= (ward, id) => (dispatch) => {
+    console.log(ward, id)
+    return dispatch(
+      // console.log(patient);
+        apiCallBegan({
+            url: hospitalURL + `wards/${id}`,
+            method: "patch",
+            data: ward,
+            onSuccess: wardUpdated.type,
+        })
+    );
+
+}
 
 // export const updatePcrAproval = (pcrIds) =>{
 //     return apiCallBegan({

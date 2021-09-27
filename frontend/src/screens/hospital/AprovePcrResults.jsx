@@ -1,12 +1,15 @@
 import React, {useEffect, useState} from 'react'
 import { Table, Container, Button, Row, Card} from 'react-bootstrap'
-import { loadPatients, getAllPatients, getPatientsLoadingStatus, updateTransferPatient,
-    updateSelectedTransferPatient} from '../../store/entities/patients';
+// import { loadPatients, getAllPatients, getPatientsLoadingStatus, updateTransferPatient,
+//     updateSelectedTransferPatient} from '../../store/entities/patients';
 import Loader from '../../components/Loader'
+import Pagination from '../../components/Pagination';
+import { paginate } from '../../utils/paginate';
 //import { paginate } from '../../utils/paginate';
 //import Pagination from '../../components/Pagination';
 import {getAllPcrs, loadPcrs, updatePcrAproval, getPcrLoadingStatus} from '../../store/entities/pcr';
 import { useDispatch, useSelector } from 'react-redux';
+//import Cookies from 'js-cookie';
 
 
 
@@ -14,24 +17,25 @@ const AprovePcrResults = ({history}) => {
     const dispatch = useDispatch()
 
     const auth = useSelector(state => state.auth);
-    console.log(auth)
-    //const patientsList = useSelector(getAllPatients);
-    const pcrDetails = useSelector(getAllPcrs);
-    const patientsList = pcrDetails.list;
+   // const token = Cookies.get("token")
 
-    //console.log(patientsList)
-    const [patientState, setPatientState] = useState(getOnlyIds(patientsList));
-   // console.log(patientState)
+    //const pcrDetails = useSelector(getAllPcrs);
+    //const patientsList = pcrDetails.list;
+    const patientsList = useSelector(getAllPcrs);
+    const pageSize = 10;
+    const [currentPage, setCurrentPage] = useState(1);
+    let [paginated, setPaginated] = useState(patientsList);
+    //console.log(paginated)
 
+    const [patientState, setPatientState] = useState(getOnlyIds(paginated));
    // console.log(patientState)
-   // const [patientState, setPatientState] = useState([...patientsList]);
     const [selected, setSelected] = useState([]);
-   // console.log(selected.length, patientsList.length)
-   // console.log(selected)
-   // console.log(patientsList)
+    console.log(selected)
     const [allSelected, setAllSelected] = useState(false);
-    //const patientsLoading = useSelector(getPatientsLoadingStatus);
     const patientsLoading = useSelector(getPcrLoadingStatus);
+
+//const [filtered, setFiltered] = useState(patientsList);
+
 
 
     useEffect(() => {
@@ -39,10 +43,10 @@ const AprovePcrResults = ({history}) => {
        if(!auth.loggedIn){
            window.location='/'
        }
-       dispatch(loadPcrs(auth.token));
+       dispatch(loadPcrs());
 
         setPatientState(
-            patientsList.map( p=>{
+            paginated.map( p=>{
                 return {
                      select: false,
                     _id: p._id,
@@ -54,6 +58,8 @@ const AprovePcrResults = ({history}) => {
             })
         )
 
+        setPaginated(paginate(patientsList, currentPage, pageSize));
+
     },[dispatch])
 
     const Aproval = (decision, patientId)=>{
@@ -64,7 +70,8 @@ const AprovePcrResults = ({history}) => {
             // }
             ids: [
                 patientId
-            ]
+            ],
+            token: auth.token
         }
         console.log(updateAprove)
         dispatch(updatePcrAproval(updateAprove));
@@ -87,15 +94,15 @@ const AprovePcrResults = ({history}) => {
     }
 
     const handleSelected =(value, data)=>{
-        if(value === false && selected.length === patientsList.length){
+        if(value === false && selected.length === patientsList.length/(pageSize * currentPage)){
             setAllSelected(false);
         }
-        if(value === true && selected.length === patientsList.length-1){
+        if(value === true && selected.length === patientsList.length/(pageSize * currentPage)-1){
             setAllSelected(true);
         }
         if(value === true){
             let selectedList = [...selected]
-            let patient = patientsList.filter(p => p._id === data._id );
+            let patient = paginated.filter(p => p._id === data._id );
             selectedList.push(patient[0]._id);
             setSelected(selectedList);
         }else{
@@ -108,7 +115,7 @@ const AprovePcrResults = ({history}) => {
         if(check === true){
             setAllSelected(check);
             //setSelected(patientsList)
-            setSelected(getOnlyIds(patientsList))
+            setSelected(getOnlyIds(paginated))
         }else{
             setAllSelected(check);
             setSelected([]);
@@ -164,7 +171,7 @@ const AprovePcrResults = ({history}) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {patientState.map( p =>
+                    {paginated.map( p =>
                     
                         <tr>
                             {/* <td>{p._id}</td> */}
@@ -209,15 +216,15 @@ const AprovePcrResults = ({history}) => {
         }
       
 
-        {/* <Pagination
-            itemsCount = {filtered.length} 
+        <Pagination
+            itemsCount = {patientsList.length} 
             pageSize = {pageSize} 
             currentPage = {currentPage}
             onPageChange = {(page) => {
                 setCurrentPage(page);
-                setPaginated(paginate(filtered, page, pageSize));
+                setPaginated(paginate(patientsList, page, pageSize));
             }}
-        /> */}
+        />
         
         </Container>
         {/* : history.push('/')} */}

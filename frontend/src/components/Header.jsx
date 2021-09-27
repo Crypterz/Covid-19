@@ -1,12 +1,18 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { Navbar, Nav, Container, NavDropdown, Dropdown} from 'react-bootstrap'
 import { LinkContainer,Link } from 'react-router-bootstrap';
-import { useSelector } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
+import {getAuthDetails} from '../store/auth'
 
 function Header() {
-    let history = useHistory();
+   // let history = useHistory();
     const auth = useSelector(state => state.auth);
+   // const auth = useSelector(getAuthDetails);
+
+    useEffect(() => {
+       // console.log(auth);
+    });
 
     return (
         <header>

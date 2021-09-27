@@ -9,7 +9,8 @@ const slice = createSlice({
     initialState: {
         list: [],
         loading: false,
-        lastFetch: null
+        lastFetch: null,
+        patientAdded : false
     },
     reducers: {
 
@@ -26,6 +27,7 @@ const slice = createSlice({
             delete patients.registering;
             patients.registerSuccessful = true;
             patients.list.push(action.payload.data);
+            patients.patientAdded = true
         },
 
         patientsRequested(patients, action){
@@ -70,6 +72,12 @@ const slice = createSlice({
           //  variants[variantIndex].countInStock = newCount;
         },
 
+        patientUpdated(patients, action){
+            const patientId = action.payload.data.patient._id;
+            const index = patients.list.findIndex(c => c._id === patientId );
+            patients.list[index] = action.payload.data.patient;
+        },
+
         selectedPatientTransferUpdated(patients, actions){
             
         }
@@ -86,6 +94,7 @@ export const {
     patientsRegisterRequested,
     patientsRegisterRequestFailed,
     patientsRegisterRequestSucceeded,
+    patientUpdated,
     patientSymptomsUpdated,
     patientDrugsUpdated,
     patientTransferUpdated,
@@ -135,18 +144,32 @@ export const getPatientById = patientId =>
 );
 
 export const registerPatients = (patient) => (dispatch) => {
-    console.log(patient)
+   // console.log(patient, 'efeferfrgre' )
     return dispatch(
-        console.log(patient)
-        // apiCallBegan({
-        //     url: patientURL + 'patientRegister',
-        //     method: "post",
-        //     data: patient,
-        //     onStart: patientsRegisterRequested,
-        //     onSuccess: patientsRegisterRequestSucceeded.type,
-        //     onError: patientsRegisterRequestFailed
-        // })
+       // console.log(patient)
+        apiCallBegan({
+            url: patientURL + 'patients/',
+            method: "post",
+            data: patient,
+            onStart: patientsRegisterRequested,
+            onSuccess: patientsRegisterRequestSucceeded.type,
+            onError: patientsRegisterRequestFailed
+        })
     );
+}
+
+export const updatePatient= (patient, id) => (dispatch) => {
+    console.log(patient, id)
+    return dispatch(
+      // console.log(patient);
+        apiCallBegan({
+            url: patientURL + `patients/${id}`,
+            method: "patch",
+            data: patient,
+            onSuccess: patientUpdated.type,
+        })
+    );
+
 }
 
 export const updateSymptomsInDB = (symptoms) => (dispatch) => {
