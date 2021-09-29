@@ -6,7 +6,7 @@ const bcrypt=require('bcryptjs')
 const userSchema=new mongoose.Schema({
     name:{
         type:String,
-        required:[true, 'name is required']
+        required:[false, 'name is required']
     },
     email:{
         type:String,
@@ -36,8 +36,14 @@ const userSchema=new mongoose.Schema({
     },
     role:{
         type:String,
-        enum:['patient','admin','medicalOfficer']
+        enum:['patient','admin','hospitalAdmin', 'hospital user']
     },
+
+    hospital_id:{
+        type:String,
+        required:false
+    },
+
     passwordResetToken: String,
     passwordResetExpire: Date
 })
