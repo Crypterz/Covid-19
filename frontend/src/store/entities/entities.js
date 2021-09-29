@@ -6,5 +6,6 @@ import hospitalReducer from './hospitals'
 export default combineReducers({
     patients: patientReducer,
     pcr: pcrReducer,
-    hospital: hospitalReducer
+    hospital: hospitalReducer,
+    user: userReducer,
 })
