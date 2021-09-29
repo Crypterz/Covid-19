@@ -10,6 +10,7 @@ import Patient from './screens/hospital/Patients'
 import PatientProfile from './screens/hospital/PatientProfile'
 import AdminDashboard from './screens/healthMinistry/AdminDashBoard'
 import AddHospital from './screens/healthMinistry/AddHospital'
+import AddHospitalAdmin from './screens/healthMinistry/AddHospitalAdmin'
 import AddPatient from './screens/hospital/AddPatient'
 import AddHospitalStaff from './screens/hospital/staffs/AddHospitalStaff'
 import EditCurrentDetails from './screens/hospital/EditCurrentDetails';
@@ -55,6 +56,7 @@ const App = () =>{
             <Route path='/hospital/patientProfile/:id' component={PatientProfile}/>
             <Route path='/healthMinistry/dashboard' component={AdminDashboard}/>
             <Route path='/healthMinistry/addHospital' component={AddHospital}/>
+            <Route path='/healthMinistry/addHospitalAdmin/:id' component={AddHospitalAdmin}/>
             <Route path='/hospital/addHospitalStaff' component={AddHospitalStaff}/>
             <Route path='/hospital/addPatient' component={AddPatient}/>
             <Route path='/hospital/editCurrentDetails/:id' component={EditCurrentDetails}/>
