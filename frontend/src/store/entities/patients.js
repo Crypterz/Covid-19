@@ -45,7 +45,7 @@ const slice = createSlice({
             patients.list = action.payload.data.patients;
             patients.loading = false;
             patients.lastFetch = Date.now();
-            console.log(patients.list)
+           // console.log(patients.list)
         },
 
         patientSymptomsUpdated(patients, action){
@@ -120,6 +120,22 @@ export const loadPatients = () => (dispatch, getState) => {
         })
     );
 };
+
+export const loadPatient = (patientid) => (dispatch, getState) => {
+    const { lastFetch } = getState().entities.patients;
+ 
+     const diffInMinutes = moment().diff(moment(lastFetch), "minutes");
+     if (diffInMinutes < refreshTime) return;
+ 
+     return dispatch(
+         apiCallBegan({
+             url: patientURL + `patients/${patientid}`,
+             onStart: patientsRequested.type,
+             onSuccess: patientsReceived.type,
+             onError: patientsRequestFailed.type
+         })
+     );
+ };
 
 export const getAllPatients= createSelector(
     state => state.entities.patients,

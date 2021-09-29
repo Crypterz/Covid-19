@@ -1,18 +1,25 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import { Navbar, Nav, Container, NavDropdown, Dropdown} from 'react-bootstrap'
 import { LinkContainer,Link } from 'react-router-bootstrap';
-import { Provider, useSelector } from 'react-redux';
-import { useHistory } from "react-router-dom";
-import {getAuthDetails} from '../store/auth'
+import {  useSelector } from 'react-redux';
+//import { useHistory } from "react-router-dom";
+//import {getAuthDetails} from '../store/auth'
 
 function Header() {
    // let history = useHistory();
     const auth = useSelector(state => state.auth);
+    const [userType, setUsertype] = useState('');
    // const auth = useSelector(getAuthDetails);
+  // console.log(userType)
+  // console.log(auth)
 
     useEffect(() => {
+        if(auth.loggedIn){
+            //console.log(auth.data.user)
+            setUsertype(auth.data.user.role)
+        }
        // console.log(auth);
-    });
+    },[userType]);
 
     return (
         <header>
@@ -40,9 +47,13 @@ function Header() {
                             <Nav.Link className = 'navbar-item'><span>Log Out</span></Nav.Link>
                         </LinkContainer>}
 
+                        {auth.loggedIn && userType === 'patient' && <LinkContainer to = '/hospital/profile'>
+                            <Nav.Link className = 'navbar-item'><span>Profile</span></Nav.Link>
+                        </LinkContainer>}
+
                         
-                        {auth.loggedIn && <Dropdown className="my-2 dropdown">
-                        
+                        {auth.loggedIn && userType === 'hospitalAdmin' && <Dropdown className="my-2 dropdown">
+                        {/* {auth.loggedIn &&  <Dropdown className="my-2 dropdown"> */}
                         <Dropdown.Toggle   className='dropdown-toogle'>Admin</Dropdown.Toggle>
 
                         <Dropdown.Menu  className='dropdown-menu'>

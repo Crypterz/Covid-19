@@ -61,7 +61,7 @@ const App = () =>{
             <Route path='/hospital/acceptanceWaiting' component={AcceptanceWaiting}/>
             <Route path='/hospital/addPcrResults' component={AddPcrResults}/>
             <Route path='/hospital/editProfile/:id' component={EditProfile}/>
-            <Route path='/hospital/profile' component={Profile}/>
+            <Route path='/hospital/profile/:id' component={Profile}/>
             <Route path='/hospital/aprovePcrResults' component={AprovePcrResults}/>
             <Route path='/hospitals/editProfile' component={EditProfile}/>
           {/* <Route path='/login' component={Login}/> */}

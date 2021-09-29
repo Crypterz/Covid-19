@@ -27,7 +27,7 @@ const slice = createSlice({
             delete user.error;
             user.data = action.payload.data;
             user.token = action.payload.token; 
-            Cookies.set("token", user.token) 
+            //Cookies.set("token", user.token) 
             user.loggedIn = true;
         },
 
@@ -55,6 +55,7 @@ const slice = createSlice({
         userLoggedOut(user,action){
             user.loggedIn = false;
             user.data = {};
+            user.token=''
         },
 
         authDataUpdated(user, action){
