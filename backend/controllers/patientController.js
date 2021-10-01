@@ -88,6 +88,7 @@ exports.getPatient = catchAsync(async (req, res,next) => {
 })
 
 exports.createPatient= catchAsync(async (req,res)=>{
+    console.log(req.body)
     // const newPatient=new Patient({})
     // newPatient.save()
     // try{

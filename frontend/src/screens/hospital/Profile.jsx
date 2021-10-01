@@ -3,18 +3,22 @@ import {Container, Button, Card, Row, Col, Nav, Form,FormControl} from 'react-bo
 import Loader from '../../components/Loader'
 import { useDispatch, useSelector } from 'react-redux';
 //import { listPatientDetails } from '../../actions/patientActions'
-import patients, { loadPatients , getPatientById, getAllPatients, getPatientsLoadingStatus, updateTransferPatient} from '../../store/entities/patients';
+import { loadPatients , getPatientById, getAllPatients, getPatientsLoadingStatus, updateTransferPatient, loadPatient} from '../../store/entities/patients';
+import {getAllHospitals, loadHospitals} from '../../store/entities/hospitals'
 import { Scrollbars } from 'react-custom-scrollbars';
 
-const Profile =  ({value, history}) => {
+const Profile =  ({ history}) => {
     const dispatch = useDispatch()
     const patientId = (window.location.href.split('/')).pop()
 
     const auth = useSelector(state => state.auth);
-
+   // console.log(auth)
     //const userType = 'admin'
 
     const patients = useSelector(getPatientById(patientId))
+    //console.log(patients)
+    const hospitals = useSelector(getAllHospitals)
+    //console.log(hospitals)
 
     const [ symptoms, setSymptoms ] = useState(['']);
     const [ drugs, setDrugs ] = useState(['']);
@@ -24,8 +28,8 @@ const Profile =  ({value, history}) => {
 
     const [tranferSt, transferState ] = useState('false');
 
-    const hospitals = [{id:'1', name:'National Hospital of Sri Lanka'},{ id:'2', name:'Lady Ridgeway Hospital for Children'},
-    {id:'3',name:'Castle Street Hospital for Women'}]
+   // const hospitals = [{id:'1', name:'National Hospital of Sri Lanka'},{ id:'2', name:'Lady Ridgeway Hospital for Children'},
+   // {id:'3',name:'Castle Street Hospital for Women'}]
 
     const currentHospital_id = '4';
     const userHospital_id = '4'
@@ -75,7 +79,12 @@ const Profile =  ({value, history}) => {
 
 
     useEffect(() => {
-        dispatch(loadPatients())
+        if(auth.data.user.role === 'patient'){
+            dispatch(loadPatient(patientId))
+        }else{
+            dispatch(loadPatients())
+            dispatch(loadHospitals())
+        }
 
         if(symptoms.length ===1 && symptoms[0] ===''){
             if(patient.length !==0){
@@ -184,8 +193,9 @@ const Profile =  ({value, history}) => {
                                         </li>
                                     </ul>
                                 </div>
+                                {auth.data.user.role !== 'patient' &&
                                 <div className='text-center m-2'>
-                                {currentHospital_id === userHospital_id ? <Button 
+                                {currentHospital_id === userHospital_id ?<Button 
                                         type='submit'  
                                         className='btn btn-primary m-2 text-center' 
                                         onClick = { () => history.push(`/hospital/editCurrentDetails/${patients._id}`)}
@@ -194,13 +204,13 @@ const Profile =  ({value, history}) => {
                                         <Button className='btn btn-prymary m-2'>Accept</Button>
                                         <Button className='btn btn-danger m-2'>Decline</Button>
                                     </div> }
-                                </div>
+                                </div> }
                             </Card>
                         </div>
                     </div>
 
 
-                    
+                    {auth.data.user.role !== 'patient' &&
                     <div className="vs-col vs-xs- vs-sm-12 vs-lg-3" style={{margin:'0%',width:'100%', position:'relative'}}>
                             <div className="set-animation from-left animate">
                             {currentHospital_id === userHospital_id ? 
@@ -247,7 +257,7 @@ const Profile =  ({value, history}) => {
                                     </div>
                                 </Card> :''}
                             </div>
-                    </div>
+                    </div> }
                 </div>
 
                 <div className="vs-row top-content" style={{display:'flex', width:'100%'}}>
@@ -351,10 +361,11 @@ const Profile =  ({value, history}) => {
                                 </div>
                         </Card>
                     </div>
-
+                    
+                    {filteredHistory.length !== 0 &&
                     <div className="vs-col vs-xs vs-sm-12 vs-lg-3" style={{marginLeft:'0%',marginRight:'0%',width:'100%'}}>
                     <Card className='m-2'>
-                        {filteredHistory.length !== 0 ?
+                       
                         <div>
                             <h5 className='text-center m-2 font-weight-bold'>MEDICAL HISTORY LIST</h5>
                             <Scrollbars style={{ width: '100%',minHeight:'15rem', height:'auto', overflowX:'hidden', border:'1px black'}}>
@@ -369,9 +380,9 @@ const Profile =  ({value, history}) => {
                                     </Button>)}
                                 </ul>
                             </Scrollbars>
-                        </div>:''}
+                        </div>
                     </Card>
-                    </div>
+                    </div>}
 
                 </div>
             </div>: history.push('/')}

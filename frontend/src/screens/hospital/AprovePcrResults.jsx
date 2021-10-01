@@ -1,12 +1,15 @@
 import React, {useEffect, useState} from 'react'
 import { Table, Container, Button, Row, Card} from 'react-bootstrap'
-import { loadPatients, getAllPatients, getPatientsLoadingStatus, updateTransferPatient,
-    updateSelectedTransferPatient} from '../../store/entities/patients';
+// import { loadPatients, getAllPatients, getPatientsLoadingStatus, updateTransferPatient,
+//     updateSelectedTransferPatient} from '../../store/entities/patients';
 import Loader from '../../components/Loader'
+import Pagination from '../../components/Pagination';
+import { paginate } from '../../utils/paginate';
 //import { paginate } from '../../utils/paginate';
 //import Pagination from '../../components/Pagination';
 import {getAllPcrs, loadPcrs, updatePcrAproval, getPcrLoadingStatus} from '../../store/entities/pcr';
 import { useDispatch, useSelector } from 'react-redux';
+//import Cookies from 'js-cookie';
 
 
 
@@ -14,24 +17,21 @@ const AprovePcrResults = ({history}) => {
     const dispatch = useDispatch()
 
     const auth = useSelector(state => state.auth);
-    console.log(auth)
-    //const patientsList = useSelector(getAllPatients);
-    const pcrDetails = useSelector(getAllPcrs);
-    const patientsList = pcrDetails.list;
+   // const token = Cookies.get("token")
 
-    //console.log(patientsList)
+    //const pcrDetails = useSelector(getAllPcrs);
+    //const patientsList = pcrDetails.list;
+    const patientsList = useSelector(getAllPcrs);
+
     const [patientState, setPatientState] = useState(getOnlyIds(patientsList));
-   // console.log(patientState)
-
-   // console.log(patientState)
-   // const [patientState, setPatientState] = useState([...patientsList]);
     const [selected, setSelected] = useState([]);
-   // console.log(selected.length, patientsList.length)
-   // console.log(selected)
-   // console.log(patientsList)
     const [allSelected, setAllSelected] = useState(false);
-    //const patientsLoading = useSelector(getPatientsLoadingStatus);
     const patientsLoading = useSelector(getPcrLoadingStatus);
+
+//const [filtered, setFiltered] = useState(patientsList);
+//    const pageSize = 10;
+//    const [currentPage, setCurrentPage] = useState(1);
+//    let [paginated, setPaginated] = useState(patientsList);
 
 
     useEffect(() => {
@@ -39,7 +39,7 @@ const AprovePcrResults = ({history}) => {
        if(!auth.loggedIn){
            window.location='/'
        }
-       dispatch(loadPcrs(auth.token));
+       dispatch(loadPcrs());
 
         setPatientState(
             patientsList.map( p=>{
@@ -64,7 +64,8 @@ const AprovePcrResults = ({history}) => {
             // }
             ids: [
                 patientId
-            ]
+            ],
+            token: auth.token
         }
         console.log(updateAprove)
         dispatch(updatePcrAproval(updateAprove));
@@ -210,12 +211,12 @@ const AprovePcrResults = ({history}) => {
       
 
         {/* <Pagination
-            itemsCount = {filtered.length} 
+            itemsCount = {patientsList.length} 
             pageSize = {pageSize} 
             currentPage = {currentPage}
             onPageChange = {(page) => {
                 setCurrentPage(page);
-                setPaginated(paginate(filtered, page, pageSize));
+                setPaginated(paginate(patientsList, page, pageSize));
             }}
         /> */}
         

@@ -71,19 +71,21 @@ export const {
 const pcrURL = "/api/v1/";
 const refreshTime = configData.REFRESH_TIME;
 
-export const loadPcrs = (token) => (dispatch, getState) => {
+export const loadPcrs = () => (dispatch, getState) => {
+  //  console.log(data)
     const { lastFetch } = getState().entities.pcr;
     //console.log(token)
-    const diffInMinutes = moment().diff(moment(lastFetch), "minutes");
-    if (diffInMinutes < refreshTime) return;
+   const diffInMinutes = moment().diff(moment(lastFetch), "minutes");
+   if (diffInMinutes < refreshTime) return;
     
     return dispatch(
         apiCallBegan({
             url: pcrURL + 'pcr',
+            method: "get",
+           // data: data,
             onStart: pcrRequested.type,
             onSuccess: pcrReceived.type,
             onError: pcrRequestFailed.type,
-            data: token
         })
     );
 };
@@ -116,7 +118,7 @@ export const getPcrAddedStatus = createSelector(
 
 export const getAllPcrs = createSelector(
     state => state.entities.pcr,
-    pcr => pcr
+    pcr => pcr.list
 );
 
 export const updatePcrAproval = (pcrIds) =>{
@@ -124,6 +126,7 @@ export const updatePcrAproval = (pcrIds) =>{
         url: pcrURL + "pcr/confirm",
         method: "post",
         data: pcrIds,
+        //header: token,
         onSuccess: pcrAprovalUpdated.type,
     });
 }

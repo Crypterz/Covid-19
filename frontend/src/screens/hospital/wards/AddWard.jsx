@@ -3,8 +3,12 @@ import {Form, Button, Col, Row} from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
+import { useDispatch, useSelector } from 'react-redux';
+import { addWard} from '../../../store/entities/hospitals';
 
 export default function AddWard(props){
+    const dispatch = useDispatch();
+
     const [ward_name, setWardName] = useState('');
     const [total_beds, setTotalBeds] = useState('');
     const [admitted_patients, setAdmittedPatients] = useState('');
@@ -14,6 +18,14 @@ export default function AddWard(props){
     const submitHandler = (e) => {
         e.preventDefault();
         // TODO: sign in action
+        let ward= {
+            name: ward_name,
+            totalBeds: total_beds,
+            admittedPatients: admitted_patients,
+            emptyBeds: empty_beds
+        }
+
+        dispatch(addWard())
     };
 
 return (

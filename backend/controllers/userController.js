@@ -12,3 +12,13 @@ exports.getAllUsers = catchAsync(async (req, res) => {
         data: {users}
     });
 })
+
+exports.createUser= catchAsync(async (req,res)=>{
+    const newUser=await User.create(req.body)
+    res.status(201).json({
+        status:'success',
+        data:{
+            user:newUser
+        }
+    })
+})

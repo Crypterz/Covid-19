@@ -7,6 +7,7 @@ const sendEmail = require('../utils/email');
 const crypto = require('crypto')
 
 const signToken = id =>{
+    console.log('new token ............')
     return jwt.sign({id},process.env.JWT_SECRET,{
         // expiresIn:500
         expiresIn:process.env.JWT_EXPIRES_IN
@@ -72,6 +73,7 @@ exports.login=catchAsync(async(req, res, next)=>{
 })
 
 exports.protect = catchAsync(async (req,res,next)=>{
+    console.log(req.cookies)
     let token
     //1. GETTING TOKEN FROM COOKIE
     if(req.cookies && req.cookies.jwt){

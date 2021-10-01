@@ -24,7 +24,12 @@ if(process.env.NODE_ENV==='development'){
 
 app.use(cookieParser())
 app.use(helmet())   //SET SECURITY HTTP
-app.use(cors());
+//app.use(cors());
+app.use(cors({
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    origin: ['http://localhost:3000']
+}));
 app.use(express.json());  //BODY PARSER -> READING DATA FROM BODY INTO req.body
 
 app.use((req, res, next)=>{

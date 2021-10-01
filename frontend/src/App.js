@@ -1,6 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router,Route, Switch } from 'react-router-dom'
- import { ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Header from './components/Header'
 import Footer from './components/Footer'
 import HomeScreen from './screens/HomeScreen'
@@ -9,6 +10,7 @@ import Patient from './screens/hospital/Patients'
 import PatientProfile from './screens/hospital/PatientProfile'
 import AdminDashboard from './screens/healthMinistry/AdminDashBoard'
 import AddHospital from './screens/healthMinistry/AddHospital'
+import AddHospitalAdmin from './screens/healthMinistry/AddHospitalAdmin'
 import AddPatient from './screens/hospital/AddPatient'
 import AddHospitalStaff from './screens/hospital/staffs/AddHospitalStaff'
 import EditCurrentDetails from './screens/hospital/EditCurrentDetails';
@@ -54,13 +56,14 @@ const App = () =>{
             <Route path='/hospital/patientProfile/:id' component={PatientProfile}/>
             <Route path='/healthMinistry/dashboard' component={AdminDashboard}/>
             <Route path='/healthMinistry/addHospital' component={AddHospital}/>
+            <Route path='/healthMinistry/addHospitalAdmin/:id' component={AddHospitalAdmin}/>
             <Route path='/hospital/addHospitalStaff' component={AddHospitalStaff}/>
             <Route path='/hospital/addPatient' component={AddPatient}/>
             <Route path='/hospital/editCurrentDetails/:id' component={EditCurrentDetails}/>
             <Route path='/hospital/acceptanceWaiting' component={AcceptanceWaiting}/>
             <Route path='/hospital/addPcrResults' component={AddPcrResults}/>
             <Route path='/hospital/editProfile/:id' component={EditProfile}/>
-            <Route path='/hospital/profile' component={Profile}/>
+            <Route path='/hospital/profile/:id' component={Profile}/>
             <Route path='/hospital/aprovePcrResults' component={AprovePcrResults}/>
             <Route path='/hospitals/editProfile' component={EditProfile}/>
           {/* <Route path='/login' component={Login}/> */}
@@ -80,7 +83,6 @@ const App = () =>{
            <Route path='/hospital/wards' component={WardsList}/>
            <Route path= '/healthMinistry/hospital' component={Hospitals}/>
            <Route path='/hospital/staffs' component={StaffList}/>
-           <Route path='/hospital/addHospitalStaff' component={AddHospitalStaff}/>
 
         {/* </Container> */}
           </switch>

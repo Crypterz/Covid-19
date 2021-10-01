@@ -6,11 +6,13 @@ import { Link } from 'react-router-dom';
 import {Form, Button} from 'react-bootstrap';
 import { login, getLoggedInStatus } from './../store/auth';
 import { toastAction } from './../store/toastActions';
+//import User from '../../../backend/models/userModel';
 //import { signin } from '../actions/userAction';
 
 export default function SigninScreen(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
 
 //   const redirect = props.location.search
 //     ? props.location.search.split('=')[1]
@@ -35,15 +37,22 @@ export default function SigninScreen(props) {
   };
 
     const loggedIn = useSelector(getLoggedInStatus)
-    console.log(loggedIn)
+    const auth = useSelector(state => state.auth.data);
+    console.log(auth)
 
     
     useEffect(() => {
         if (loggedIn === true) {
            //props.history.push(redirect);
-            console.log('logged in suceessfully');
-           // dispatch(toastAction({ message: "Logged in Success...", type: 'info' }));
-            window.location ='/hospital/dashboard';
+           // console.log('logged in suceessfully');
+            dispatch(toastAction({ message: "Logged in Success...", type: 'info' }));
+            if(auth.user.role === 'hospitalAdmin'){
+               window.location ='/hospital/dashboard'
+            }
+            else if(auth.user.role === 'patient'){
+               window.location =`/hospital/profile/${auth.user._id}`
+            }
+           /// ;
         }else{
            // console.log('not logged in suceessfully');
         }

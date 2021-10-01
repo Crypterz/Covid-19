@@ -40,7 +40,7 @@ function validateNIC(nic) {
     }
 }
 
-export default class AddPatient extends Component {
+class AddPatient extends Component {
     constructor(props){
         super(props);
         this.state = {first_name: '',
@@ -51,6 +51,10 @@ export default class AddPatient extends Component {
                       address:'',
                       city:'',
                       district:'',
+
+        // this.state = {name: 'dvdvsv',
+        //               slug: 'efdffve',
+        //               age: 25,
     };
 
         this.onChangeFirstName = this.onChangeFirstName.bind(this);
@@ -116,13 +120,17 @@ export default class AddPatient extends Component {
             alert("Enter valid NIC number");
         }
         else{
-            //alert('Submitted: ' + this.state);
-           // registerPatients(this.state)
-          // this.props.registerPatients(this.state)
-            console.log(this.state)
+            this.props.registerPatients(this.state);
         }
         
     }
+
+    componentDidUpdate() {
+        if(this.props.patients.patientAdded){
+             this.props.addSuccessful();
+        }
+         
+     }
     
 
     render() {
@@ -294,14 +302,14 @@ export default class AddPatient extends Component {
     }
 }
 
-// const mapStateToProps = state => ({
-//     patients: state.entities.users,
-// });
+const mapStateToProps = state => ({
+    patients: state.entities.patients,
+});
 
 
-// const mapDispatchToProps = dispatch => ({
-//     registerPatients: (data) => dispatch(registerPatients(data)),
-//    // registerSuccessful: () => dispatch(toastAction({ message: "User Added Successfully...", type: 'info' }))
-// });
+const mapDispatchToProps = dispatch => ({
+    registerPatients: (data) => dispatch(registerPatients(data)),
+   // addSuccessful: () => dispatch(toastAction({ message: "Patient Added Successfully...", type: 'info' }))
+});
 
-// export default connect(mapStateToProps, mapDispatchToProps)(AddPatient);
+export default connect(mapStateToProps, mapDispatchToProps)(AddPatient);

@@ -8,6 +8,7 @@ const dashBoardController = require('./dashBoardController')
 
 
 exports.getAllTest = async (req, res) => {
+    //console.log(req.body)
     try{
         const features=new APIfunctions(PCRTest.find(),req.query).filter().sort().select()
         // const tests=await features.query
