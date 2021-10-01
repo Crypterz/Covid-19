@@ -24,7 +24,7 @@ exports.getAllTest = async (req, res) => {
         data: {pcr}
         
     });
-    }catch(err){                 //if schema doent stisfy error may occur VALIDATIO ERROR
+    }catch(err){                 //if schema doesnt stisfy error may occur VALIDATION ERROR
         res.status(404).json({
             status:'fail',
             message:err

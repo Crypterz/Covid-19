@@ -10,7 +10,7 @@ import PatientProfile from './screens/hospital/PatientProfile'
 import AdminDashboard from './screens/healthMinistry/AdminDashBoard'
 import AddHospital from './screens/healthMinistry/AddHospital'
 import AddPatient from './screens/hospital/AddPatient'
-import AddHospitalStaff from './screens/hospital/AddHospitalStaff'
+import AddHospitalStaff from './screens/hospital/staffs/AddHospitalStaff'
 import EditCurrentDetails from './screens/hospital/EditCurrentDetails';
 import AcceptanceWaiting from './screens/hospital/AcceptanceWaiting';
 import AddPcrResults from './screens/hospital/AddPcrResults';
@@ -19,11 +19,13 @@ import Profile from './screens/hospital/Profile';
 import AprovePcrResults from './screens/hospital/AprovePcrResults';
 import './bootstrap.min.css';
 import './App.css';
-import AddWard from './screens/hospital/wards/AddWards'
+import AddWard from './screens/hospital/wards/AddWard'
 import Ward from './screens/hospital/wards/Ward'
 import WardsList from './screens/hospital/wards/WardsList'
 import SigninScreen from './screens/SigninScreen';
 import Logout from './components/Logout';
+import Hospitals from './screens/healthMinistry/Hospitals';
+import StaffList from './screens/hospital/staffs/StaffsList';
 //import Login from './screens/Login'
 
 
@@ -73,10 +75,12 @@ const App = () =>{
           {/* <Route path='/hospital/addPatient' component={AddPatient}/> */}
           {/* <Route path='/' component={HomeScreen} exact/> */}
           {/* <Route path='/login' component={Login}/> */}
-          <Route path='/signin' component={SigninScreen}/>
            <Route path='/hospital/wards/:id' component={Ward}/>
-           <Route path='/hospital/add_wards' component={AddWard}/>
+            <Route path='/hospital/addWard' component={AddWard}/>
            <Route path='/hospital/wards' component={WardsList}/>
+           <Route path= '/healthMinistry/hospital' component={Hospitals}/>
+           <Route path='/hospital/staffs' component={StaffList}/>
+           <Route path='/hospital/addHospitalStaff' component={AddHospitalStaff}/>
 
         {/* </Container> */}
           </switch>

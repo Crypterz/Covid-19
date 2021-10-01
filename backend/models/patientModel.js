@@ -11,6 +11,10 @@ const patientSchema =new mongoose.Schema({
         type:Number,
         required:[true, 'A patient must hae a age']
     },
+    // user:{
+    //     type:mongoose.Schema.objectId,
+    //     ref:'User'
+    // },
     createdAt:{
         type:Date,
         default:Date.now,
@@ -54,6 +58,12 @@ patientSchema.pre(/^find/,function(next){        //QUERY MIDDLEWARE
     this.find({confidential:{$ne:true}})                                 //this refre to query we can change query object from here
     next()
 })
+// patientSchema.pre(/^find/,function(next){        //QUERY MIDDLEWARE
+//     this.populate({
+//         path:'user'
+//     })                                 //this refre to query we can change query object from here
+//     next()
+// })
 patientSchema.pre(/^find/,function(next){        //QUERY MIDDLEWARE
     this.populate({
         path:'pcrTest',

@@ -6,7 +6,7 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(/*authController.protect,*/ pcrTestController.getAllTest)
+  .get(authController.protect, pcrTestController.getAllTest)
   .post(authController.protect,pcrTestController.createPCRTest)
 
 router

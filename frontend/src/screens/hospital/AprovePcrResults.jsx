@@ -14,20 +14,21 @@ const AprovePcrResults = ({history}) => {
     const dispatch = useDispatch()
 
     const auth = useSelector(state => state.auth);
+    console.log(auth)
     //const patientsList = useSelector(getAllPatients);
     const pcrDetails = useSelector(getAllPcrs);
     const patientsList = pcrDetails.list;
 
-    console.log(patientsList)
+    //console.log(patientsList)
     const [patientState, setPatientState] = useState(getOnlyIds(patientsList));
-    console.log(patientState)
+   // console.log(patientState)
 
    // console.log(patientState)
    // const [patientState, setPatientState] = useState([...patientsList]);
     const [selected, setSelected] = useState([]);
-    console.log(selected.length, patientsList.length)
-    console.log(selected)
-    console.log(patientsList)
+   // console.log(selected.length, patientsList.length)
+   // console.log(selected)
+   // console.log(patientsList)
     const [allSelected, setAllSelected] = useState(false);
     //const patientsLoading = useSelector(getPatientsLoadingStatus);
     const patientsLoading = useSelector(getPcrLoadingStatus);
@@ -35,7 +36,10 @@ const AprovePcrResults = ({history}) => {
 
     useEffect(() => {
        // dispatch(loadPatients())
-       dispatch(loadPcrs());
+       if(!auth.loggedIn){
+           window.location='/'
+       }
+       dispatch(loadPcrs(auth.token));
 
         setPatientState(
             patientsList.map( p=>{
@@ -62,6 +66,7 @@ const AprovePcrResults = ({history}) => {
                 patientId
             ]
         }
+        console.log(updateAprove)
         dispatch(updatePcrAproval(updateAprove));
         setPatientState(patientState.filter(p=>p._id !== patientId))
     }
@@ -72,6 +77,7 @@ const AprovePcrResults = ({history}) => {
             // selectedPatients: selected
              ids : selected
         }
+        console.log(updateAprove)
         dispatch(updatePcrAproval(updateAprove));
        // dispatch(updateTransferPatient(transferUpdate))
         setSelected([]);
@@ -111,9 +117,9 @@ const AprovePcrResults = ({history}) => {
 
     return (
         <>
-        {auth.loggedIn && patientsLoading && (<Loader></Loader>)}
-        {auth.loggedIn ? 
-
+        {/* {auth.loggedIn && patientsLoading && (<Loader></Loader>)}
+        {auth.loggedIn ?  */}
+         { patientsLoading && (<Loader></Loader>)}
         <Container>
            
             <h2 style={{textAlign:'center', marginBottom:'40px', fontWeight:'700'}}>APROVE PCR RESULTS</h2>
@@ -214,7 +220,7 @@ const AprovePcrResults = ({history}) => {
         /> */}
         
         </Container>
-        : history.push('/')}
+        {/* : history.push('/')} */}
        
 
     </>

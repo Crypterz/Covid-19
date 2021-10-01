@@ -48,9 +48,10 @@ const slice = createSlice({
         },
 
         pcrAprovalUpdated(pcr, action){
-            // const {pcrId} = action.payload.data;
-            // console.log(action.payload);
-            // const index = pcr.list.findIndex
+             pcr.list = action.payload.data.pcr;
+            //  const {pcrId} = action.payload.data;
+            //  console.log(action.payload);
+            //  const index = pcr.list.findIndex
         }
     }
 });
@@ -70,9 +71,9 @@ export const {
 const pcrURL = "/api/v1/";
 const refreshTime = configData.REFRESH_TIME;
 
-export const loadPcrs = () => (dispatch, getState) => {
+export const loadPcrs = (token) => (dispatch, getState) => {
     const { lastFetch } = getState().entities.pcr;
-
+    //console.log(token)
     const diffInMinutes = moment().diff(moment(lastFetch), "minutes");
     if (diffInMinutes < refreshTime) return;
     
@@ -81,7 +82,8 @@ export const loadPcrs = () => (dispatch, getState) => {
             url: pcrURL + 'pcr',
             onStart: pcrRequested.type,
             onSuccess: pcrReceived.type,
-            onError: pcrRequestFailed.type
+            onError: pcrRequestFailed.type,
+            data: token
         })
     );
 };
@@ -120,7 +122,7 @@ export const getAllPcrs = createSelector(
 export const updatePcrAproval = (pcrIds) =>{
     return apiCallBegan({
         url: pcrURL + "pcr/confirm",
-        method: "put",
+        method: "post",
         data: pcrIds,
         onSuccess: pcrAprovalUpdated.type,
     });

@@ -16,7 +16,7 @@ const createSendToken = (user,statusCode, res)=>{
     const token = signToken(user._id)
     res.cookie('jwt',token,{
         expires:new Date(Date.now()+process.env.JWT_COOKIE_EXPIRES_IN*24*60*60*1000),
-        // secure:true,     //COOKIE WILL SEND ONLY ENCREPTED CONNECTION HTTPS 
+        secure:true,     //COOKIE WILL SEND ONLY ENCREPTED CONNECTION HTTPS 
         httpOnly:true        // COKKIES CANT BE MODIFIES BY BROWSER - TO PREVENT CROSS SITE ATTACK
     })
     res.status(statusCode).json({
@@ -50,6 +50,7 @@ exports.signup =catchAsync( async (req,res, next)=>{
 
 exports.login=catchAsync(async(req, res, next)=>{
     console.log('auth controller..........')
+    console.log(req.body)
     const {email, password}=req.body
     if(!email || !password){
         return next(new AppError('Please provide email and password',400))
@@ -72,12 +73,13 @@ exports.login=catchAsync(async(req, res, next)=>{
 
 exports.protect = catchAsync(async (req,res,next)=>{
     let token
+    //1. GETTING TOKEN FROM COOKIE
     if(req.cookies && req.cookies.jwt){
         token=req.cookies.jwt
-    // }
-    // //1. GETTING TOKEN AND CHECK IT
-    // if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
-    //     token= req.headers.authorization.split(' ')[1]
+    }
+    //1. GETTING TOKEN FROM BEAR AUTH
+    else if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
+        token= req.headers.authorization.split(' ')[1]
     }if(!token){
         return next(new AppError('Not Logged In',401))  //401-unathorized
     }

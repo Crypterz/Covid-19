@@ -220,6 +220,16 @@ main {
   float: right;
 }
 
+.formContainer {
+  box-shadow: 0 0 0 2px #cecece;
+  padding: 10px;
+}
+
+.textBox {
+  height: 20px;
+  font-size: 10px;
+}
+
 /* Form */
 .form {
   max-width: 60rem;
@@ -234,12 +244,12 @@ main {
   margin: 1rem 0;
   display: block;
 }
-.loginTitle{
+.loginTitle {
   align-content: center;
 }
 
 /* Dropdown */
-.dropdown {
+/* .dropdown {
   display: inline-block;
   position: relative;
 }
@@ -257,4 +267,4 @@ main {
 }
 .dropdown:hover .dropdown-content {
   display: block;
-}
+} */

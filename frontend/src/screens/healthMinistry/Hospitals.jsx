@@ -225,9 +225,9 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
-import { DeleteOutline } from "@material-ui/icons";
+import { DeleteOutline, AddCircleOutline, Edit} from "@material-ui/icons";
 import {Link} from "react-router-dom";
-import './wardList.css';
+import './hospitals.css';
 
 import { useState } from "react";
 
@@ -237,61 +237,67 @@ const useStyles = makeStyles({
   }
 });
 
-function createData(ward_id, ward_name, allocated_beds, empty_beds) {
+function createData(hospital_id,name, contact, city, district, province) {
   return {
-    ward_id,
-    ward_name,
-    allocated_beds,
-    empty_beds,
+    hospital_id,
+    name,
+    contact,
+    city,
+    district,
+    province,
   };
 }
 
 const rows = [
-  createData(1, 'Labour Ward','2','3' ),
-  createData(2, 'Labour Ward','2','3'),
-  createData(3, 'Labour Ward','2','3'),
-  createData(4, 'Labour Ward','2','3'),
-  createData(5, 'Labour Ward','2','3'),
+  createData(1, 'Royal Hospital','012-345-6789','Colombo','Colombo','Western'),
+  createData(2, 'Royal Hospital','012-345-6789','Colombo','Colombo','Western'),
+  createData(3, 'Royal Hospital','012-345-6789','Colombo','Colombo','Western'),
+  createData(4, 'Royal Hospital','012-345-6789','Colombo','Colombo','Western'),
+  createData(5, 'Royal Hospital','012-345-6789','Colombo','Colombo','Western'),
   
 ];
 
-export default function WardsList() {
+export default function Hospitals() {
   const [data, setData] = useState(rows)
   const classes = useStyles();
 
-  const handleDelete = (ward_id)=>{
-    setData(data.filter((item)=>item.ward_id !== ward_id));
+  const handleDelete = (hospital_id)=>{
+    setData(data.filter((item)=>item.hospital_id !== hospital_id));
   };
 
   return (
     <TableContainer component={Paper}>
-      <Link to="/hospital/addWard"><button className="wardAddButton">New Ward</button></Link>
+      <Link to="/healthMinistry/addHospital"><button className="wardAddButton"><AddCircleOutline/>Add New Hospital</button></Link>
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>ID</TableCell>
-            <TableCell align="left">Ward Name</TableCell>
-            <TableCell align="left">Allocated Beds</TableCell>
-            <TableCell align="left">Empty Beds</TableCell>
+            <TableCell align="left">Name</TableCell>
+            <TableCell align="left">Contact</TableCell>
+            <TableCell align="left">District</TableCell>
+            <TableCell align="left">City</TableCell>
+            <TableCell align="left">Province</TableCell>
             <TableCell align="left">Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {data.map(row => (
-            <TableRow key={row.ward_id}>
+            <TableRow key={row.hospital_id}>
               <TableCell component="th" scope="row">
-                {row.ward_id}
+                {row.hospital_id}
               </TableCell>
-              <TableCell align="left">{row.ward_name}</TableCell>
-              <TableCell align="left">{row.allocated_beds}</TableCell>
-              <TableCell align="left">{row.empty_beds}</TableCell>
+              <TableCell align="left">{row.name}</TableCell>
+              <TableCell align="left">{row.contact}</TableCell>
+              <TableCell align="left">{row.city}</TableCell>
+              <TableCell align="left">{row.district}</TableCell>
+              <TableCell align="left">{row.province}</TableCell>
 
               <>
               <TableCell align="left">
-                <Link to={"/wards/"+row.ward_id}>
+                <Link to={"/wards/"+row.hospital_id}>
                 <button className="wardListEdit" aria-label="edit" >
-                  Edit 
-                </button></Link><DeleteOutline className="wardListDelete" onclick={()=>handleDelete(data.ward_id)}/>
+                  <Edit/>Edit 
+                </button></Link><DeleteOutline className="wardListDelete" onclick={()=>handleDelete(data.hospital_id)}/>
               </TableCell></>
             </TableRow>
           ))}

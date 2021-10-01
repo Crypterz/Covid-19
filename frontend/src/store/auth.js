@@ -24,8 +24,8 @@ const slice = createSlice({
         userLoginSucceeded(user, action){
             user.logging = false;
             delete user.error;
-           // user.data = action.payload.data;
-           // user.token = action.payload.auth.token;  
+            user.data = action.payload.data;
+            user.token = action.payload.token;  
             user.loggedIn = true;
         },
 

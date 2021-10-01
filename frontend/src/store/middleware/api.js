@@ -25,7 +25,7 @@ const api = ({ dispatch }) => next => async action => {
     //Specific
     if (onSuccess) dispatch({ type: onSuccess, payload: response.data });
     //console.log(response.data.data)
-    console.log(response.data)
+  //  console.log(response.data.token)
   } catch (error) {
       const response = error.response;
       const message = response ? response.data.message : error.message;

@@ -56,6 +56,18 @@ function Header() {
                                     <Nav.Link ><span>Aprove PCR Results</span></Nav.Link>
                             </LinkContainer></Dropdown.Item>
 
+                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/wards'>
+                                    <Nav.Link ><span>Wards</span></Nav.Link>
+                            </LinkContainer></Dropdown.Item>
+
+                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/healthMinistry/hospital'>
+                                    <Nav.Link ><span>Hospitals</span></Nav.Link>
+                            </LinkContainer></Dropdown.Item>
+
+                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/staffs'>
+                                    <Nav.Link ><span>Staffs</span></Nav.Link>
+                            </LinkContainer></Dropdown.Item>
+
 
                         </Dropdown.Menu>
                     </Dropdown>}
