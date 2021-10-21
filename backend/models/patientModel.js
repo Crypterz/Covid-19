@@ -1,19 +1,15 @@
 const mongoose=require('mongoose')
 const slugify = require('slugify')
 const patientSchema =new mongoose.Schema({
-    name:{
-        type:String,
-        required:[true,'A patient must have a name'],
-        unique:true
-    },
-    slug:String,
-    age:{
-        type:Number,
-        required:[true, 'A patient must hae a age']
-    },
-    // user:{
-    //     type:mongoose.Schema.objectId,
-    //     ref:'User'
+    // name:{
+    //     type:String,
+    //     required:[true,'A patient must have a name'],
+    //     unique:true
+    // },
+    // slug:String,
+    // age:{
+    //     type:Number,
+    //     required:[true, 'A patient must hae a age']
     // },
     createdAt:{
         type:Date,
@@ -24,6 +20,20 @@ const patientSchema =new mongoose.Schema({
         type:mongoose.Schema.ObjectId,
         ref: 'PCRTest'
     }],
+    user:{
+        type:mongoose.Schema.ObjectId,
+        ref: 'User'
+    },
+    nic:{
+        nicno:{
+            type:Number,
+            // required:[true,'A user should have unique NIC'],
+            unique:true,
+        },
+        person:{
+            
+        }
+    },
     medicalHistory:[{
         type:mongoose.Schema.ObjectId,
         ref:'MedicalHistory'
@@ -39,11 +49,11 @@ const patientSchema =new mongoose.Schema({
 //     return this.#filed/3
 // })
 
-patientSchema.pre('save',function(next){    //RUN BEFORE  .SAVE, AND .CREATE()
-    this.slug=slugify(this.name, {lower:true})
-    // console.log(this)
-    next()
-})
+// patientSchema.pre('save',function(next){    //RUN BEFORE  .SAVE, AND .CREATE()
+//     this.slug=slugify(this.name, {lower:true})
+//     // console.log(this)
+//     next()
+// })
 patientSchema.post('save', function(doc,next){
     // console.log("pre fin post")
     next()

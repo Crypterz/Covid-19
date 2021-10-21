@@ -5,8 +5,14 @@ const bcrypt=require('bcryptjs')
 
 const userSchema=new mongoose.Schema({
     name:{
+        firstName:{
+            type:String,
+            required:[true,'A user should enter first name'],
+        },
+       lastName:{
         type:String,
-        required:[false, 'name is required']
+        required:[true,'A user should enter last name'],
+       }
     },
     email:{
         type:String,
@@ -15,6 +21,12 @@ const userSchema=new mongoose.Schema({
         lowercase:true,
         validate:[validator.isEmail, 'Please provide valid email']
     },
+    // nic:{
+    //     type:Number,
+    //     required:[true,'A user should have unique NIC'],
+    //     unique:true,
+    //     // length:12
+    // },
     password:{
         type:String,
         required:true,
@@ -39,15 +51,15 @@ const userSchema=new mongoose.Schema({
         enum:['patient','admin','hospitalAdmin', 'hospital user']
     },
 
-    hospital_id:{
-        type:String,
-        required:false
-    },
+    // hospital_id:{
+    //     type:String,
+    //     required:false
+    // },
 
     passwordResetToken: String,
     passwordResetExpire: Date
 })
-
+//ENCRYPT PASSWORD
 userSchema.pre('save',async function(next){
     if(!this.isModified('password')) return next();     //Only run this if password was modified
     this.password=await bcrypt.hash(this.password,12)
@@ -59,6 +71,11 @@ userSchema.pre('save',async function(next){
         return next()
     }
     this.passwordChangedAt=Date.now()-1000 //sometimes token is issue before this executed. to avoid that
+    next()
+})
+
+userSchema.post('save', function(doc,next){      //document middleware
+    // console.log(doc)
     next()
 })
 

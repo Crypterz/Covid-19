@@ -1,11 +1,12 @@
 const PCRTest=require('./../models/pcrTestModel')
 const dashBoard=require('./../models/dashBoardModel')
 const APIfunctions=require('./../utils/apiFunctions')
-const msg = require('./../utils/msg')
+const msg = require('../utils/message')
 const catchAsync= require('./../utils/catchAsync');
 const AppError = require('../utils/appError');
+const sendMessage = require('../utils/message');
 const dashBoardController = require('./dashBoardController')
-
+const Patient=require('./../models/patientModel')
 
 exports.getAllTest = async (req, res) => {
     //console.log(req.body)
@@ -33,12 +34,48 @@ exports.getAllTest = async (req, res) => {
     }
 };
 
+exports.getAllPCRTest_hospital = catchAsync(async (req, res, next) => {
+    const hospital=req.user.hospital
+    const tests=await PCRTest.find({"hospital.creation":hospital})
+    if(!tests){
+        return next(new AppError("No PCR Tests found with that ID",404)) 
+    }
+    res.status(200).json({
+    status: 'success',
+    data: {tests}
+    });
+})
+
+exports.getAllPCRTest_Patient = catchAsync(async (req, res, next) => {
+    let id;
+    if(req.params.id){
+        id=req.params.id
+    }else{
+        id=req.user._id
+    }
+    const tests=await PCRTest.findById(id)
+    if(!tests){
+        return next(new AppError("No PCR Tests found with that ID",404)) 
+    }
+    res.status(200).json({
+    status: 'success',
+    data: {tests}
+    });
+})
+
 exports.createPCRTest= catchAsync(async (req,res)=>{
     req.body.creation={
         createdBy:req.user.name
     }
-    const r=req.body
-    const newTest=await PCRTest.create(r)
+    req.body.sendStatus="fail"
+    const message=`Your PCR Text Result is ${req.body.result}`
+    // if(req.body.contactNumber){
+    //     const msg=await sendMessage(message,req.body.contactNumber)
+    //     if(msg.status=="success"){
+    //         req.body.sendStatus="success"
+    //     }
+    // }
+    const newTest=await PCRTest.create(req.body)
     res.status(201).json({
         status:'success',
         data:{

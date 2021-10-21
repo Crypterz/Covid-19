@@ -1,5 +1,6 @@
 const mongoose=require('mongoose')
 const slugify = require('slugify')
+const Patient = require('./patientModel')
 const pcrTestSchema =new mongoose.Schema({
     name:{
         type:String,
@@ -41,6 +42,21 @@ const pcrTestSchema =new mongoose.Schema({
         confirmBy:{
             type:String
         }
+    },
+    nic:{
+        nicno:{
+            type:Number
+        },
+        person:{
+            
+        }
+    },
+    contactNumber:{
+        type:Number
+    },
+    sendStatus:{
+        type:String,
+        enum:['success','fail']
     }
 })
 
@@ -53,7 +69,10 @@ pcrTestSchema.post('save', function(doc,next){
     console.log("lllllllll")
     next()
 })
-pcrTestSchema.post('save', function(doc,next){      //document middleware
+pcrTestSchema.post('save', async function(doc,next){      //document middleware
+    const test=await Patient.update(
+        { "nic.nicno":this.nic.nicno},
+        { "$push": { "pcrTest": this._id } })
     next()
 })
 pcrTestSchema.post('updateMany', function(doc,next){ 

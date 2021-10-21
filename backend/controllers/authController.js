@@ -6,6 +6,9 @@ const AppError = require('../utils/appError');
 const sendEmail = require('../utils/email');
 const crypto = require('crypto')
 
+const Patient=require('./../models/patientModel')
+const Admin=require('./../models/adminModel')
+
 const signToken = id =>{
     console.log('new token ............')
     return jwt.sign({id},process.env.JWT_SECRET,{
@@ -17,7 +20,7 @@ const createSendToken = (user,statusCode, res)=>{
     const token = signToken(user._id)
     res.cookie('jwt',token,{
         expires:new Date(Date.now()+process.env.JWT_COOKIE_EXPIRES_IN*24*60*60*1000),
-        secure:true,     //COOKIE WILL SEND ONLY ENCREPTED CONNECTION HTTPS 
+        // secure:true,     //COOKIE WILL SEND ONLY ENCREPTED CONNECTION HTTPS 
         httpOnly:true        // COKKIES CANT BE MODIFIES BY BROWSER - TO PREVENT CROSS SITE ATTACK
     })
     res.status(statusCode).json({
@@ -33,16 +36,26 @@ exports.signup =catchAsync( async (req,res, next)=>{
     // console.log(req.cookie)
         // const newUser=await User.create(req.body)  //if we go this way, any user can change other fields too. ex: type of user
         const newUser = await User.create({
-            name:req.body.name,
+            name:{
+                firstName:req.body.name.firstName,
+                lastName:req.body.name.lastName},
             email:req.body.email,
             password:req.body.password,
             passwordConfirm:req.body.passwordConfirm,
-            role:req.body.role
+            role:req.body.role,
+            // nic:req.body.nic,
+
         })
-        const token = signToken(newUser._id)
+        req.body.user=newUser._id
+        console.log(newUser.role)
+        if(newUser.role=='patient'){
+            const newPatient=await Patient.create(req.body)
+        }else if(newUser.role=='hospitalAdmin'){
+            const newAdmin=await Admin.create(req.body)
+        }
         res.status(201).json({
             status:'success',
-            token,
+            // token,
             data:{
                 user:newUser
             }
@@ -100,6 +113,9 @@ exports.protect = catchAsync(async (req,res,next)=>{
         return next(new AppError('Recently Password has changed',401))  //401-unathorized
     }
     req.user=fuser
+    if(fUser.role.startsWith("hospital")){
+        // req.user.hospital=await Admin.find({""})
+    }
     // console.log(req.user)
     next()
 })

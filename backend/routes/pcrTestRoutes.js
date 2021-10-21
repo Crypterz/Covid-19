@@ -12,8 +12,8 @@ router
 router
   .route('/confirm')
   .post(authController.protect, pcrTestController.confirmPCRTest)
-// router
-//   .route('/:id')
+router
+  // .route('/:id')
 //   .get(patientController.getPatient)
 //   .patch(patientController.updatePatient)
 //   .delete(patientController.deletePatient)
