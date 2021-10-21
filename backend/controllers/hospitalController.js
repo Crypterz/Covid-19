@@ -33,26 +33,47 @@ exports.createHospital= catchAsync(async (req,res)=>{
 
 exports.createWard= catchAsync(async (req,res)=>{
     const hospital=req.user.hospital
-    const newHospital=await Hospital.create(req.body)
+    console.log(hospital)
+    const updatedHospital=await Hospital.findByIdAndUpdate(
+        hospital,   
+        {$push:{
+            wards:{
+                name:req.body.name,
+                totalBeds:req.body.totalBeds,
+            }
+        }},
+        // {upsert: true},
+        {new: true}
+    )
     res.status(201).json({
         status:'success',
         data:{
-            hospital:newHospital
+            hospital:updatedHospital
         }
     })
 })
 
-exports.addDrugs = catchAsync(async (req,res)=>{
-    console.log(req.body)
-    const medicalHistory=await MedicalHistory.findByIdAndUpdate(
-        req.params.id,   
-        {$push:{drugDetails:{description:req.body.description}}},
-        {upsert: true}
+exports.updateWard= catchAsync(async (req,res)=>{
+    const hospital=req.user.hospital
+    const ward={}
+    if(req.body.name){
+        ward["wards.$.name"]=req.body.name
+    }
+    if(req.body.totalBeds){
+        ward["wards.$.totalBeds"]=req.body.totalBeds
+    }
+    console.log(ward)
+    console.log(hospital)
+    const updatedHospital=await Hospital.findOneAndUpdate(
+        { _id: hospital , "wards._id":req.params.wardId },
+        { $set:ward },
+        // { upsert: true },
+        {new: true} 
     )
-    res.status(200).json({
+    res.status(201).json({
         status:'success',
         data:{
-            medicalHistory:medicalHistory
+            hospital:updatedHospital
         }
     })
 })

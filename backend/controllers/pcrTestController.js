@@ -88,7 +88,7 @@ exports.confirmPCRTest=catchAsync(async (req,res)=>{
     const test=await PCRTest.updateMany({_id:{
         $in:req.body.ids
     }},{
-        confirm:{confirmBy:req.user.name}
+        confirm:{confirmBy:req.user.name._id}
     })
     const positive =await PCRTest.where({confirm:{$exists:true},_id:{$in:req.body.ids}, result:"positive"}).countDocuments();
     const negative =await PCRTest.where({confirm:{$exists:true},_id:{$in:req.body.ids}, result:"negative"}).countDocuments();

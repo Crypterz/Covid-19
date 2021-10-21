@@ -117,7 +117,8 @@ exports.protect = catchAsync(async (req,res,next)=>{
     }
     req.user=fuser
     if(fuser.role.startsWith("hospital")){
-        req.user.hospital=await Admin.find({"user":fuser._id}).select('hospital -_id')
+        const hospital=req.user.hospital=await Admin.findOne({"user":fuser._id}).select('hospital -_id')
+        req.user.hospital=hospital.hospital
     }
     // console.log(req.user)
     next()
