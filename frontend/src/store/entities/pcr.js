@@ -21,11 +21,13 @@ const slice = createSlice({
 
         pcrCreateRequestFailed(pcr, action){
             pcr.loading = false;
+            pcr.pcrAdded = false
         },
 
         pcrCreateRequestSucceeded(pcr, action){
             pcr.loading = false;
             pcr.pcrAdded = true
+           // console.log(pcr.pcrAdded)
         },
 
         
@@ -44,14 +46,23 @@ const slice = createSlice({
             pcr.list = action.payload.data.pcr;
             pcr.loading = false;
             pcr.lastFetch = Date.now();
-            console.log(pcr.list)
+            //console.log(pcr.list)
         },
 
         pcrAprovalUpdated(pcr, action){
-             pcr.list = action.payload.data.pcr;
-            //  const {pcrId} = action.payload.data;
-            //  console.log(action.payload);
+            //  const ids = action.payload.data.ids
+            //  console.log(action.payload.data)
+            //  let lists = []
+            //  pcr.list.map( p=> {
+            //     if (ids.includes(p._id)){
+            //         console.log(p)
+            //         lists.push(p)
+            //     }
+            //  });
+            // //  const {pcrId} = action.payload.data;
+            //   console.log(lists);
             //  const index = pcr.list.findIndex
+            //console.log(action.payload.data)
         }
     }
 });
@@ -112,8 +123,7 @@ export const getPcrLoadingStatus = createSelector(
 
 export const getPcrAddedStatus = createSelector(
     state => state.entities.pcr,
-   // pcr => pcr.pcrAdded
-    pcrAdded => pcrAdded
+    pcr => pcr.pcrAdded
 )
 
 export const getAllPcrs = createSelector(

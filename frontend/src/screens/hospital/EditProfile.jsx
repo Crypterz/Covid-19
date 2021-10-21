@@ -74,7 +74,7 @@ const EditProfile = ({history}) => {
        // console.log(Result)
 
         dispatch(updatePatient(Result, patientId));
-        dispatch(toastAction({ message: "Profile Updated Successfully", type: 'info' }))
+        //dispatch(toastAction({ message: "Profile Updated Successfully", type: 'info' }))
     }
 
 

@@ -8,6 +8,7 @@ main {
 
 .back {
   background-color: rgb(34, 110, 252);
+  padding: 100px;
 }
 
 .sitename {
@@ -246,6 +247,10 @@ main {
 }
 .loginTitle {
   align-content: center;
+}
+
+.headerContainer {
+  margin-left: 100px;
 }
 
 /* Dropdown */

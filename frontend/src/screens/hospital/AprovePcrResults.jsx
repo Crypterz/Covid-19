@@ -1,44 +1,31 @@
 import React, {useEffect, useState} from 'react'
+import { useHistory } from "react-router-dom";
 import { Table, Container, Button, Row, Card} from 'react-bootstrap'
-// import { loadPatients, getAllPatients, getPatientsLoadingStatus, updateTransferPatient,
-//     updateSelectedTransferPatient} from '../../store/entities/patients';
 import Loader from '../../components/Loader'
-import Pagination from '../../components/Pagination';
-import { paginate } from '../../utils/paginate';
-//import { paginate } from '../../utils/paginate';
-//import Pagination from '../../components/Pagination';
 import {getAllPcrs, loadPcrs, updatePcrAproval, getPcrLoadingStatus} from '../../store/entities/pcr';
 import { useDispatch, useSelector } from 'react-redux';
-//import Cookies from 'js-cookie';
 
 
 
-const AprovePcrResults = ({history}) => {
+const AprovePcrResults = ({}) => {
     const dispatch = useDispatch()
-
+    const history = useHistory()
     const auth = useSelector(state => state.auth);
-   // const token = Cookies.get("token")
+    const [userType, setUserType] = useState('')
 
-    //const pcrDetails = useSelector(getAllPcrs);
-    //const patientsList = pcrDetails.list;
     const patientsList = useSelector(getAllPcrs);
+  //  console.log(patientsList)
 
     const [patientState, setPatientState] = useState(getOnlyIds(patientsList));
     const [selected, setSelected] = useState([]);
     const [allSelected, setAllSelected] = useState(false);
     const patientsLoading = useSelector(getPcrLoadingStatus);
 
-//const [filtered, setFiltered] = useState(patientsList);
-//    const pageSize = 10;
-//    const [currentPage, setCurrentPage] = useState(1);
-//    let [paginated, setPaginated] = useState(patientsList);
-
-
     useEffect(() => {
-       // dispatch(loadPatients())
        if(!auth.loggedIn){
            window.location='/'
        }
+       setUserType(auth.data.user.role)
        dispatch(loadPcrs());
 
         setPatientState(
@@ -46,10 +33,10 @@ const AprovePcrResults = ({history}) => {
                 return {
                      select: false,
                     _id: p._id,
-                    name: p.name,
+                    first_name: p.first_name,
                     age: p.age,
-                    'tel':p.name,
-                    'address':p.name
+                    telephone:p.telephone,
+                    result:p.result
                 }
             })
         )
@@ -58,24 +45,20 @@ const AprovePcrResults = ({history}) => {
 
     const Aproval = (decision, patientId)=>{
         const updateAprove = {
-            // patientId,
-            // details:{
-            //     aproveState : decision
-            // }
+
             ids: [
                 patientId
             ],
             token: auth.token
         }
-        console.log(updateAprove)
+
         dispatch(updatePcrAproval(updateAprove));
         setPatientState(patientState.filter(p=>p._id !== patientId))
     }
 
     const AproveSelected =(dicision) =>{
         const updateAprove = {
-            // dicision:dicision,
-            // selectedPatients: selected
+
              ids : selected
         }
         console.log(updateAprove)
@@ -118,12 +101,11 @@ const AprovePcrResults = ({history}) => {
 
     return (
         <>
-        {/* {auth.loggedIn && patientsLoading && (<Loader></Loader>)}
-        {auth.loggedIn ?  */}
-         { patientsLoading && (<Loader></Loader>)}
+        {auth.loggedIn && patientsLoading && (<Loader></Loader>)}
+        {auth.loggedIn /*&& userType === 'hospitalAdmin' */? 
         <Container>
            
-            <h2 style={{textAlign:'center', marginBottom:'40px', fontWeight:'700'}}>APROVE PCR RESULTS</h2>
+        <h2 style={{textAlign:'center', marginBottom:'40px', fontWeight:'700'}}>APROVE PCR RESULTS</h2>
         {patientState.length === 0 ? <Card style={{backgroundColor:'#fca8a4', color:'#b73333', opacity:'0.5', padding:'10px'}}>No data</Card>:
         <div>
             <Row className='ml-3 mb-2'>
@@ -183,10 +165,10 @@ const AprovePcrResults = ({history}) => {
                                 }}
                                 checked ={p.select}
                             /></td>
-                            <td>{p.name}</td>
+                            <td>{p.first_name}</td>
                             <td>{p.age}</td>
-                            <td>{p.name}</td>
-                            <td>{p.name}</td>
+                            <td>{p.telephone}</td>
+                            <td>{p.result}</td>
                             <td>
                                 <Row>
                                     <Button 
@@ -206,7 +188,7 @@ const AprovePcrResults = ({history}) => {
                     )}
                 </tbody>
             </Table>
-        </div>
+        </div> 
         }
       
 
@@ -221,9 +203,8 @@ const AprovePcrResults = ({history}) => {
         /> */}
         
         </Container>
-        {/* : history.push('/')} */}
-       
-
+         : history.goBack()/*window.location='/'*/}
+        
     </>
     )
 }
@@ -232,6 +213,9 @@ export default AprovePcrResults
 
 function getOnlyIds(patientsList){
     let list =[]
+
+    if ( patientsList.length === 0) return list;
+
     for ( let i =0; i<= patientsList.length-1 ; i++){
         list.push(patientsList[i]._id)
     }

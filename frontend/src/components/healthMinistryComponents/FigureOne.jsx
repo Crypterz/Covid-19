@@ -1,6 +1,6 @@
 import React from 'react'
 
-const FigureOne = () => {
+const FigureOne = ({details}) => {
     return (
         <div>
             <div style={{justifyContent:'center'}}>

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const FigureTwo = () => {
+const FigureTwo = ({details}) => {
    // console.log(details);
     return (
         <div>

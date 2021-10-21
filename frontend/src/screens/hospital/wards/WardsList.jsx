@@ -259,6 +259,8 @@ export default function WardsList() {
   const [data, setData] = useState(rows)
   const classes = useStyles();
 
+  //const auth = useSelector(state => state.auth);
+
   const handleDelete = (ward_id)=>{
     setData(data.filter((item)=>item.ward_id !== ward_id));
   };

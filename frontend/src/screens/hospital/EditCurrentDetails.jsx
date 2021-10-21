@@ -1,23 +1,15 @@
 import React, {useEffect, useState} from 'react'
 import {Container, Button, Card, Row, Col, Nav, Form, FormControl} from 'react-bootstrap'
-import Loader from '../../components/Loader'
 import { useDispatch, useSelector } from 'react-redux';
 import {  Formik } from 'formik';
 import * as Yup from 'yup';
-//import { listPatientDetails } from '../../actions/patientActions'
-import {  getAllPatients, updateSymptomsInDB, updateDrugsInDB, updatePatient} from '../../store/entities/patients';
+import {  getAllPatients, updatePatient} from '../../store/entities/patients';
 
 const EditCurrentDetails = ({history}) => {
     const dispatch = useDispatch()
     const patientId = (window.location.href.split('/')).pop()
-   // const [ selectedMainCategories, setSelectedMainCategories ] = useState(['']);
 
     const auth = useSelector(state => state.auth);
-
-   // const patient = useSelector(getPatientById(patientId))
-    const patients = useSelector(getAllPatients);
-   // console.log(patients)
-  //  const patientsLoading = useSelector(getPatientsLoadingStatus);
 
     const [ schema, setSchema ] = useState({ 
         symptom0: Yup.string().required("Symptom is required..."),
@@ -30,28 +22,11 @@ const EditCurrentDetails = ({history}) => {
     });
 
     const [ symptoms, setSymptoms ] = useState([{}]);
+  //  console.log(symptoms)
     const [ drugs, setDrugs ] = useState([{}]);
     const formElements = useState(4);  
 
-   const [ selectedDrugs, setSelectedDrugs ] = useState([patients.length > 0 ?  {name:patients[0].name, value:''} : {name:'', value:''}]);
-
-    // const handleDrugsAdded = () => {
-    //     const updated = [...selectedDrugs, {}];
-    //     setSelectedDrugs(updated);
-    // }
-
-    // const handleDrugsDeleted = () => {
-    //     const updated = [...selectedDrugs];
-    //     updated.pop();
-    //     setSelectedDrugs(updated);
-    // }
-
-    //var updateSymptoms = true;
     const [updateSymptoms, setUpdateSymptoms] = useState(true);
-
-    const hospitals = [{id:'1', name:'National Hospital of Sri Lanka'},{ id:'2', name:'Lady Ridgeway Hospital for Children'},
-    {id:'3',name:'Castle Street Hospital for Women'}]
-
 
     const UpdateSymptoms =(value, sym)=>{
         for (var i =0; i< sym.length ; i++){
@@ -206,52 +181,25 @@ const EditCurrentDetails = ({history}) => {
 
     }
 
-
-    // const submitForm = (values) => {
-    //  // console.log(values)
-    //   console.log(symptoms);
-    //   console.log(drugs)
- 
-    // }
-
     const updateSymptom = () =>{
         const symUpdate = {
-            //patientId,
             symptoms: symptoms
         }
         dispatch(updatePatient(symUpdate,patientId ));
-       // console.log(symptoms);
     } 
 
     const updateDrug = () =>{
         const drugUpdate = {
-            //patientId,
             drugs: drugs
         }
         dispatch(updatePatient(drugUpdate,patientId));
-       // console.log(drugs);
     }
 
 
 
     useEffect(() => {
-        //dispatch(loadPatients())
-        if(selectedDrugs.length ===1 && selectedDrugs[0]===''){
-            if(drugs.length !==0){
-                const selected = [{name: drugs[0], value: ''}];
-                setSelectedDrugs(selected);
-            }
-        }
+        ////////////
     }, [dispatch])
-
-    //const updateSymptomsInDB = (patientId) => {
-    
-            // const stockUpdate ={
-            //     productId,
-            // }
-            // dispatch(updateProductStock(stockUpdate));
-   // }
-
 
     return (
         <>
@@ -275,27 +223,7 @@ const EditCurrentDetails = ({history}) => {
             <Form className='mt-2' noValidate onSubmit={handleSubmit}>
             <h2 className = 'heading text-center font-weight-bold mt-4'>UPDATE PATIENT MEDICAL DATA</h2>
 
-
-            <Row className='m-3'>
-                <div style={{width:'50%'}}>
-                <Form.Group style={{width:'100%'}}>
-                <Form.Label >Assign doctor for the patient</Form.Label>
-                    <Form.Control 
-                         style={{height:'40px'}}
-                        onChange = {(e) => {
-                        if(e.target.value !== "Select Hospital"){
-                            //setTransferHospital(e.target.value);
-                        }
-                        }} as="select">
-                        {hospitals.map((c,index) => <option selected={index === 0? 'slected': null}>{`${c.name}`}</option>)}
-                    </Form.Control>
-                    {/* <Button className='mt-4 w-50'>Assign doctor</Button> */}
-                </Form.Group>
-                </div>
-                <div className='w-50'>
-                <Button style={{marginTop:'32px'}}>Assign doctor</Button></div>
-            </Row>
-            <Row className='m-3'>
+            <Row className='m-5'>
                 <Col>
                 {symptoms.map( v =>{
                     const index = symptoms.findIndex(va => va === v );
@@ -333,13 +261,6 @@ const EditCurrentDetails = ({history}) => {
                                 </Form.Group>
                             </Col>
 
-                        {/* <Col>
-                            { index === symptoms.length-1 && <div>
-                            <Button onClick= {() => handleSymptomsAdded()} className='mx-2 my-4' variant='primary'>+</Button>
-                            { index !==0 && <Button onClick= {() => handleSymptomsDeleted(values)} className='mx-2 my-4' variant='danger'>-</Button>}
-                            </div>}
-                        </Col></Row></> */}
-
                         <Col className='mt-2'>
                             { index === 0 && <div>
                             <Button onClick= {() => handleSymptomsAdded()} className='mx-2 my-4' variant='primary'>+</Button>
@@ -363,7 +284,7 @@ const EditCurrentDetails = ({history}) => {
                     const index = drugs.findIndex(va => va === v );
                     return (
                     <>
-                        <Row className='ml-2'>
+                        <Row className=''>
                             <Col>
                             <Form.Group controlId= {`validationFormik${formElements + index + 1 >= 10 ? `${formElements + index + 1}`: `0${formElements + index + 1}` }`}>
                                 <Form.Label className = 'form-label'>Drugs</Form.Label>
@@ -394,12 +315,6 @@ const EditCurrentDetails = ({history}) => {
                             </Form.Group>
                         </Col>
 
-                        {/* <Col>
-                            { index === drugs.length-1 && <div>
-                            <Button onClick= {() => handleDrugsAdded()} className='mx-2 my-4' variant='primary'>+</Button>
-                            { index !==0 && <Button onClick= {() => handleDrugsDeleted(values)} className='mx-2 my-4' variant='danger'>-</Button>}
-                            </div>}
-                        </Col></Row></> */}
                         <Col className='mt-2'>
                             { index === 0 && <div>
                             <Button onClick= {() => handleDrugsAdded()} className='mx-2 my-4' variant='primary'>+</Button>

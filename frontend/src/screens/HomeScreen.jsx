@@ -18,14 +18,18 @@ const HomeScreen = () => {
     const [recovered, setRecovered] =useState([])
     var [loading, setLoading ]= useState(true)
 
+    console.log('1.....................')
+
     useEffect(() => {
        // dispatch(loadPatients())
         const fetchOverall = async () => {
+            console.log('2.....................')
             const {data} = await axios.get('https://www.hpb.health.gov.lk/api/get-current-statistical')
             setOverall(data.data)
         }
 
         const fetchGraph = async () => {
+            console.log('3.....................')
             const {data} = await axios.get('https://disease.sh/v3/covid-19/historical/Sri%20Lanka?lastdays=365')
             const data2 = data
             setDates(Object.keys(data2['timeline']['cases']))
@@ -38,7 +42,7 @@ const HomeScreen = () => {
         fetchOverall()
         fetchGraph()
 
-       // console.log(overall)
+        console.log("4..........................")
 
 
     },[dispatch])
