@@ -27,7 +27,7 @@ const patientSchema =new mongoose.Schema({
     nic:{
         nicno:{
             type:Number,
-            // required:[true,'A user should have unique NIC'],
+            required:[true,'A user should have unique NIC'],
             unique:true,
         },
         person:{

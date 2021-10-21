@@ -23,14 +23,6 @@ const hospitalSchema =new mongoose.Schema({
         default:Date.now(),
         select:false
     },
-    location:{
-        type:{
-            type:String,
-            default:'Point',
-            enum:['Point']
-        },
-        cordinates:[Number],
-    },
     wards:[{
         name:{
             type:String,

@@ -30,3 +30,29 @@ exports.createHospital= catchAsync(async (req,res)=>{
         }
     })
 })
+
+exports.createWard= catchAsync(async (req,res)=>{
+    const hospital=req.user.hospital
+    const newHospital=await Hospital.create(req.body)
+    res.status(201).json({
+        status:'success',
+        data:{
+            hospital:newHospital
+        }
+    })
+})
+
+exports.addDrugs = catchAsync(async (req,res)=>{
+    console.log(req.body)
+    const medicalHistory=await MedicalHistory.findByIdAndUpdate(
+        req.params.id,   
+        {$push:{drugDetails:{description:req.body.description}}},
+        {upsert: true}
+    )
+    res.status(200).json({
+        status:'success',
+        data:{
+            medicalHistory:medicalHistory
+        }
+    })
+})
