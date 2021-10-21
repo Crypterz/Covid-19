@@ -1,12 +1,12 @@
 import React, {useEffect, useState, Component} from 'react'
-import { Table, Container, Button, InputGroup, FormControl} from 'react-bootstrap'
+import { Table, Container, Button, InputGroup, FormControl, Card} from 'react-bootstrap'
 import CommonListGroup from '../../components/common/CommonListGroup'
 import { paginate } from '../../utils/paginate';
 import Loader from '../../components/Loader'
 import Pagination from '../../components/Pagination';
 //import { listPatients } from '../../actions/patientActions'
 import { loadPatients, getAllPatients, getPatientsLoadingStatus } from '../../store/entities/patients';
-import { useLocation } from 'react-router-dom'
+import { useLocation, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 
 const Patients = ({history}) => {
@@ -29,7 +29,7 @@ const Patients = ({history}) => {
     const [selectedCategory, setSelectedCategory] = useState(passedCategory);
     const [filtered, setFiltered] = useState(patients);
 
-    const pageSize = 3;
+    const pageSize = 5;
     const [currentPage, setCurrentPage] = useState(1);
     let [paginated, setPaginated] = useState(patients);
 
@@ -62,10 +62,10 @@ const Patients = ({history}) => {
                 <Button 
                     className="btn btn-success"
                     style={{float:'right',padding:'10px'}}
-                    onClick = { () => history.push('/hospital/addPatient')}
-                >+ add new patient</Button>
+                    onClick = { () => history.push('/hospital/admitPatient')}
+                >+ admit patient</Button>
 
-                <InputGroup id = 'product-search-bar' style={{padding:'0px 200px 20px 200px', color:'blue'}}>
+                <InputGroup id = 'search-bar' style={{padding:'0px 200px 20px 200px', color:'blue'}}>
                             <FormControl
                                 className='textBox'
                                 placeholder="search patient by using name or NIC..."
@@ -74,19 +74,7 @@ const Patients = ({history}) => {
                                 size = 'lg'
                                 value = {searchKeyword}
                                 onChange = { e => setSearchKeyword(e.target.value)}
-                               //onChange ={ e => getFilteredSearchedPatients(patients, e.target.value)}
                             />
-                            {/* <InputGroup.Append id = 'product-search-button'>
-                                <Button 
-                                    className = 'pl-2.5 pr-2.5' 
-                                    variant="primary" 
-                                    onClick = {() => {
-                                        history.push(`/search?filterBy=${searchKeyword}`)
-                                    }}
-                                >
-                                    Search
-                                </Button>
-                            </InputGroup.Append> */}
                 </InputGroup>
 
                 <CommonListGroup 
@@ -158,11 +146,13 @@ function getFilteredPatients(patients, categories, filter){
    return patients;
 }
 
-function getFilteredSearchedPatients(patients, filterBy){
+export function getFilteredSearchedPatients(patients, filterBy){
   //  console.log(patients)
    // console.log(filterBy)
-    return patients.filter(p => 
-        p.name.toLowerCase().includes(filterBy) //||
+    if(/*typeof(patients) === 'undefined' || */patients.length === 0){
+       return {}
+    }
+    return patients.filter(p => p.name.toLowerCase().includes(filterBy) //||
         //p.description.toLowerCase().includes(filterBy.toLowerCase())
        // console.log(p.name.toLowerCase())
     );

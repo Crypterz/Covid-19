@@ -8,11 +8,12 @@ import { addWard} from '../../../store/entities/hospitals';
 
 export default function AddWard(props){
     const dispatch = useDispatch();
+    const auth = useSelector(state => state.auth);
 
     const [ward_name, setWardName] = useState('');
-    const [total_beds, setTotalBeds] = useState('');
-    const [admitted_patients, setAdmittedPatients] = useState('');
-    const [empty_beds, setEmptyBeds] = useState('');
+    const [total_beds, setTotalBeds] = useState(0);
+    const [admitted_patients, setAdmittedPatients] = useState(0);
+    const [empty_beds, setEmptyBeds] = useState(0);
 
 
     const submitHandler = (e) => {

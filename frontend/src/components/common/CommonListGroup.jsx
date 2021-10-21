@@ -1,3 +1,4 @@
+import React from 'react';
 import { ListGroup } from 'react-bootstrap';
 
 const CommonListGroup = ({list, defaultSelected, selected, onSelect}) => {

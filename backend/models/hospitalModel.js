@@ -33,8 +33,22 @@ const hospitalSchema =new mongoose.Schema({
     },
     wards:[{
         name:{
-            type:String
-        }
+            type:String,
+            required:[true,'Ward must have a name']
+        },
+        totalBeds:{
+            type: Number,
+            required:[true,'Ward must have beds count']
+        },
+
+        admittedPatients:{
+            type: Number,
+            required:[true,'Ward must have admitted patient count']
+        },
+        freeBeds:{
+            type: Number,
+            required:[true,'Ward must have free beds count']
+        } 
     }]
 })
 

@@ -52,11 +52,14 @@ export default function SigninScreen(props) {
             else if(auth.user.role === 'patient'){
                window.location =`/hospital/profile/${auth.user._id}`
             }
+            else if(auth.user.role === 'admin'){
+              window.location ='/healthMinistry/dashboard'
+            }
            /// ;
         }else{
            // console.log('not logged in suceessfully');
         }
-   },/* [props.history, redirect, data]*/);
+   },);
 
   return (
     <div>

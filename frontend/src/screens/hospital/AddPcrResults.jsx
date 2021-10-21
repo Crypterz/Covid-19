@@ -10,10 +10,12 @@ import { addPcr, getPcrAddedStatus } from '../../store/entities/pcr';
 const AddPcrResults = ({history}) => {
     const dispatch = useDispatch()
 
+     const pcrAdded = useSelector(getPcrAddedStatus);
+     const [pcrState, setPcrState] = useState(false)
     const auth = useSelector(state => state.auth);
 
     const [nic, setnic] = useState(Yup.string().max(10, "'Invalid NIC Number. Ex:- 1234567V'")
-             .matches(/[3-9]+[0-9]{8,8}(v|x)$/, 'Invalid NIC Number. Ex:- 1234567V').required('NIC number is required...'))
+             .matches(/[3-9]+[0-9]{8,8}(v|V|x|X)$/, 'Invalid NIC Number. Ex:- 1234567V').required('NIC number is required...'))
 
 
     const [ selectedResult, setSelectedResult ] = useState('');
@@ -23,8 +25,6 @@ const AddPcrResults = ({history}) => {
         last_name : Yup.string().required("Last Name is required..."),
         Tel_number : Yup.string().matches(/^(?:7|0|(?:\+94))[0-9]{9,9}$/, 'Invalid Phone Number. Ex:- 0123458907')
                         .required('Phone number is required...'),
-        // NIC_number : Yup.string().max(12, "'Invalid NIC Number. Ex:- 199812345678 or 1234567V'")
-        //     .matches(/[3-9]+[0-9]{8,8}(v|x)$|19[3-9][0-9]{9,9}$|200[0-3][0-9]{8,8}$/, 'Invalid NIC Number. Ex:- 199812345678 or 1234567V').required('NIC number is required...'),
         NIC_number : nic,
         age : Yup.number("Age should be a number").positive().required("Age is required"),
 
@@ -35,30 +35,27 @@ const AddPcrResults = ({history}) => {
         last_name: '',
         Tel_number:'',
         NIC_number:'',
-        age:''
+        age:'',
     });
 
     const submitForm = (values) => {
         const {first_name, last_name, Tel_number, NIC_number, age } = values;
         if(selectedResult !== ""){
             const Result = {
+                first_name : first_name,
+                last_name : last_name,
                 name: first_name,
-                age
-                // first_name,
-                // last_name,
-                // Tel_number,
-                // NIC_number,
-                // age,
-                // selectedResult
+                age : age,
+                telephone : Tel_number,
+                nic : NIC_number,
+                result : selectedResult,
+                slug : first_name.toString()
         }
-
-        dispatch(addPcr(Result));
-           // console.log(Result)
+            dispatch(addPcr(Result));
+            setPcrState(true);
         }else{
             alert('Please select correct PCR result')
         }
-       // console.log(values);
-    
     }
 
 
@@ -76,17 +73,14 @@ const AddPcrResults = ({history}) => {
         }
     }
 
-    const pcrAdded = useSelector(getPcrAddedStatus);
     useEffect(() => {
-       if(pcrAdded.pcrAdded){
-           console.log(pcrAdded);
+       if(pcrState && pcrAdded){
            dispatch(toastAction({ message: "PCR added successfully..." , type: 'info'}))
-       }else{
-           console.log(pcrAdded)
        }
-
-
-    }/*,[nic]*/)
+       else if(pcrState && !pcrAdded){
+            dispatch(toastAction({ message: "PCR added successfully..." , type: 'error'}))
+       }
+    },[dispatch, pcrAdded])
 
     return (
         <>
@@ -108,7 +102,7 @@ const AddPcrResults = ({history}) => {
                 errors
             }) => (
             <Form noValidate onSubmit={handleSubmit}>
-            <h2 style={{textAlign:'center', fontWeight:'700'}}>UPDATE PCR RESULTS</h2>
+            <h2 style={{textAlign:'center', fontWeight:'700'}}>ADD PCR RESULTS</h2>
 
             {/* <Col>
                 <Row> */}

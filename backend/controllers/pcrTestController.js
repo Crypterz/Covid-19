@@ -33,19 +33,42 @@ exports.getAllTest = async (req, res) => {
     }
 };
 
+// exports.createPCRTest= catchAsync(async (req,res)=>{
+//     req.body.creation={
+//         createdBy:req.user.name
+//     }
+//     const r=req.body
+//     const newTest=await PCRTest.create(r)
+//     res.status(201).json({
+//         status:'success',
+//         data:{
+//             test:newTest
+//         }
+//     })
+// })
+
 exports.createPCRTest= catchAsync(async (req,res)=>{
     req.body.creation={
         createdBy:req.user.name
     }
-    const r=req.body
-    const newTest=await PCRTest.create(r)
-    res.status(201).json({
-        status:'success',
-        data:{
-            test:newTest
-        }
-    })
-})
+    try{
+        const r=req.body
+        const newTest=await PCRTest.create(r)
+        res.status(201).json({
+            status:'success',
+            data:{
+                test:newTest
+            }
+        });
+    }catch(err){                 //if schema doent stisfy error may occur VALIDATIO ERROR
+        res.status(404).json({
+            status:'fail',
+            message:err
+        })
+    }
+});
+    
+
 
 exports.confirmPCRTest=catchAsync(async (req,res)=>{
     const test=await PCRTest.updateMany({_id:{
@@ -67,7 +90,8 @@ exports.confirmPCRTest=catchAsync(async (req,res)=>{
     res.status(200).json({
         status:'success',
         data:{
-            test
+            test, 
+            ids: req.body.ids
         }
     })
 })

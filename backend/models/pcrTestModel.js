@@ -1,15 +1,32 @@
 const mongoose=require('mongoose')
 const slugify = require('slugify')
 const pcrTestSchema =new mongoose.Schema({
+    first_name:{
+        type:String,
+        required:[true,'A patient must have a first name'],
+    },
+    last_name:{
+        type:String,
+        required:[true,'A patient must have a last name'],
+    },
     name:{
         type:String,
-        required:[true,'A patient must have a name'],
+        required:[true,'A patient must have a  name'],
+    },
+    telephone:{
+        type:String,
+        required:[true,'A patient must have a telephone'],
         unique:true
+    },
+    nic:{
+        type:String,
+        required:[true,'A patient must have a nic number'],
+        unique:false
     },
     slug:String,
     age:{
-        type:Number,
-        required:[true, 'A patient must hae a age']
+        type:String,
+        required:[true, 'A patient must have a age']
     },
     result:{
         type:String,
@@ -46,7 +63,7 @@ const pcrTestSchema =new mongoose.Schema({
 
 
 pcrTestSchema.pre('save',function(next){    //RUN BEFORE  .SAVE, AND .CREATE()
-    this.slug=slugify(this.name, {lower:true})
+    this.slug=slugify(this.first_name, {lower:true})
     next()
 })
 pcrTestSchema.post('save', function(doc,next){

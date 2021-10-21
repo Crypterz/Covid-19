@@ -28,6 +28,8 @@ import SigninScreen from './screens/SigninScreen';
 import Logout from './components/Logout';
 import Hospitals from './screens/healthMinistry/Hospitals';
 import StaffList from './screens/hospital/staffs/StaffsList';
+import ConfirmData from './screens/healthMinistry/ConfirmData'
+import AdmitPatient from './screens/hospital/AdmitPatient'
 //import Login from './screens/Login'
 
 
@@ -55,6 +57,7 @@ const App = () =>{
             <Route path='/hospital/patients' component={Patient}/>
             <Route path='/hospital/patientProfile/:id' component={PatientProfile}/>
             <Route path='/healthMinistry/dashboard' component={AdminDashboard}/>
+            <Route path='/healthMinistry/confirmData' component={ConfirmData}/>
             <Route path='/healthMinistry/addHospital' component={AddHospital}/>
             <Route path='/healthMinistry/addHospitalAdmin/:id' component={AddHospitalAdmin}/>
             <Route path='/hospital/addHospitalStaff' component={AddHospitalStaff}/>
@@ -65,24 +68,14 @@ const App = () =>{
             <Route path='/hospital/editProfile/:id' component={EditProfile}/>
             <Route path='/hospital/profile/:id' component={Profile}/>
             <Route path='/hospital/aprovePcrResults' component={AprovePcrResults}/>
-            <Route path='/hospitals/editProfile' component={EditProfile}/>
-          {/* <Route path='/login' component={Login}/> */}
+            <Route path='/hospital/admitPatient' component={AdmitPatient}/>
             <Route path='/logout' component={Logout}/>
             <Route path='/' component={HomeScreen} exact/>
-            {/* <Route path='/' exact component={HomeScreen} /> */}
-
-          {/* <Route path='/hospital/dashboard' component={Dashboard}/>
-          <Route path='/healthMinistry/dashboard' component={AdminDashboard}/> */}
-          {/* <Route path='/healthMinistry/addHospital' component={AddHospital}/> */}
-          {/* <Route path='/hospital/addHospitalStaff' component={AddHospitalStaff}/> */}
-          {/* <Route path='/hospital/addPatient' component={AddPatient}/> */}
-          {/* <Route path='/' component={HomeScreen} exact/> */}
-          {/* <Route path='/login' component={Login}/> */}
-           <Route path='/hospital/wards/:id' component={Ward}/>
+            <Route path='/hospital/wards/:id' component={Ward}/>
             <Route path='/hospital/addWard' component={AddWard}/>
-           <Route path='/hospital/wards' component={WardsList}/>
-           <Route path= '/healthMinistry/hospital' component={Hospitals}/>
-           <Route path='/hospital/staffs' component={StaffList}/>
+            <Route path='/hospital/wards' component={WardsList}/>
+            <Route path= '/healthMinistry/hospital' component={Hospitals}/>
+            <Route path='/hospital/staffs' component={StaffList}/>
 
         {/* </Container> */}
           </switch>
