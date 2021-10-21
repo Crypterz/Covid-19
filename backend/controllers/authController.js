@@ -113,8 +113,8 @@ exports.protect = catchAsync(async (req,res,next)=>{
         return next(new AppError('Recently Password has changed',401))  //401-unathorized
     }
     req.user=fuser
-    if(fUser.role.startsWith("hospital")){
-        // req.user.hospital=await Admin.find({""})
+    if(fuser.role.startsWith("hospital")){
+        req.user.hospital=await Admin.find({"user":fuser._id}).select('hospital -_id')
     }
     // console.log(req.user)
     next()

@@ -27,6 +27,9 @@ const userSchema=new mongoose.Schema({
     //     unique:true,
     //     // length:12
     // },
+    birthday:{
+        type:Date
+    },
     password:{
         type:String,
         required:true,
