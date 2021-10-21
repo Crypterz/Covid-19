@@ -30,6 +30,7 @@ exports.createMedical= catchAsync(async (req,res)=>{
         req.body.createdBy=req.user.id
     }
     req.body.hospital=req.user.hospital
+    console.log(req.body)
     const medHistory=await MedicalHistory.create(req.body)
     res.status(201).json({
         status:'success',
@@ -39,17 +40,32 @@ exports.createMedical= catchAsync(async (req,res)=>{
     })
 })
 
-exports.addSymtomsDrugs = catchAsync(async (req,res)=>{
+exports.addDrugs = catchAsync(async (req,res)=>{
     console.log(req.body)
-    await MedicalHistory.findByIdAndUpdate(
+    const medicalHistory=await MedicalHistory.findByIdAndUpdate(
         req.params.id,   
-        {$push:{drugDetails:{description:"kkkk"}}},
+        {$push:{drugDetails:{description:req.body.description}}},
         {upsert: true}
     )
     res.status(200).json({
         status:'success',
         data:{
-            medicalHistory:"medicalHistory"
+            medicalHistory:medicalHistory
+        }
+    })
+})
+
+exports.addSymptoms = catchAsync(async (req,res)=>{
+    console.log(req.body)
+    const medicalHistory=await MedicalHistory.findByIdAndUpdate(
+        req.params.id,   
+        {$push:{symptoms:{description:req.body.description}}},
+        {upsert: true}
+    )
+    res.status(200).json({
+        status:'success',
+        data:{
+            medicalHistory:medicalHistory
         }
     })
 })

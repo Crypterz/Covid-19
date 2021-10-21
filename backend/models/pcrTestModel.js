@@ -2,32 +2,20 @@ const mongoose=require('mongoose')
 const slugify = require('slugify')
 const Patient = require('./patientModel')
 const pcrTestSchema =new mongoose.Schema({
-    first_name:{
-        type:String,
-        required:[true,'A patient must have a first name'],
-    },
-    last_name:{
-        type:String,
-        required:[true,'A patient must have a last name'],
-    },
     name:{
+        firstName:{
+            type:String,
+            required:[true,'A user should enter first name'],
+        },
+       lastName:{
         type:String,
-        required:[true,'A patient must have a  name'],
-    },
-    telephone:{
-        type:String,
-        required:[true,'A patient must have a telephone'],
-        unique:true
+        required:[true,'A user should enter last name'],
+       }
     },
     nic:{
         type:String,
         required:[true,'A patient must have a nic number'],
         unique:false
-    },
-    slug:String,
-    age:{
-        type:String,
-        required:[true, 'A patient must have a age']
     },
     result:{
         type:String,
@@ -37,15 +25,6 @@ const pcrTestSchema =new mongoose.Schema({
         type:Date,
         default:Date.now(),
         select:false
-    },
-    location:{
-        type:{
-            type:String,
-            default:'Point',
-            enum:['Point']
-        },
-        cordinates:[Number],
-        address:String
     },
     creation:{
         createdBy:{
@@ -78,10 +57,10 @@ const pcrTestSchema =new mongoose.Schema({
 })
 
 
-pcrTestSchema.pre('save',function(next){    //RUN BEFORE  .SAVE, AND .CREATE()
-    this.slug=slugify(this.first_name, {lower:true})
-    next()
-})
+// pcrTestSchema.pre('save',function(next){    //RUN BEFORE  .SAVE, AND .CREATE()
+//     this.slug=slugify(this.first_name, {lower:true})
+//     next()
+// })
 pcrTestSchema.post('save', function(doc,next){
     console.log("lllllllll")
     next()

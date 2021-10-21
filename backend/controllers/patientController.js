@@ -94,7 +94,7 @@ exports.getPatient = catchAsync(async (req, res,next) => {
 exports.getAllPatients = catchAsync(async (req, res,next) => {
     const patients=await Patient.find().populate({
         path:'pcrTest medicalHistory user',
-        select: '-__v -name -passwordResetToken'
+        select: '-__v -passwordResetToken'
     })    //Patient.findOne({_id:req.params.id})
     if(!patients){
         return next(new AppError("No patient found",404))    //used return statement to avoid executing code below
@@ -105,7 +105,6 @@ exports.getAllPatients = catchAsync(async (req, res,next) => {
     });
 })
 exports.createPatient= catchAsync(async (req,res)=>{
-    console.log('pppppppppppppppppppppppppppppppppppppppppp')
     console.log(req.body)
     // const newPatient=new Patient({})
     // newPatient.save()
@@ -177,3 +176,5 @@ exports.deletePatient=async (req,res)=>{
 //         })
 //     }
 // }
+
+

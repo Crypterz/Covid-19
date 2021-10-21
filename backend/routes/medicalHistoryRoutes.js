@@ -11,6 +11,9 @@ router
 router
   .route('/:id')
   .get(medicalHistoryController.getMedicalHistory)
-  .patch(medicalHistoryController.addSymtomsDrugs)
+  // .patch(medicalHistoryController.addSymtomsDrugs)
+
+  router.patch('/:id/adddrugs',medicalHistoryController.addDrugs)
+  router.patch('/:id/addsymptoms',medicalHistoryController.addSymptoms)
 
 module.exports = router;

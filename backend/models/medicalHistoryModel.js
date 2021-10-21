@@ -42,13 +42,12 @@ const medicalHistorySchema=new mongoose.Schema({
     }
 })
 
-// medicalHistorySchema.post('save',async function(doc,next){
-//     await Patient.findByIdAndUpdate(this.patient,   
-//         {$push:{medicalHistory:this._id}},
-//         {upsert: true}
-//     )
-//     next()
-// })
-
+medicalHistorySchema.post('save',async function(doc,next){
+    await Patient.findByIdAndUpdate(this.patient,   
+        {$push:{medicalHistory:this._id}},
+        {upsert: true}
+    )
+    next()
+})
 const MedicalHistory=mongoose.model('MedicalHistory',medicalHistorySchema)
 module.exports=MedicalHistory

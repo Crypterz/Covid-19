@@ -7,7 +7,7 @@ const router = express.Router();
 
 router
   .route('/')
-  // .get(authController.protect, authController.restrictTo('patient','admin'), patientController.getAllPatients)
+  .get(authController.protect, authController.restrictTo('patient','admin'), patientController.getAllPatients)
   .get(patientController.getAllPatients)
   .post(patientController.createPatient)
 
