@@ -23,6 +23,7 @@
     "bootstrap": "^5.1.1",
     "chart.js": "^3.4.1",
     "formik": "^2.2.9",
+    "material-ui": "^1.0.0-beta.47",
     "js-cookie": "^3.0.1",
     "moment": "^2.29.1",
     "react": "^17.0.2",
@@ -67,10 +68,18 @@
       "last 1 safari version"
     ]
   },
+<<<<<<< HEAD
   "babel": {
     "presets": [
       "@babel/preset-react",
       "@babel/preset-env"
     ]
   }
+=======
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "index.js",
+  "devDependencies": {},
+  "author": "",
+  "license": "ISC"
+>>>>>>> 78d5d015b5454e998694a009cfc9cb81a63ce0e0
 }

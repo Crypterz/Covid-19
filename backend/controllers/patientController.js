@@ -1,7 +1,6 @@
 const Patient=require('./../models/patientModel')
 
 const APIfunctions=require('./../utils/apiFunctions')
-const msg = require('./../utils/msg')
 const catchAsync= require('./../utils/catchAsync');
 const AppError = require('../utils/appError');
 
@@ -46,7 +45,6 @@ exports.getAllPatients = async (req, res) => {
         
 
         // const patients=await Patient.find().where('name').equals('nimal')
-        msg.sendmsg('https://www.google.com/')
         const features=new APIfunctions(Patient.find()
         // .populate({
         //     path:'pcrTest',
@@ -71,7 +69,10 @@ exports.getAllPatients = async (req, res) => {
 
 exports.getPatient = catchAsync(async (req, res,next) => {
     // try{
-        const patient=await Patient.findById(req.params.id).populate('pcrTest')    //Patient.findOne({_id:req.params.id})
+        const patient=await Patient.findById(req.params.id).populate({
+            path:'pcrTest medicalHistory user',
+            select: '-__v -name -passwordResetToken'
+        })    //Patient.findOne({_id:req.params.id})
         if(!patient){
             return next(new AppError("No patient found with that ID",404))    //used return statement to avoid executing code below
         }
@@ -88,6 +89,7 @@ exports.getPatient = catchAsync(async (req, res,next) => {
 })
 
 exports.createPatient= catchAsync(async (req,res)=>{
+    console.log('pppppppppppppppppppppppppppppppppppppppppp')
     console.log(req.body)
     // const newPatient=new Patient({})
     // newPatient.save()
