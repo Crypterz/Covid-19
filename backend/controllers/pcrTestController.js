@@ -34,21 +34,6 @@ exports.getAllTest = async (req, res) => {
     }
 };
 
-<<<<<<< HEAD
-// exports.createPCRTest= catchAsync(async (req,res)=>{
-//     req.body.creation={
-//         createdBy:req.user.name
-//     }
-//     const r=req.body
-//     const newTest=await PCRTest.create(r)
-//     res.status(201).json({
-//         status:'success',
-//         data:{
-//             test:newTest
-//         }
-//     })
-// })
-=======
 exports.getAllPCRTest_hospital = catchAsync(async (req, res, next) => {
     const hospital=req.user.hospital
     const tests=await PCRTest.find({"hospital.creation":hospital})
@@ -77,32 +62,11 @@ exports.getAllPCRTest_Patient = catchAsync(async (req, res, next) => {
     data: {tests}
     });
 })
->>>>>>> 78d5d015b5454e998694a009cfc9cb81a63ce0e0
 
 exports.createPCRTest= catchAsync(async (req,res)=>{
     req.body.creation={
         createdBy:req.user.name
     }
-<<<<<<< HEAD
-    try{
-        const r=req.body
-        const newTest=await PCRTest.create(r)
-        res.status(201).json({
-            status:'success',
-            data:{
-                test:newTest
-            }
-        });
-    }catch(err){                 //if schema doent stisfy error may occur VALIDATIO ERROR
-        res.status(404).json({
-            status:'fail',
-            message:err
-        })
-    }
-});
-    
-
-=======
     req.body.sendStatus="fail"
     const message=`Your PCR Text Result is ${req.body.result}`
     // if(req.body.contactNumber){
@@ -119,7 +83,6 @@ exports.createPCRTest= catchAsync(async (req,res)=>{
         }
     })
 })
->>>>>>> 78d5d015b5454e998694a009cfc9cb81a63ce0e0
 
 exports.confirmPCRTest=catchAsync(async (req,res)=>{
     const test=await PCRTest.updateMany({_id:{

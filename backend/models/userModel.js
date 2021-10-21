@@ -30,6 +30,23 @@ const userSchema=new mongoose.Schema({
     birthday:{
         type:Date
     },
+    contactNo:{
+        type:Number
+    },
+    address:{
+        line1:{
+            type:String
+        },
+        line2:{
+            type:String
+        },
+        city:{
+            type:String
+        },
+        province:{
+            type:String
+        },
+    },
     password:{
         type:String,
         required:true,
