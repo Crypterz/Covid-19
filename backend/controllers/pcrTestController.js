@@ -88,7 +88,7 @@ exports.confirmPCRTest=catchAsync(async (req,res)=>{
     const test=await PCRTest.updateMany({_id:{
         $in:req.body.ids
     }},{
-        confirm:{confirmBy:req.user.name._id}
+        confirm:{confirmBy:req.user._id}
     })
     const positive =await PCRTest.where({confirm:{$exists:true},_id:{$in:req.body.ids}, result:"positive"}).countDocuments();
     const negative =await PCRTest.where({confirm:{$exists:true},_id:{$in:req.body.ids}, result:"negative"}).countDocuments();
@@ -97,7 +97,7 @@ exports.confirmPCRTest=catchAsync(async (req,res)=>{
     //     negative:negative,
     //     creation:req.user
     // })
-    await dashBoardController.addPCRResults(Date.now(),4,5,req.user)
+    await dashBoardController.addPCRResults(Date.now(),positive,negative,req.user)
     if(!test){
         return next(new AppError("No patient found with that ID",404))    //used return statement to avoid executing code below
     }

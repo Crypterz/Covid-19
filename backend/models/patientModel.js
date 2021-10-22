@@ -38,6 +38,10 @@ const patientSchema =new mongoose.Schema({
         type:mongoose.Schema.ObjectId,
         ref:'MedicalHistory'
     }],
+    currentMedicalHistory:{
+        type:mongoose.Schema.ObjectId,
+        ref:'MedicalHistory'
+    },
     confidential:Boolean
 // },{
 //     toJSON:{virtuals:true},
