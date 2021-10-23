@@ -45,7 +45,7 @@ const slice = createSlice({
             patients.list = action.payload.data.patients;
             patients.loading = false;
             patients.lastFetch = Date.now();
-           // console.log(patients.list)
+           // console.log('srherhtrhjtrjtrjr')
         },
 
         patientSymptomsUpdated(patients, action){
@@ -188,13 +188,12 @@ export const updatePatient= (patient, id) => (dispatch) => {
 
 }
 
-export const updateSymptomsInDB = (symptoms) => (dispatch) => {
-        console.log(symptoms)
+export const updateSymptomsInDB = (symptoms, medicalHistoryId) => (dispatch) => {
+      //  console.log(symptoms)
         return dispatch(
-          // console.log(patient);
             apiCallBegan({
-                url: patientURL + 'updateSymptoms',
-                method: "post",
+                url: patientURL + `med/${medicalHistoryId}/addsymptoms`,
+                method: "patch",
                 data: symptoms,
                 onSuccess: patientSymptomsUpdated.type,
             })
@@ -202,13 +201,12 @@ export const updateSymptomsInDB = (symptoms) => (dispatch) => {
 
 }
 
-export const updateDrugsInDB = (drugs) => (dispatch) => {
-    console.log(drugs)
+export const updateDrugsInDB = (drugs, medicalHistoryId) => (dispatch) => {
+    //console.log(drugs)
     return dispatch(
-       // console.log(patient);
         apiCallBegan({
-            url: patientURL + 'updateDrugs',
-            method: "post",
+            url: patientURL + `med/${medicalHistoryId}/adddrugs`,
+            method: "patch",
             data: drugs,
             onSuccess: patientDrugsUpdated.type,
         })

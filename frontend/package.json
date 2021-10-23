@@ -68,18 +68,9 @@
       "last 1 safari version"
     ]
   },
-<<<<<<< HEAD
-  "babel": {
-    "presets": [
-      "@babel/preset-react",
-      "@babel/preset-env"
-    ]
-  }
-=======
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
   "devDependencies": {},
   "author": "",
   "license": "ISC"
->>>>>>> 78d5d015b5454e998694a009cfc9cb81a63ce0e0
 }

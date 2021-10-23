@@ -26,7 +26,12 @@ const AddPcrResults = ({history}) => {
         Tel_number : Yup.string().matches(/^(?:7|0|(?:\+94))[0-9]{9,9}$/, 'Invalid Phone Number. Ex:- 0123458907')
                         .required('Phone number is required...'),
         NIC_number : nic,
-        age : Yup.number("Age should be a number").positive().required("Age is required"),
+       // age : Yup.number("Age should be a number").positive().required("Age is required"),
+        birth_year : Yup.string()
+        .required("Birth Year is required")
+        .min(4, "Invalid Birth year")
+        .max(4, "Invalid Birth year")
+        .matches(/^(?:19|(?:20))[0-9]{1,1}[0-9]{1,1}$/, "Month must be greater than 0 and can't be exceeded 12")
 
     });
 
@@ -35,24 +40,32 @@ const AddPcrResults = ({history}) => {
         last_name: '',
         Tel_number:'',
         NIC_number:'',
-        age:'',
+        birth_year:'',
     });
 
     const submitForm = (values) => {
-        const {first_name, last_name, Tel_number, NIC_number, age } = values;
+        const {first_name, last_name, Tel_number, NIC_number, age, birth_year } = values;
+        const year = new Date().getFullYear()
+
         if(selectedResult !== ""){
-            const Result = {
-                first_name : first_name,
-                last_name : last_name,
-                name: first_name,
-                age : age,
-                telephone : Tel_number,
-                nic : NIC_number,
-                result : selectedResult,
-                slug : first_name.toString()
-        }
-            dispatch(addPcr(Result));
-            setPcrState(true);
+            if(parseInt(birth_year, 10)>year){
+                alert(`Birth year must be lower or equal to ${year}`)
+            }else{
+                const Result = {
+                    name:{
+                        firstName : first_name,
+                        lastName : last_name,
+                    },
+                    contactNo : Tel_number,
+                    nic : {
+                        nicno:NIC_number,
+                        birthYear : birth_year
+                    },
+                    result : selectedResult,
+                }
+                dispatch(addPcr(Result));
+                setPcrState(true);
+            } 
         }else{
             alert('Please select correct PCR result')
         }
@@ -241,7 +254,7 @@ const AddPcrResults = ({history}) => {
             <div className="vs-col vs-xs- vs-sm-12 vs-lg-6"style={{margin:'0%',width:'100%', position:'relative'}}>
                 <div className="set-animation from-left animate">
 
-                    <Form.Group controlId = 'lastName' className='m-2 float-right' style={{width:'100%', float:'right'}}>
+                    {/* <Form.Group controlId = 'lastName' className='m-2 float-right' style={{width:'100%', float:'right'}}>
                     <Form.Label className = 'form-label'>Age</Form.Label>
                         <Form.Control 
                             className='textBox'
@@ -256,6 +269,23 @@ const AddPcrResults = ({history}) => {
                             autoComplete = 'disabled'
                         />
                         <FormControl.Feedback type='invalid'>{errors.age}</FormControl.Feedback>
+                    </Form.Group> */}
+                   <Form.Group controlId = 'birthYer' className='m-2 float-right' style={{width:'100%', float:'right'}}>
+                        <Form.Label className = 'form-label'>Birth Year</Form.Label>
+                            <Form.Control 
+                                className='textBox'
+                                type='text'
+                                name='birth_year'
+                                minLength={4}
+                                value={values.birth_year}
+                                onChange={handleChange}
+                                placeholder='Birth Year'
+                                isValid={touched.birth_year && !errors.birth_year}
+                                isInvalid={!!errors.birth_year}
+                                size = {'lg'} 
+                                autoComplete = 'off'
+                            />
+                        <FormControl.Feedback type='invalid'>{errors.birth_year}</FormControl.Feedback>
                     </Form.Group>
                 </div>
             </div>

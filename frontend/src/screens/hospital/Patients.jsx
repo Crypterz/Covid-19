@@ -16,6 +16,8 @@ const Patients = ({history}) => {
 
     const patientsDetails = useSelector(getAllPatients);
     const patients = patientsDetails.list;
+   // const data = objectDestructure (patients);
+   // const {medicalHistory, nic, pcrTest, user, _id } = patientsDetails.list;
    // console.log(patients)
     const patientsLoading = useSelector(getPatientsLoadingStatus);
 
@@ -28,10 +30,12 @@ const Patients = ({history}) => {
 
     const [selectedCategory, setSelectedCategory] = useState(passedCategory);
     const [filtered, setFiltered] = useState(patients);
+    //console.log(filtered)
 
     const pageSize = 5;
     const [currentPage, setCurrentPage] = useState(1);
     let [paginated, setPaginated] = useState(patients);
+    //console.log(paginated)
 
     const [searchKeyword, setSearchKeyword ] = useState('');
 
@@ -49,13 +53,13 @@ const Patients = ({history}) => {
         setPaginated(paginate(updatedFiltered, currentPage, pageSize));
        // getFilteredSearchedPatients(patients, searchKeyword)
        // console.log(searchKeyword)
-    },[dispatch, searchKeyword])
+    },[searchKeyword])
 
     return (
         <>
             {/* {auth.loggedIn && patientsLoading && (<Loader></Loader>)}
             {auth.loggedIn ?  */}
-            { patientsLoading && (<Loader></Loader>)}
+            {(typeof(patients) === 'undefined' || patients.length == 0) && patientsLoading && (<Loader></Loader>)}
             <Container>
                 <h3 style={{textAlign:'center', marginBottom:'40px', fontWeight:'700'}}>PATIENTS DETAILS</h3>
 
@@ -97,18 +101,20 @@ const Patients = ({history}) => {
                     <th>Age</th>
                     <th>Tel</th>
                     <th>Address</th>
-                    <th>Status</th>
+                    {/* <th>Status</th> */}
                     <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {paginated.map( p =>
                         <tr>
-                            <td>{p.name}</td>
-                            <td>{p.age}</td>
-                            <td>{p.name}</td>
-                            <td>{p.name}</td>
-                            <td>{p.name}</td>
+                            <td>
+                               {(objectDestructure(p , "name"))}
+                            </td>
+                            <td>{(objectDestructure(p , "age"))}</td>
+                            <td>{(objectDestructure(p , "tel"))}</td>
+                            <td>{(objectDestructure(p , "address"))}</td>
+                            {/* <td>{p.name}</td> */}
                             <td>
                                 <Button 
                                     value = {p._id}
@@ -116,7 +122,8 @@ const Patients = ({history}) => {
                                     className="btn btn-primary">Profile</Button>
                             </td>
                         </tr>
-                     )}
+                    //)
+                    )}
                 </tbody>
             </Table>
 
@@ -149,13 +156,59 @@ function getFilteredPatients(patients, categories, filter){
 export function getFilteredSearchedPatients(patients, filterBy){
   //  console.log(patients)
    // console.log(filterBy)
-    if(/*typeof(patients) === 'undefined' || */patients.length === 0){
+    if(typeof(patients) === 'undefined' || patients.length === 0){
        return {}
     }
-    return patients.filter(p => p.name.toLowerCase().includes(filterBy) //||
+    //return patients
+    //return patients.filter(p => p.user)
+    return patients.filter(p => objectDestructure(p, "name").toLowerCase().includes(filterBy) || getNic(p).includes(filterBy.toString()));
+    //return patients.filter(p => p.name.toLowerCase().includes(filterBy) //||
         //p.description.toLowerCase().includes(filterBy.toLowerCase())
        // console.log(p.name.toLowerCase())
-    );
+    //);
+}
+
+function objectDestructure ( patients, type){
+    let newList = ""
+    if(typeof(patients) === 'undefined' || patients.length === 0){
+        return newList
+    } 
+
+    const { user } = patients
+    if(user){
+        if(type === "name"){
+            const { firstName , lastName } = user.name;
+            const patientName = firstName + " " + lastName
+            return patientName;
+        }
+        
+        if(type === "age"){
+            const { birthday } = user;
+            const date = new Date().getFullYear();
+            const birthYear = birthday.split("-")[0]
+            return (date - birthYear)
+        }
+
+        if(type === "tel"){
+            const { contactNo } = user;
+            return contactNo
+        }
+        if(type === "address"){
+            const { city, line1, line2, province } = user.address;
+            return (city + "," + line1 + "," + line2 + "," + province)
+        }
+    }else{
+        return newList
+    }
+}
+
+function getNic(patient){
+    const { nic } = patient
+    if(nic){
+        const {nicno} = nic
+        return nicno.toString()
+    }
+    return ""
 }
 
 export default Patients

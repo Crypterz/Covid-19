@@ -3,6 +3,8 @@ import {Card} from 'react-bootstrap'
 import { loadPatients , getPatientById, getAllPatients, getPatientsLoadingStatus, updateTransferPatient, loadPatient} from '../../store/entities/patients';
 
 const History = ({patientHistory, filteredHistory}) => {
+   // console.log(patientHistory)
+   // console.log(filteredHistory)
     // const dispatch = useDispatch()
     // const patientDetails = useSelector(getAllPatients);
     // const patient = patientDetails.list
@@ -23,7 +25,7 @@ const History = ({patientHistory, filteredHistory}) => {
                         <li>
                             <div className="field">Admitted Date:</div>
                             {filteredHistory.length !== 0 ?
-                            <div className="value">{patientHistory.age}</div>:''}
+                            <div className="value">{patientHistory.admittedDate}</div>:''}
                         </li>
                         <li>
                             <div className="field">Doctor:</div>
@@ -36,7 +38,14 @@ const History = ({patientHistory, filteredHistory}) => {
                         </li>
                         <li>
                             <div className="field">Symptoms:</div>
-                            <div className="value">077123456</div>
+                            {objectDestructure(patientHistory, "symptoms").length > 0 ? 
+                            <ul className="value">
+                                {objectDestructure(patientHistory, "symptoms").map(p=> 
+                                    <li>{p.date} - {p.description}</li>
+                                )}
+                            </ul> 
+                            
+                            : "No data"}
                         </li>
                     </li>
 
@@ -53,7 +62,14 @@ const History = ({patientHistory, filteredHistory}) => {
                         </li>
                         <li>
                             <div className="field">Drug Details:</div>
-                            <div className="value">077123456</div>
+                            {objectDestructure(patientHistory, "drugs").length > 0 ? 
+                            <ul className="value">
+                                {objectDestructure(patientHistory, "drugs").map(p=> 
+                                    <li>{p.date} - {p.description}</li>
+                                )}
+                            </ul> 
+                            
+                            : "No data"}
                         </li>
                     </li>
                 </ul>
@@ -63,3 +79,27 @@ const History = ({patientHistory, filteredHistory}) => {
 }
 
 export default History
+
+function objectDestructure ( histories, type){
+    let newList = ""
+    if(typeof(histories) === 'undefined' || histories.length === 0){
+         return newList
+    } 
+ 
+    const {drugDetails, symptoms } = histories
+    if(drugDetails){
+         if(type === "drugs"){
+            // console.log(drugDetails.length)
+            return drugDetails
+         }
+    }
+
+    if(symptoms){
+        if(type === "symptoms"){
+            //console.log(medicalHistory)
+           return symptoms
+        }
+    }
+
+    return newList
+ }

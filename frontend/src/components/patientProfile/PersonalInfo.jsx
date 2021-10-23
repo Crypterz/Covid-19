@@ -2,31 +2,32 @@ import React from 'react'
 import { Button, Card} from 'react-bootstrap'
 
 const PersonalInfo = ({patients, currentHospital, userHospital}) => {
+
     return (
             <Card  className="m-2" bg="#ffffff" text="black" style={{ width: '100%'}}>
                 <ul className="profile-info-list mt-2">
                     <li className="title ">PERSONAL INFORMATION</li>
                     <li>
                         <div className="field">Name:</div>
-                        <div className="value">{patients.name}</div>
+                        <div className="value">{objectDestructure(patients, "name")}</div>
                      </li>
                     <li>
                         <div className="field">Age:</div>
-                        <div className="value">{patients.age}</div>
+                        <div className="value">{objectDestructure(patients, "age")}</div>
                     </li>
                     <li>
                         <div className="field">Birth of Date:</div>
-                        <div className="value">{patients.name}</div>
+                        <div className="value">{objectDestructure(patients, "birthday")}</div>
                     </li>
                     <li>
                         <div className="field">Tel Number:</div>
-                        <div className="value">{patients.name}</div>
+                        <div className="value">{patients.contactNo}</div>
                     </li>
                     <li>
                         <div className="field">Address:</div>
                         <div className="value">
                             <address className="m-b-0">
-                                {patients.name}
+                                {objectDestructure(patients, "address")}
                             </address>
                         </div>
                     </li>
@@ -44,3 +45,34 @@ const PersonalInfo = ({patients, currentHospital, userHospital}) => {
 }
 
 export default PersonalInfo
+
+function objectDestructure ( patients, type){
+    // console.log(patients)
+     let newList = ""
+     if(typeof(patients) === 'undefined' || patients.length === 0){
+         return newList
+     } 
+ 
+     const { name, address, birthday } = patients
+
+        if(type === "name"){
+            const { firstName , lastName } = name;
+            const patientName = firstName + " " + lastName
+            //console.log(typeof(patientName))
+            return patientName;
+         }
+        if(type === "address"){
+            const { city, line1, line2, province } = address;
+            return (city + "," + line1 + "," + line2 + "," + province)
+        }
+        if(type === "birthday"){
+            const date = birthday.split("-")
+            return date[0] +"-" + date[1] + "-" + (date[2][0] + date[2][1])
+        }
+        if(type === "age"){
+            const date = new Date().getFullYear();
+            const birthYear = birthday.split("-")[0]
+           // console.log(date-birthYear)
+            return (date - birthYear)
+        }
+ }

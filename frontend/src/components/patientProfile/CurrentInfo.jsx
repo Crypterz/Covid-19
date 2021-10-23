@@ -4,7 +4,7 @@ import {Card, Button} from 'react-bootstrap';
 
 const CurrentInfo = ({patients, currentHospital, userHospital, hospitalName}) => {
     const auth = useSelector(state => state.auth);
-
+    console.log(patients)
     return (
         <Card className='m-2 con-vs-card'>
             <h5 className="text-center mt-2 font-weight-bold">CURRENT DETAILS</h5>
@@ -17,7 +17,7 @@ const CurrentInfo = ({patients, currentHospital, userHospital, hospitalName}) =>
                         </li>
                         <li>
                             <div className="field">Admitted Date:</div>
-                            <div className="value">55</div>
+                            <div className="value">{patients.admittedDate}</div>
                         </li>
                         <li>
                             <div className="field">Doctor:</div>
@@ -29,7 +29,12 @@ const CurrentInfo = ({patients, currentHospital, userHospital, hospitalName}) =>
                         </li>
                         <li>
                             <div className="field">Symptoms:</div>
-                            <div className="value">077123456</div>
+                            {objectDestructure(patients, "symptoms").length > 0 ? 
+                            <ul className="value">
+                                {objectDestructure(patients, "symptoms").map(p=> 
+                                    <li>{p.date} - {p.description}</li>
+                                )}
+                            </ul> : "No data"}
                         </li>
                     </li>
 
@@ -46,12 +51,19 @@ const CurrentInfo = ({patients, currentHospital, userHospital, hospitalName}) =>
                         </li>
                         <li>
                             <div className="field">Drug Details:</div>
-                            <div className="value">077123456</div>
+                            {objectDestructure(patients, "drugs").length > 0 ? 
+                            <ul className="value">
+                                {objectDestructure(patients, "drugs").map(p=> 
+                                    <li>{p.date} - {p.description}</li>
+                                )}
+                            </ul> 
+                            
+                            : "No data"}
                         </li>
                     </li>
                 </ul>
                 </div>
-                    {auth.data.user.role !== 'patient' &&
+                    {auth.data.user.role !== 'patient' && objectDestructure(patients, "discharge") === false &&
                     <div className='text-center m-2'>
                         {currentHospital === userHospital ?<Button 
                             type='submit'  
@@ -68,3 +80,33 @@ const CurrentInfo = ({patients, currentHospital, userHospital, hospitalName}) =>
 }
 
 export default CurrentInfo
+
+function objectDestructure ( histories, type){
+    let newList = ""
+    if(typeof(histories) === 'undefined' || histories.length === 0){
+         return newList
+    } 
+ 
+    const {dischargeDate, drugDetails, symptoms } = histories
+    if(dischargeDate){
+        if(type === "discharge"){
+           // console.log(drugDetails.length)
+           return dischargeDate.changed
+        }
+   }
+    if(drugDetails){
+         if(type === "drugs"){
+            // console.log(drugDetails.length)
+            return drugDetails
+         }
+    }
+
+    if(symptoms){
+        if(type === "symptoms"){
+            //console.log(medicalHistory)
+           return symptoms
+        }
+    }
+
+    return newList
+ }
