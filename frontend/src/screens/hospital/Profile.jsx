@@ -3,34 +3,43 @@ import {Container, Button, Card, Row, Col, Nav, Form,FormControl} from 'react-bo
 import Loader from '../../components/Loader'
 import { useDispatch, useSelector } from 'react-redux';
 //import { listPatientDetails } from '../../actions/patientActions'
-import { loadPatients , getPatientById, getAllPatients, getPatientsLoadingStatus, updateTransferPatient, loadPatient} from '../../store/entities/patients';
+import patients, { loadPatients , getPatientById, getAllPatients, getPatientsLoadingStatus, updateTransferPatient, loadPatient} from '../../store/entities/patients';
 import {getAllHospitals, loadHospitals} from '../../store/entities/hospitals'
 import { Scrollbars } from 'react-custom-scrollbars';
 import PersonalInfo from '../../components/patientProfile/PersonalInfo'
 import CurrentInfo from '../../components/patientProfile/CurrentInfo'
 import Actions from '../../components/patientProfile/Actions'
 import History from '../../components/patientProfile/History'
+import PopUp from '../../components/popUp/PopUp';
+import AlertDialog from '../../components/dialog/Dialog';
 
 const Profile =  ({match, history}) => {
     const dispatch = useDispatch()
     const patientId = match.params.id
     const auth = useSelector(state => state.auth);
     const patients = useSelector(getPatientById(patientId))
+    //console.log(patients)
     const hospitals = useSelector(getAllHospitals)
-    const wardDetails = getWard(hospitals, auth.data.user.hospital_id)
+  //  console.log(hospitals)
+    //const wardDetails = getWard(hospitals, auth.data.user.hospital_id)
 
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
+    const [popup, setPopUp] = useState(false);
+  //  console.log(popup)
 
     const currentHospital_id = '4';
     const userHospital_id = '4'
 
-   const patientDetails = useSelector(getAllPatients);
-   const patient = patientDetails.list
    const [filteredHistory, setFilteredHistory] = useState([])
    const [patientHistory, changeHistory ] = useState(filteredHistory) 
+
+
+   const setDischargeHandler = () =>{
+       console.log('efewfwef')
+   }
 
     const setDates = (date, type) =>{
         if(type === 'start'){
@@ -42,7 +51,8 @@ const Profile =  ({match, history}) => {
 
     const searchHistory =() =>{
         if(startDate <= endDate){
-            let medicalHistories = getMedicalHistories(startDate, endDate, patient);
+            let medicalHistories = getMedicalHistories(startDate, endDate, patients);
+            console.log(medicalHistories)
             changeHistory(medicalHistories)
             setFilteredHistory(medicalHistories);
         }
@@ -54,7 +64,7 @@ const Profile =  ({match, history}) => {
         if(auth.data.user.role === 'patient'){
             dispatch(loadPatient(patientId))
         }else{
-            dispatch(loadPatients())
+          //  dispatch(loadPatients())
             dispatch(loadHospitals())
         }
         
@@ -69,7 +79,7 @@ const Profile =  ({match, history}) => {
                     
                     <div className="vs-col vs-xs- vs-sm-12 vs-lg-3"style={{margin:'0%',width:'100%', position:'relative'}}>
                         <div className="set-animation from-left animate">
-                            <PersonalInfo patients={patients} currentHospital={currentHospital_id}
+                            <PersonalInfo patients={objectDestructure(patients, "user")} currentHospital={currentHospital_id}
                                 userHospital={userHospital_id}>
                             </PersonalInfo>
                         </div>
@@ -77,9 +87,14 @@ const Profile =  ({match, history}) => {
 
                     <div className="vs-col vs-xs- vs-sm-12 vs-lg-6"style={{margin:'0%',width:'100%', position:'relative'}}>
                         <div className="set-animation from-left animate">
-                            <CurrentInfo patients={patients} currentHospital={currentHospital_id}
-                                userHospital={userHospital_id}
-                            ></CurrentInfo>
+                            {objectDestructure(patients, "history").length > 0 ?
+                                <CurrentInfo patients={objectDestructure(patients, "history").slice(-1)[0]} currentHospital={currentHospital_id}
+                                    userHospital={userHospital_id}
+                                ></CurrentInfo> : 
+
+                                <CurrentInfo patients={[]} currentHospital={""}
+                                    userHospital={""}
+                                ></CurrentInfo>}
                         </div>
                     </div>
 
@@ -88,7 +103,7 @@ const Profile =  ({match, history}) => {
                     <div className="vs-col vs-xs- vs-sm-12 vs-lg-3" style={{margin:'0%',width:'100%', position:'relative'}}>
                             <div className="set-animation from-left animate">
                             {currentHospital_id === userHospital_id ? 
-                                <Actions patients={patients} hospitals={hospitals}></Actions> :''}
+                                <Actions patients={patients} hospitals={hospitals} popUpHandler={setPopUp}></Actions> :''}
                             </div>
                     </div> }
                 </div>
@@ -122,11 +137,17 @@ const Profile =  ({match, history}) => {
                                 />
                             <FormControl.Feedback type='invalid'>This field is required!</FormControl.Feedback>
                             </Form.Group>
+                            
                             { startDate !== '' && endDate !== '' && startDate > endDate ?
                             <Card 
                                 style={{backgroundColor:'#fca8a4', color:'#b73333', opacity:'0.5', padding:'10px', margin:'5px'}}
                                 className='m-2'
                             >Start date must be past to the end date</Card> : ''}
+                            { startDate !== '' && endDate !== '' && filteredHistory.length === 0 ?
+                            <Card 
+                                style={{backgroundColor:'#fca8a4', color:'#b73333', opacity:'0.5', padding:'10px', margin:'5px'}}
+                                className='m-2'
+                            >No Medical History Data</Card> : ''}
                             <Button 
                                 className='btn btn-primary m-2'
                                 disabled ={startDate === '' || endDate === ''}
@@ -155,7 +176,7 @@ const Profile =  ({match, history}) => {
                                         style={{width:'80%', borderRadius:'0px'}}
                                         onClick={()=>changeHistory(p)}
                                         >
-                                        {p.name}
+                                        {p.admittedDate}
                                     </Button>)}
                                 </ul>
                             </Scrollbars>
@@ -163,8 +184,13 @@ const Profile =  ({match, history}) => {
                     </Card>
                     </div>}
 
+                    
+
                 </div>
             </div>: history.push('/')}
+
+             <AlertDialog dialogSet={popup} closePopUp={setPopUp}  dischargeHandler={setDischargeHandler}/>
+            
         </Container>    
     
     )
@@ -174,16 +200,33 @@ const Profile =  ({match, history}) => {
 export default Profile
 
 
-export function getMedicalHistories(start_date, end_date, patient){
-    //console.log(start_date, end_date);
-    if (typeof(patient) === "undefined" || patient.length === 0){
-        return {};
-       // return (patient.filter(p=> p.name.includes('OSCAR')))
+export function getMedicalHistories(start_date, end_date, patients){
+    const histories = objectDestructure(patients, "history")
+    if(histories !== ""){
+        //console.log(histories)
+        return histories.filter ( p=> p.admittedDate >= start_date && p.admittedDate <= end_date)
     }
-    return (patient.filter(p=> p.name.includes('OSCAR')))
-   //return {}
+    return ""
 }
 
-export function getWard( hospitals, hospitalId){
-    return (hospitals.filter(p=> p._id === hospitalId)[0].wards);
-}
+function objectDestructure ( patients, type){
+    let newList = ""
+    if(typeof(patients) === 'undefined' || patients.length === 0){
+         return newList
+    } 
+ 
+    const {medicalHistory, user } = patients
+    if(user){
+         if(type === "user"){
+            return user
+         }
+    }
+
+    if(medicalHistory){
+        if(type === "history"){
+           return medicalHistory
+        }
+    }
+
+    return newList
+ }

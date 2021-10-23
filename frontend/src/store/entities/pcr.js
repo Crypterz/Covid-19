@@ -104,7 +104,6 @@ export const loadPcrs = () => (dispatch, getState) => {
 export const addPcr = (pcr) => (dispatch) => {
     console.log(pcr)
     return dispatch(
-        //console.log(pcr)
         apiCallBegan({
             url: pcrURL + 'pcr',
             method: "post",

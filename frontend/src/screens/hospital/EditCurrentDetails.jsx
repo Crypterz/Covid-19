@@ -3,11 +3,12 @@ import {Container, Button, Card, Row, Col, Nav, Form, FormControl} from 'react-b
 import { useDispatch, useSelector } from 'react-redux';
 import {  Formik } from 'formik';
 import * as Yup from 'yup';
-import {  getAllPatients, updatePatient} from '../../store/entities/patients';
+import {updateDrugsInDB, updateSymptomsInDB} from '../../store/entities/patients';
 
-const EditCurrentDetails = ({history}) => {
+const EditCurrentDetails = ({match,history}) => {
     const dispatch = useDispatch()
-    const patientId = (window.location.href.split('/')).pop()
+   // const patientId = (window.location.href.split('/')).pop()
+   const medicalHistoryId = match.params.id
 
     const auth = useSelector(state => state.auth);
 
@@ -31,10 +32,10 @@ const EditCurrentDetails = ({history}) => {
     const UpdateSymptoms =(value, sym)=>{
         for (var i =0; i< sym.length ; i++){
             var v = sym[i]
-            if (!v.name){
+            if (!v.description){
                 setUpdateSymptoms(true);
                 return
-            }else if (v.name == ""){
+            }else if (v.description == ""){
                 setUpdateSymptoms(true);
                 return
             } 
@@ -58,10 +59,10 @@ const EditCurrentDetails = ({history}) => {
 
         for (var i =0; i< newSymptom.length ; i++){
             var v = newSymptom[i]
-            if (!v.name){
+            if (!v.description){
                 setUpdateSymptoms(true);
                 return
-            }else if (v.name == ""){
+            }else if (v.description == ""){
                 setUpdateSymptoms(true);
                 return
             } 
@@ -91,10 +92,10 @@ const EditCurrentDetails = ({history}) => {
 
         for (var i =0; i< newSymptoms.length ; i++){
             var v = newSymptoms[i]
-            if (!v.name){
+            if (!v.description){
                 setUpdateSymptoms(true);
                 return
-            }else if (v.name == ""){
+            }else if (v.description == ""){
                 setUpdateSymptoms(true);
                 return
             } 
@@ -108,10 +109,10 @@ const EditCurrentDetails = ({history}) => {
     const UpdateDrugs =(value, sym)=>{
         for (var i =0; i< sym.length ; i++){
             var v = sym[i]
-            if (!v.name){
+            if (!v.description){
                 setUpdateDrugs(true);
                 return
-            }else if (v.name == ""){
+            }else if (v.description == ""){
                 setUpdateDrugs(true);
                 return
             } 
@@ -136,10 +137,10 @@ const EditCurrentDetails = ({history}) => {
 
         for (var i =0; i< newDrug.length ; i++){
             var v = newDrug[i]
-            if (!v.name){
+            if (!v.description){
                 setUpdateDrugs(true);
                 return
-            }else if (v.name == ""){
+            }else if (v.description == ""){
                 setUpdateDrugs(true);
                 return
             } 
@@ -168,10 +169,10 @@ const EditCurrentDetails = ({history}) => {
         
         for (var i =0; i< newDrugs.length ; i++){
             var v = newDrugs[i]
-            if (!v.name){
+            if (!v.description){
                 setUpdateDrugs(true);
                 return
-            }else if (v.name == ""){
+            }else if (v.description == ""){
                 setUpdateDrugs(true);
                 return
             } 
@@ -182,17 +183,21 @@ const EditCurrentDetails = ({history}) => {
     }
 
     const updateSymptom = () =>{
-        const symUpdate = {
-            symptoms: symptoms
-        }
-        dispatch(updatePatient(symUpdate,patientId ));
+        // const symUpdate = {
+        //     symptoms
+        // }
+      //  console.log(symUpdate)
+        //dispatch(updatePatient(symUpdate,patientId ));
+        dispatch(updateSymptomsInDB(symptoms, medicalHistoryId))
     } 
 
     const updateDrug = () =>{
-        const drugUpdate = {
-            drugs: drugs
-        }
-        dispatch(updatePatient(drugUpdate,patientId));
+        // const drugUpdate = {
+        //     drugs
+        // }
+       // console.log(drugUpdate)
+       // dispatch(updatePatient(drugUpdate,patientId));
+       dispatch(updateDrugsInDB(drugs, medicalHistoryId))
     }
 
 
@@ -241,7 +246,7 @@ const EditCurrentDetails = ({history}) => {
                                         onChange={(e) => {
                                             handleChange(e);
                                             const updated = {...symptoms[index]};
-                                            updated.name = e.target.value;
+                                            updated.description= e.target.value;
                                             const newSymptoms = [...symptoms];
                                             newSymptoms[index] = updated;
                                             setSymptoms(newSymptoms);
@@ -296,7 +301,7 @@ const EditCurrentDetails = ({history}) => {
                                     onChange={(e) => {
                                         handleChange(e);
                                         const updated = {...drugs[index]};
-                                        updated.name = e.target.value;
+                                        updated.description = e.target.value;
                                         const newDrugs = [...drugs];
                                         newDrugs[index] = updated;
                                         setDrugs(newDrugs);
