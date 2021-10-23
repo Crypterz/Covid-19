@@ -8,31 +8,31 @@ const sendMessage = require('../utils/message');
 const dashBoardController = require('./dashBoardController')
 const Patient=require('./../models/patientModel')
 
-exports.getAllTest = async (req, res) => {
-    //console.log(req.body)
-    try{
-        const features=new APIfunctions(PCRTest.find(),req.query).filter().sort().select()
-        // const tests=await features.query
-        // res.status(200).json({
-        // status: 'success',
-        // requestedAt: req.requestTime,
-        // results: tests.length,
-        // data: {tests}
-        const pcr=await features.query
-        res.status(200).json({
-        status: 'success',
-        requestedAt: req.requestTime,
-        results: pcr.length,
-        data: {pcr}
+// exports.getAllTest = async (req, res) => {
+//     //console.log(req.body)
+//     try{
+//         const features=new APIfunctions(PCRTest.find(),req.query).filter().sort().select()
+//         // const tests=await features.query
+//         // res.status(200).json({
+//         // status: 'success',
+//         // requestedAt: req.requestTime,
+//         // results: tests.length,
+//         // data: {tests}
+//         const pcr=await features.query
+//         res.status(200).json({
+//         status: 'success',
+//         requestedAt: req.requestTime,
+//         results: pcr.length,
+//         data: {pcr}
         
-    });
-    }catch(err){                 //if schema doesnt stisfy error may occur VALIDATION ERROR
-        res.status(404).json({
-            status:'fail',
-            message:err
-        })
-    }
-};
+//     });
+//     }catch(err){                 //if schema doesnt stisfy error may occur VALIDATION ERROR
+//         res.status(404).json({
+//             status:'fail',
+//             message:err
+//         })
+//     }
+// };
 
 exports.getAllPCRTest_hospital = catchAsync(async (req, res, next) => {
     const hospital=req.user.hospital

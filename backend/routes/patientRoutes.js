@@ -9,21 +9,18 @@ router
   .route('/')
   .get(authController.protect, authController.restrictTo('patient','admin'), patientController.getAllPatients)
   .get(patientController.getAllPatients)
-  .post(patientController.createPatient)
+  // .post(patientController.createPatient)
+  
 
 router
   .route('/:id')
   .get(patientController.getPatient)
-  .patch(patientController.updatePatient)
-  .delete(patientController.deletePatient)
+//   .patch(patientController.updatePatient)
+//   .delete(patientController.deletePatient)
 
-router
-  .route('/:id/history')
-  // .get(medicalHistoryController)
-  .post(authController.protect,medicalHistoryController.createMedical)
-  // .patch(medicalHistoryController)
-
-
-  router.get('/:patientID/discharge',authController.protect, medicalHistoryController.discharge)
+router.post('/:id/history', authController.protect, authController.restrictTo('hospitalAdmin'), medicalHistoryController.createMedical)
+router.get('/:id/admit', authController.protect, authController.restrictTo('hospitalAdmin'), medicalHistoryController.createMedical)
+router.get('/:patientID/discharge', authController.protect, authController.restrictTo('hospitalAdmin'), medicalHistoryController.discharge)
+router.get('/search/:nic', authController.protect, authController.restrictTo('hospitalAdmin'), patientController.getPatientByNIC)
 
 module.exports = router;

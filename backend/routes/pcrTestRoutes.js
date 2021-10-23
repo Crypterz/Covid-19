@@ -6,12 +6,12 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(authController.protect, pcrTestController.getAllTest)
-  .post(authController.protect,pcrTestController.createPCRTest)
+  // .get(authController.protect, authController.restrictTo('hospitalAdmin'), pcrTestController.getAllTest)
+  .post(authController.protect, authController.restrictTo('hospitalAdmin'),pcrTestController.createPCRTest)
 
 router
   .route('/confirm')
-  .post(authController.protect, pcrTestController.confirmPCRTest)
+  .post(authController.protect, authController.restrictTo('hospitalAdmin'), pcrTestController.confirmPCRTest)
 router
   // .route('/:id')
 //   .get(patientController.getPatient)
