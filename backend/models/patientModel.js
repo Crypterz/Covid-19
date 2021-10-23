@@ -27,7 +27,7 @@ const patientSchema =new mongoose.Schema({
     nic:{
         nicno:{
             type:Number,
-            // required:[true,'A user should have unique NIC'],
+            required:[true,'A user should have unique NIC'],
             unique:true,
         },
         person:{
@@ -38,6 +38,10 @@ const patientSchema =new mongoose.Schema({
         type:mongoose.Schema.ObjectId,
         ref:'MedicalHistory'
     }],
+    currentMedicalHistory:{
+        type:mongoose.Schema.ObjectId,
+        ref:'MedicalHistory'
+    },
     confidential:Boolean
 // },{
 //     toJSON:{virtuals:true},

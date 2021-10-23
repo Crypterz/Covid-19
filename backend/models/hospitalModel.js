@@ -23,14 +23,6 @@ const hospitalSchema =new mongoose.Schema({
         default:Date.now(),
         select:false
     },
-    location:{
-        type:{
-            type:String,
-            default:'Point',
-            enum:['Point']
-        },
-        cordinates:[Number],
-    },
     wards:[{
         name:{
             type:String,
@@ -38,17 +30,15 @@ const hospitalSchema =new mongoose.Schema({
         },
         totalBeds:{
             type: Number,
-            required:[true,'Ward must have beds count']
+            default:0
+            // required:[true,'Ward must have beds count']
         },
 
         admittedPatients:{
             type: Number,
-            required:[true,'Ward must have admitted patient count']
-        },
-        freeBeds:{
-            type: Number,
-            required:[true,'Ward must have free beds count']
-        } 
+            default :0
+            // required:[true,'Ward must have admitted patient count']
+        }
     }]
 })
 

@@ -10,10 +10,13 @@ router
   .get( hospitalController.getAllHospitals)
   .post(hospitalController.createHospital)
 
-// router
-//   .route('/:id')
-//   .get(adminController.getPatient)
-//   .patch(adminController.updatePatient)
-//   .delete(adminController.deletePatient)
+router
+  .route('/ward')
+  .post(authController.protect, authController.restrictTo('hospitalAdmin'), hospitalController.createWard)
+  // .patch(authController.protect, authController.restrictTo('hospitalAdmin'), hospitalController.updateWard)
+  // .patch(adminController.updatePatient)
+  // .delete(adminController.deletePatient)
+
+router.patch('/ward/:wardId',authController.protect, authController.restrictTo('hospitalAdmin'), hospitalController.updateWard)
 
 module.exports = router;

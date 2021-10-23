@@ -23,4 +23,7 @@ router
   .post(authController.protect,medicalHistoryController.createMedical)
   // .patch(medicalHistoryController)
 
+
+  router.get('/:patientID/discharge',authController.protect, medicalHistoryController.discharge)
+
 module.exports = router;

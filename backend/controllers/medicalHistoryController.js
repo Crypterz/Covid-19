@@ -3,6 +3,8 @@ const APIfunctions=require('./../utils/apiFunctions')
 const catchAsync= require('./../utils/catchAsync');
 const AppError = require('../utils/appError');
 
+const Patient=require('./../models/patientModel')
+
 
 // exports.getAllTest = async (req, res) => {
 //     try{
@@ -22,9 +24,13 @@ const AppError = require('../utils/appError');
 //     }
 // };
 
-exports.createMedical= catchAsync(async (req,res)=>{
+exports.createMedical= catchAsync(async (req,res,next)=>{
     if(!req.body.patient){
         req.body.patient=req.params.id
+    }
+    const patient=await Patient.findById(req.body.patient)
+    if(patient.currentMedicalHistory){
+        return next(new AppError("Patient already have active medical Report",404))
     }
     if(!req.body.createdBy){
         req.body.createdBy=req.user.id
@@ -32,6 +38,7 @@ exports.createMedical= catchAsync(async (req,res)=>{
     req.body.hospital=req.user.hospital
     console.log(req.body)
     const medHistory=await MedicalHistory.create(req.body)
+    await Patient.findByIdAndUpdate(req.body.patient,{"currentMedicalHistory":medHistory._id})
     res.status(201).json({
         status:'success',
         data:{
@@ -109,4 +116,23 @@ exports.getAllMedicalHistory = catchAsync(async (req, res, next) => {
     status: 'success',
     data: {med}
     });
+})
+
+exports.discharge = catchAsync(async (req,res)=>{
+    const patient=await Patient.findByIdAndUpdate(req.params.patientID,
+        {"currentMedicalHistory":null})
+    console.log(patient)
+    if(!patient.currentMedicalHistory){
+        return next(new AppError("Active Medical History not found for this patient",404))
+    }
+    const medicalHistory=await MedicalHistory.findByIdAndUpdate(
+        patient.currentMedicalHistory,   
+        {"dischargeDate.date":new Date()},
+    )
+    res.status(200).json({
+        status:'success',
+        data:{
+            medicalHistory:medicalHistory
+        }
+    })
 })
