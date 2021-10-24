@@ -1,12 +1,16 @@
 const PCRTest=require('./../models/pcrTestModel')
 const dashBoard=require('./../models/dashBoardModel')
+const HospitalRecord=require('../models/hospitalRecords')
+
 const APIfunctions=require('./../utils/apiFunctions')
 const msg = require('../utils/message')
 const catchAsync= require('./../utils/catchAsync');
 const AppError = require('../utils/appError');
 const sendMessage = require('../utils/message');
 const dashBoardController = require('./dashBoardController')
+
 const Patient=require('./../models/patientModel')
+const DashBoard=require('./../models/dashBoardModel')
 
 // exports.getAllTest = async (req, res) => {
 //     //console.log(req.body)
@@ -64,9 +68,10 @@ exports.getAllPCRTest_Patient = catchAsync(async (req, res, next) => {
 })
 
 exports.createPCRTest= catchAsync(async (req,res)=>{
-    req.body.creation={
-        createdBy:req.user.name
-    }
+    const d = new Date()
+    const today=`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`.toString()
+    req.body.createdBy=req.user._id
+    req.body.hospital=req.user.hospital
     req.body.sendStatus="fail"
     const message=`Your PCR Text Result is ${req.body.result}`
     // if(req.body.contactNumber){
@@ -76,6 +81,10 @@ exports.createPCRTest= catchAsync(async (req,res)=>{
     //     }
     // }
     const newTest=await PCRTest.create(req.body)
+    await HospitalRecord.findOneAndUpdate(
+        {hospital:req.user.hospital,date:today},
+        {$push:{active:newTest._id}},
+        {upsert: true})
     res.status(201).json({
         status:'success',
         data:{
@@ -109,3 +118,46 @@ exports.confirmPCRTest=catchAsync(async (req,res)=>{
         }
     })
 })
+
+exports.getPositive=catchAsync(async (req,res,next)=>{
+    const tests=await PCRTest.find({'hospital':req.user.hospital, 'status':'positive'})
+    if(!tests){
+        return next(new AppError("No positive Test found",404))    //used return statement to avoid executing code below
+    }
+    res.status(200).json({
+        status:'success',
+        data:{
+            tests
+        }
+    })
+})
+
+exports.changeStatus=catchAsync(async (req,res,next)=>{
+    const test = await PCRTest.findByIdAndUpdate(req.params.id, req.body,{
+        runValidators:true
+    })
+    if(!test){
+        return next(new AppError("No PCR Test found with that ID",404))    //used return statement to avoid executing code below
+    }
+    if(test.status==req.body.status){
+        return next(new AppError(`PCR test alredy marked as ${req.body.status}`,404))
+    }
+    if(req.body.status=='recovered'){
+        await HospitalRecord.findOneAndUpdate(
+            {hospital:req.user.hospital,date:new Date(new Date().toLocaleDateString())},
+            {$push:{recovered:test._id}},
+            {upsert: true})
+    }else if(req.body.status=='death'){
+        await HospitalRecord.findOneAndUpdate(
+            {hospital:req.user.hospital,date:new Date(new Date().toLocaleDateString())},
+            {$push:{death:test._id}},
+            {upsert: true})
+    }
+    res.status(200).json({
+        status:'success',
+        data:{
+            test
+        }
+    })
+})
+

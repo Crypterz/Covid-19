@@ -12,7 +12,9 @@ router
 router
   .route('/confirm')
   .post(authController.protect, authController.restrictTo('hospitalAdmin'), pcrTestController.confirmPCRTest)
-router
+
+router.patch('/:id/changestatus',authController.protect, authController.restrictTo('hospitalAdmin'), pcrTestController.changeStatus)
+
   // .route('/:id')
 //   .get(patientController.getPatient)
 //   .patch(patientController.updatePatient)
