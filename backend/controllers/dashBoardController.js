@@ -18,7 +18,6 @@ exports.addPCRResults=async (date,positive,negative,user)=>{
                     createdBy:user.name
                 }
             }
-
         },
         {upsert: true}
     )

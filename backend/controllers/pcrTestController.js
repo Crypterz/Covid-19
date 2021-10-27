@@ -120,7 +120,20 @@ exports.confirmPCRTest=catchAsync(async (req,res)=>{
 })
 
 exports.getPositive=catchAsync(async (req,res,next)=>{
-    const tests=await PCRTest.find({'hospital':req.user.hospital, 'status':'positive'})
+    const tests=await PCRTest.find({'hospital':req.user.hospital, 'status':'active'})
+    if(!tests){
+        return next(new AppError("No positive Test found",404))    //used return statement to avoid executing code below
+    }
+    res.status(200).json({
+        status:'success',
+        data:{
+            tests
+        }
+    })
+})
+
+exports.getNonConfirm=catchAsync(async (req,res,next)=>{
+    const tests=await PCRTest.find({'hospital':req.user.hospital, 'confirm.confirmBy':{ $exists: false}})
     if(!tests){
         return next(new AppError("No positive Test found",404))    //used return statement to avoid executing code below
     }

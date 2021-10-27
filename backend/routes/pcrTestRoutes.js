@@ -14,6 +14,7 @@ router
   .post(authController.protect, authController.restrictTo('hospitalAdmin'), pcrTestController.confirmPCRTest)
 
 router.patch('/:id/changestatus',authController.protect, authController.restrictTo('hospitalAdmin'), pcrTestController.changeStatus)
+router.get('/toconfirm',authController.protect, authController.restrictTo('hospitalAdmin'), pcrTestController.getNonConfirm)
 
   // .route('/:id')
 //   .get(patientController.getPatient)
