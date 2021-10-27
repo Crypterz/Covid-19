@@ -16,7 +16,7 @@ exports.refreshDashBoard= catchAsync(async (req,res,next)=>{
     // const y = new Date()
     d.setDate(d.getDate() - 1);
     const yesterday=`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`
-    console.log(today,yesterday)
+    // console.log(today,yesterday)
     const records=await HospitalRecord.find({date:today}).populate({
         path:'hospital',
         select:'address.district'
@@ -25,7 +25,8 @@ exports.refreshDashBoard= catchAsync(async (req,res,next)=>{
     var totRecovered=0
     var totDeath=0
     var totDistricts={}
-    const yesterdayRecord=await DashBoard.findOne({date:yesterday})
+    const yesterdayRecord=await DashBoard.findOne({},{},{ sort: { 'date' : -1 } })
+    // console.log(yesterdayRecord)
     if(yesterdayRecord){
         totActive=yesterdayRecord.totalActiveCases
         totRecovered=yesterdayRecord.totalRecovered

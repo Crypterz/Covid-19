@@ -23,3 +23,18 @@ exports.addPCRResults=async (date,positive,negative,user)=>{
         {upsert: true}
     )
 }
+
+
+exports.publicDashBoard= catchAsync(async (req,res,next)=>{
+    const d = new Date()
+    const today=`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`.toString()
+    const total = await DashBoard.findOne({},{},{ sort: { 'date' : -1 } }).select('totalActiveCases totalRecovered totalDeaths districtTotals ');
+    const all = await DashBoard.find().select('totalActiveCases date -_id')
+    res.status(200).json({
+        status:'success',
+        data:{
+           all,
+           total
+        }
+    })
+})
