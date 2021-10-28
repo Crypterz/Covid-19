@@ -14,18 +14,18 @@ const medicalHistorySchema=new mongoose.Schema({
             type:Date,
             default:Date.now()
         },
-        description:{
+        description:[{
             type:String
-        }
+        }]
     }],
     drugDetails:[{
         date:{
             type:Date,
             default:Date.now()
         },
-        description:{
+        description:[{
             type:String
-        },
+        }],
     }],
     admittedDate:{
         type:Date,

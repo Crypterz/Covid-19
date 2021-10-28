@@ -1,6 +1,7 @@
 const express = require('express');
 const hospitalController = require('../controllers/hospitalController');
 const authController = require('./../controllers/authController')
+const patientController = require('../controllers/patientController');
 
 const router = express.Router();
 
@@ -16,7 +17,7 @@ router
   // .patch(authController.protect, authController.restrictTo('hospitalAdmin'), hospitalController.updateWard)
   // .patch(adminController.updatePatient)
   // .delete(adminController.deletePatient)
-
+router.get('/admitted', authController.protect, authController.restrictTo('hospitalAdmin'), patientController.getAdmittedPatients)
 router.patch('/ward/:wardId',authController.protect, authController.restrictTo('hospitalAdmin'), hospitalController.updateWard)
 
 module.exports = router;

@@ -2,7 +2,6 @@ const MedicalHistory=require('./../models/medicalHistoryModel')
 const APIfunctions=require('./../utils/apiFunctions')
 const catchAsync= require('./../utils/catchAsync');
 const AppError = require('../utils/appError');
-
 const Patient=require('./../models/patientModel')
 
 
@@ -64,6 +63,9 @@ exports.addDrugs = catchAsync(async (req,res)=>{
 
 exports.addSymptoms = catchAsync(async (req,res)=>{
     console.log(req.body)
+    // const obj=req.body.map(el=>{
+    //     'decription':el.
+    // })
     const medicalHistory=await MedicalHistory.findByIdAndUpdate(
         req.params.id,   
         {$push:{symptoms:{description:req.body.description}}},
@@ -77,18 +79,18 @@ exports.addSymptoms = catchAsync(async (req,res)=>{
     })
 })
 
-exports.update = catchAsync(async (req,res)=>{
-    await MedicalHistory.findByIdAndUpdate(req.params.id,req.body)
-    if(!medicalHistory){
-        return next(new AppError("No mediacl History found with that ID",404))    //used return statement to avoid executing code below
-    }
-    res.status(200).json({
-        status:'success',
-        data:{
-            medicalHistory:"medicalHistory"
-        }
-    })
-})
+// exports.update = catchAsync(async (req,res)=>{
+//     await MedicalHistory.findByIdAndUpdate(req.params.id,req.body)
+//     if(!medicalHistory){
+//         return next(new AppError("No mediacl History found with that ID",404))    //used return statement to avoid executing code below
+//     }
+//     res.status(200).json({
+//         status:'success',
+//         data:{
+//             medicalHistory:"medicalHistory"
+//         }
+//     })
+// })
 
 exports.getMedicalHistory = catchAsync(async (req, res,next) => {
     const med=await MedicalHistory.findById(req.params.id)    //Patient.findOne({_id:req.params.id})
@@ -136,3 +138,4 @@ exports.discharge = catchAsync(async (req,res)=>{
         }
     })
 })
+

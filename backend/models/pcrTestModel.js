@@ -26,12 +26,23 @@ const pcrTestSchema =new mongoose.Schema({
         default:Date.now(),
         select:false
     },
-    creation:{
-        createdBy:{
-            type:String
-        },
-        place:{
-            type:mongoose.Schema.ObjectId
+    createdBy:{
+        type:mongoose.Schema.ObjectId,
+        ref:'User'
+    },
+    hospital:{
+        type:mongoose.Schema.ObjectId,
+        ref:'Hospital'
+    },
+    status:{
+        type:String,
+        enum:['active','recovered','death'],
+        default:function(){
+            if(this.result=='positive'){
+                return 'active'
+            }else{
+                return undefined
+            }
         }
     },
     confirm:{
@@ -44,7 +55,7 @@ const pcrTestSchema =new mongoose.Schema({
             type:Number
         },
         person:{
-            
+            type:String
         }
     },
     contactNumber:{

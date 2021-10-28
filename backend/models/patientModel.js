@@ -27,11 +27,10 @@ const patientSchema =new mongoose.Schema({
     nic:{
         nicno:{
             type:Number,
-            required:[true,'A user should have unique NIC'],
-            unique:true,
+            required:[true,'A user should have unique NIC']
         },
         person:{
-            
+            type:String
         }
     },
     medicalHistory:[{
@@ -85,6 +84,8 @@ patientSchema.pre(/^find/,function(next){        //QUERY MIDDLEWARE
     })                                 //this refre to query we can change query object from here
     next()
 })
+
+patientSchema.index({nic: 1}, {unique: true});
 
 const Patient=mongoose.model('Patient',patientSchema)
 
