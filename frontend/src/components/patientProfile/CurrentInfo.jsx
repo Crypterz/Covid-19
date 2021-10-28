@@ -2,9 +2,9 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import {Card, Button} from 'react-bootstrap';
 
-const CurrentInfo = ({patients, currentHospital, userHospital, hospitalName}) => {
+const CurrentInfo = ({patients, currentHospital, userHospital, hospitals}) => {
     const auth = useSelector(state => state.auth);
-    console.log(patients)
+    //console.log(patients)
     return (
         <Card className='m-2 con-vs-card'>
             <h5 className="text-center mt-2 font-weight-bold">CURRENT DETAILS</h5>
@@ -13,7 +13,7 @@ const CurrentInfo = ({patients, currentHospital, userHospital, hospitalName}) =>
                     <li className='current' style={{width:'50%',float:'left',position:'relative'}}>
                         <li>
                             <div className="field">Hospital Name:</div>
-                            <div className="value">fwfwefw</div>
+                            <div className="value">{getHospitalName(patients, hospitals)}</div>
                         </li>
                         <li>
                             <div className="field">Admitted Date:</div>
@@ -45,7 +45,7 @@ const CurrentInfo = ({patients, currentHospital, userHospital, hospitalName}) =>
                         </li>
                         <li>
                             <div className="field">Transfer Date:</div>
-                            <div className="value m-2">Hospital Name: {hospitalName} </div>
+                            <div className="value m-2">Hospital Name: {} </div>
                             <div className="value m-2">Transfer State: </div>
                             <div className="value m-2">Transfer Date</div>
                         </li>
@@ -90,23 +90,26 @@ function objectDestructure ( histories, type){
     const {dischargeDate, drugDetails, symptoms } = histories
     if(dischargeDate){
         if(type === "discharge"){
-           // console.log(drugDetails.length)
            return dischargeDate.changed
         }
    }
     if(drugDetails){
          if(type === "drugs"){
-            // console.log(drugDetails.length)
             return drugDetails
          }
     }
 
     if(symptoms){
         if(type === "symptoms"){
-            //console.log(medicalHistory)
            return symptoms
         }
     }
 
     return newList
+ }
+
+ function getHospitalName(patients, hospitals){
+     const hospitalId = patients.hospital 
+     const hospitalName = hospitals.filter(p => p._id === hospitalId)
+     return hospitalName[0].name
  }

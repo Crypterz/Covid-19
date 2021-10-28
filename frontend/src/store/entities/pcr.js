@@ -130,11 +130,12 @@ export const getAllPcrs = createSelector(
     pcr => pcr.list
 );
 
-export const updatePcrAproval = (pcrIds) =>{
+export const updatePcrAproval = (ids)=> (dispatch) =>{
+    console.log(ids)
     return apiCallBegan({
         url: pcrURL + "pcr/confirm",
         method: "post",
-        data: pcrIds,
+        data: ids,
         //header: token,
         onSuccess: pcrAprovalUpdated.type,
     });

@@ -1,14 +1,14 @@
 import React, {useEffect, useState, Component} from 'react'
 import { Container, Button, FormControl, InputGroup, Row, Card} from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
-import { loadPatients, getAllPatients, getPatientsLoadingStatus } from '../../store/entities/patients';
+import { loadPatients, getAllPatients, getPatientsLoadingStatus, admitPatient } from '../../store/entities/patients';
 
 const AdmitPatient = ({history}) => {
     const dispatch = useDispatch()
 
     const patientsDetails = useSelector(getAllPatients);
     const patients = patientsDetails.list;
-    console.log(patients)
+   // console.log(patients)
 
     const auth = useSelector(state => state.auth);
 
@@ -16,11 +16,14 @@ const AdmitPatient = ({history}) => {
     const [patientName, setPatientName] = useState();
 
     const serachPatient =() =>{
-        setPatientName(getFilteredSearchedPatients(patients, searchKeyword))
+        const filteredPatient = getFilteredSearchedPatients(patients, searchKeyword)
+        setPatientName(filteredPatient)
     }
 
-    const admitPatient =() =>{
-        console.log('rgggegege')
+    const AdmitPatient =() =>{
+       // console.log(patientName)
+        dispatch(admitPatient(patientName[0]._id))
+       // console.log('rgggegege')
     }
 
     useEffect(() => {
@@ -65,7 +68,7 @@ const AdmitPatient = ({history}) => {
 
                 <Button 
                     className='text-center my-2'
-                    onClick= { ()=> admitPatient()}
+                    onClick= { ()=> AdmitPatient()}
                 >Admit Patient</Button>
             </div>}
 
@@ -90,10 +93,29 @@ export default AdmitPatient
 function getFilteredSearchedPatients(patients, filterBy){
     let name;
     name =  patients.filter(p => 
-        p.name.toLowerCase() === (filterBy) //||
+        //p.name.toLowerCase() === (filterBy) //||
         //p.description.toLowerCase().includes(filterBy.toLowerCase())
        // console.log(p.name.toLowerCase())
+       objectDestructure(p, "nic") === filterBy.toString()
     );
-    console.log(name)
+    //console.log(name)
     return name
-  }
+}
+
+function objectDestructure(patient, type){
+    let newList = ""
+    if(typeof(patient) === 'undefined' || patient.length === 0){
+        return newList
+    } 
+
+    const { nic } = patient
+    if(nic){
+        if(type === "nic"){
+            const { nicno } = nic;
+            //console.log(nicno)
+            return nicno.toString()
+        }
+    }else{
+        return newList
+    }
+}

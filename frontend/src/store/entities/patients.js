@@ -98,7 +98,10 @@ export const {
     patientSymptomsUpdated,
     patientDrugsUpdated,
     patientTransferUpdated,
-    selectedPatientTransferUpdated } = slice.actions;
+    selectedPatientTransferUpdated,
+    patientAdmitRequest,
+    patientAdmitSuccess,
+    patientAdmitFailed } = slice.actions;
                             
 
 const patientURL = "/api/v1/";
@@ -207,7 +210,7 @@ export const updateDrugsInDB = (drugs, medicalHistoryId) => (dispatch) => {
         apiCallBegan({
             url: patientURL + `med/${medicalHistoryId}/adddrugs`,
             method: "patch",
-            data: drugs,
+            data: drugs[0],
             onSuccess: patientDrugsUpdated.type,
         })
     );
@@ -238,3 +241,16 @@ export const updateSelectedTransferPatient = (value) => (dispatch) => {
     );
 }
 
+
+export const admitPatient = (patientId) => (dispatch) => {
+    console.log(patientId)
+    return dispatch(
+        apiCallBegan({
+            url: patientURL + `patients/${patientId}/admit`,
+            method: "get",
+            onStart : patientAdmitRequest,
+            onSuccess : patientAdmitSuccess,
+            onError: patientAdmitFailed
+        })
+    )
+}

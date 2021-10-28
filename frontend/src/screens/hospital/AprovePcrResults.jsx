@@ -13,10 +13,10 @@ const AprovePcrResults = ({}) => {
     const auth = useSelector(state => state.auth);
     const [userType, setUserType] = useState('')
 
-    const patientsList = useSelector(getAllPcrs);
-  //  console.log(patientsList)
+    const pcrList = useSelector(getAllPcrs);
+    console.log(pcrList)
 
-    const [patientState, setPatientState] = useState(getOnlyIds(patientsList));
+    const [patientState, setPatientState] = useState(getOnlyIds(pcrList));
     const [selected, setSelected] = useState([]);
     const [allSelected, setAllSelected] = useState(false);
     const patientsLoading = useSelector(getPcrLoadingStatus);
@@ -29,13 +29,13 @@ const AprovePcrResults = ({}) => {
        dispatch(loadPcrs());
 
         setPatientState(
-            patientsList.map( p=>{
+            pcrList.map( p=>{
                 return {
                      select: false,
                     _id: p._id,
-                    first_name: p.first_name,
+                    name: objectDestructure(p, "name"),
                     age: p.age,
-                    telephone:p.telephone,
+                    telephone:p.contactNumber,
                     result:p.result
                 }
             })
@@ -49,8 +49,8 @@ const AprovePcrResults = ({}) => {
             ids: [
                 patientId
             ],
-            token: auth.token
         }
+        console.log(updateAprove)
 
         dispatch(updatePcrAproval(updateAprove));
         setPatientState(patientState.filter(p=>p._id !== patientId))
@@ -71,15 +71,15 @@ const AprovePcrResults = ({}) => {
     }
 
     const handleSelected =(value, data)=>{
-        if(value === false && selected.length === patientsList.length){
+        if(value === false && selected.length === pcrList.length){
             setAllSelected(false);
         }
-        if(value === true && selected.length === patientsList.length-1){
+        if(value === true && selected.length === pcrList.length-1){
             setAllSelected(true);
         }
         if(value === true){
             let selectedList = [...selected]
-            let patient = patientsList.filter(p => p._id === data._id );
+            let patient = pcrList.filter(p => p._id === data._id );
             selectedList.push(patient[0]._id);
             setSelected(selectedList);
         }else{
@@ -91,8 +91,8 @@ const AprovePcrResults = ({}) => {
     const handleSelectAll =(check)=>{
         if(check === true){
             setAllSelected(check);
-            //setSelected(patientsList)
-            setSelected(getOnlyIds(patientsList))
+            //setSelected(pcrList)
+            setSelected(getOnlyIds(pcrList))
         }else{
             setAllSelected(check);
             setSelected([]);
@@ -140,7 +140,7 @@ const AprovePcrResults = ({}) => {
                         checked={allSelected}
                     /></th>
                     <th>Name</th>
-                    <th>Age</th>
+                    {/* <th>Age</th> */}
                     <th>Telephone</th>
                     <th>PCR Result</th>
                     <th>Actions</th>
@@ -165,8 +165,8 @@ const AprovePcrResults = ({}) => {
                                 }}
                                 checked ={p.select}
                             /></td>
-                            <td>{p.first_name}</td>
-                            <td>{p.age}</td>
+                            <td>{p.name}</td>
+                            {/* <td>{p.name}</td> */}
                             <td>{p.telephone}</td>
                             <td>{p.result}</td>
                             <td>
@@ -193,12 +193,12 @@ const AprovePcrResults = ({}) => {
       
 
         {/* <Pagination
-            itemsCount = {patientsList.length} 
+            itemsCount = {pcrList.length} 
             pageSize = {pageSize} 
             currentPage = {currentPage}
             onPageChange = {(page) => {
                 setCurrentPage(page);
-                setPaginated(paginate(patientsList, page, pageSize));
+                setPaginated(paginate(pcrList, page, pageSize));
             }}
         /> */}
         
@@ -211,14 +211,39 @@ const AprovePcrResults = ({}) => {
 
 export default AprovePcrResults
 
-function getOnlyIds(patientsList){
+function getOnlyIds(pcrList){
     let list =[]
 
-    if ( patientsList.length === 0) return list;
+    if ( pcrList.length === 0) return list;
 
-    for ( let i =0; i<= patientsList.length-1 ; i++){
-        list.push(patientsList[i]._id)
+    for ( let i =0; i<= pcrList.length-1 ; i++){
+        list.push(pcrList[i]._id)
     }
     //console.log(list)
     return list;
+}
+
+function objectDestructure ( pcr, type){
+    let newList = ""
+    if(typeof(pcr) === 'undefined' || pcr.length === 0){
+        return newList
+    } 
+
+    const { name, contactNumber } = pcr
+    if(name){
+        if(type === "name"){
+            const { firstName , lastName } = pcr.name;
+            const patientName = firstName + " " + lastName
+           // console.log(patientName)
+            return patientName;
+        }
+    }
+    if(contactNumber){
+        if(type === "tel"){
+            return contactNumber
+        }
+    }
+    else{
+        return newList
+    }
 }
