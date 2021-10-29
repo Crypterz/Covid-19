@@ -66,7 +66,6 @@ export default function Hospitals() {
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>ID</TableCell>
             <TableCell align="left">NAME</TableCell>
             <TableCell align="left">CONTACT</TableCell>
             <TableCell align="left">DISTRICT</TableCell>
@@ -78,9 +77,6 @@ export default function Hospitals() {
         <TableBody>
           {data.map(row => (
             <TableRow key={row._id}>
-              <TableCell component="th" scope="row">
-                {row._id}
-              </TableCell>
               <TableCell align="left">{row.name}</TableCell>
               <TableCell align="left">{row.Contact[0]}</TableCell>
               <TableCell align="left">{row.address.district}</TableCell>
