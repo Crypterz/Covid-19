@@ -9,10 +9,12 @@ export default function AddHospitalAdmin(props) {
     const dispatch = useDispatch();
     const userAddedStatus = useSelector(getUserAddedStatus);
 
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
-
+    
     const submitHandler = (e) => {
       e.preventDefault();
       let user= {
@@ -20,8 +22,13 @@ export default function AddHospitalAdmin(props) {
           password: password,
           passwordConfirm: passwordConfirm,
           role: 'hospitalAdmin',
+          name: {
+            firstName: firstName,
+            lastName: lastName
+          },
           hospital_id: window.location.pathname.split('/')[3],
       }
+
 
       // TODO: sign in action
       dispatch(addUser(user))
@@ -30,17 +37,39 @@ export default function AddHospitalAdmin(props) {
       }else{
         dispatch(toastAction({ message: "Hospital Admin Adding Failed", type: 'error' }))
       }
-      //console.log(hospital)
+    console.log("HIII")
     };
 
     return (
-            <div class="container-fluid">
-                    <div class="col-10 mx-auto banner text-center">
-                    <h3 class="text-capitalize">
-                            <strong class="banner-title">Want to Add HOSPITAL ADMIN?</strong></h3></div>
+            <div className="container-fluid">
+                    <div className="col-10 mx-auto banner text-center">
+                    <h3 className="text-capitalize">
+                            <strong className="banner-title">Want to Add HOSPITAL ADMIN?</strong></h3></div>
             <Container >
                 <Form className="form" onSubmit={submitHandler}>
                     <Form.Row>
+                    <Form.Group controlId='firstName'>
+                    <Form.Label class="float-left" className = 'form-label'>FIRST NAME:</Form.Label>
+                    <Form.Control 
+                        type='text'
+                        id='firstName' 
+                        placeholder='Enter your First Name'
+                        onChange={(e) => setFirstName(e.target.value)}
+                        required
+                    />
+                    </Form.Group>
+
+                    <Form.Group controlId='lastName'>
+                    <Form.Label class="float-left" className = 'form-label'>LAST NAME:</Form.Label>
+                    <Form.Control 
+                        type='text'
+                        id='lastName' 
+                        placeholder='Enter your Last Name'
+                        onChange={(e) => setLastName(e.target.value)}
+                        required
+                    />
+                    </Form.Group>
+
                     <Form.Group controlId='email'>
                     <Form.Label class="float-left" className = 'form-label'>EMAIL ADDRESS:</Form.Label>
                     <Form.Control 
