@@ -47,7 +47,6 @@ const PersonalInfo = ({patients, currentHospital, userHospital}) => {
 export default PersonalInfo
 
 function objectDestructure ( patients, type){
-    // console.log(patients)
      let newList = ""
      if(typeof(patients) === 'undefined' || patients.length === 0){
          return newList
@@ -58,7 +57,6 @@ function objectDestructure ( patients, type){
         if(type === "name"){
             const { firstName , lastName } = name;
             const patientName = firstName + " " + lastName
-            //console.log(typeof(patientName))
             return patientName;
          }
         if(type === "address"){
@@ -72,7 +70,6 @@ function objectDestructure ( patients, type){
         if(type === "age"){
             const date = new Date().getFullYear();
             const birthYear = birthday.split("-")[0]
-           // console.log(date-birthYear)
             return (date - birthYear)
         }
  }

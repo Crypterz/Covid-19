@@ -183,21 +183,24 @@ const EditCurrentDetails = ({match,history}) => {
     }
 
     const updateSymptom = () =>{
-        // const symUpdate = {
-        //     symptoms
-        // }
-      //  console.log(symUpdate)
-        //dispatch(updatePatient(symUpdate,patientId ));
-        dispatch(updateSymptomsInDB(symptoms, medicalHistoryId))
+        let symList = [symptoms.length];
+        for ( var i = 0; i< symptoms.length; i++){
+            symList[i] = symptoms[i].description;
+        }
+        const data = { description: symList}
+        //const data ={ description : ["efdfs", "eefwef"]}
+        dispatch(updateSymptomsInDB(data, medicalHistoryId))
     } 
 
     const updateDrug = () =>{
-        // const drugUpdate = {
-        //     drugs
-        // }
-       // console.log(drugUpdate)
+        let drugList = [drugs.length];
+        for ( var i = 0; i< drugs.length; i++){
+            drugList[i] = drugs[i].description;
+        }
+        const data = { description: drugList}
+        console.log(data)
        // dispatch(updatePatient(drugUpdate,patientId));
-       dispatch(updateDrugsInDB(drugs, medicalHistoryId))
+       //dispatch(updateDrugsInDB(drugs, medicalHistoryId))
     }
 
 

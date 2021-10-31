@@ -39,11 +39,9 @@ const slice = createSlice({
         },
 
         userReceived(users, action){
-            //pcr.list = action.payload.pcr;
             users.list = action.payload.data.users;
             users.loading = false;
             users.lastFetch = Date.now();
-            //console.log(hospitals.list)
         },
 
         userUpdated(user, action){
@@ -103,6 +101,10 @@ export const getUserLoadingStatus = createSelector(
 
 export const getUserAddedStatus = createSelector(
     state => state.entities.user,
-   // pcr => pcr.pcrAdded
     userAdded => userAdded
 )
+
+export const getAllUsers = createSelector(
+    state => state.entities.user,
+    user => user.list
+);

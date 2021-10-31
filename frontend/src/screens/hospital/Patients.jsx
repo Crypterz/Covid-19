@@ -18,7 +18,7 @@ const Patients = ({history}) => {
     const patients = patientsDetails.list;
    // const data = objectDestructure (patients);
    // const {medicalHistory, nic, pcrTest, user, _id } = patientsDetails.list;
-   // console.log(patients)
+    console.log(patients)
     const patientsLoading = useSelector(getPatientsLoadingStatus);
 
     const location = useLocation()
@@ -168,7 +168,7 @@ export function getFilteredSearchedPatients(patients, filterBy){
     //);
 }
 
-function objectDestructure ( patients, type){
+export function objectDestructure ( patients, type){
     let newList = ""
     if(typeof(patients) === 'undefined' || patients.length === 0){
         return newList

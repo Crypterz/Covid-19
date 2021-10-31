@@ -1,3 +1,188 @@
+import React from "react";
+import ReactDOM from "react-dom";
+
+import CRUDTable, {
+  Fields,
+  Field,
+  CreateForm,
+  UpdateForm,
+  DeleteForm,
+  Pagination 
+} from "react-crud-table";
+
+// Component's Base CSS
+import "./wardList.css";
+
+const DescriptionRenderer = ({ field }) => <textarea {...field} />;
+
+let wards = [
+  {
+    ward_no: 1,
+    ward_name: "Ward 1",
+    description: "Labour Ward 1",
+    total_beds: "45"
+  },
+  {
+    ward_no: 2,
+    ward_name: "Ward 2",
+    description: "Labour Ward 2",
+    total_beds: "19"
+  },
+  {
+    ward_no: 3,
+    ward_name: "Ward 3",
+    description: "Pediatric Ward 1",
+    total_beds: "45"
+  },
+  {
+    ward_no: 4,
+    ward_name: "Ward 4",
+    description: "Pediatric Ward 2",
+    total_beds: "34"
+  }
+];
+
+// const SORTERS = {
+//   NUMBER_ASCENDING: mapper => (a, b) => mapper(a) - mapper(b),
+//   NUMBER_DESCENDING: mapper => (a, b) => mapper(b) - mapper(a),
+//   STRING_ASCENDING: mapper => (a, b) => mapper(a).localeCompare(mapper(b)),
+//   STRING_DESCENDING: mapper => (a, b) => mapper(b).localeCompare(mapper(a))
+// };
+
+// const getSorter = data => {
+//   const mapper = x => x[data.field];
+//   let sorter = SORTERS.STRING_ASCENDING(mapper);
+
+//   if (data.field === "ward_no") {
+//     sorter =
+//       data.direction === "ascending"
+//         ? SORTERS.NUMBER_ASCENDING(mapper)
+//         : SORTERS.NUMBER_DESCENDING(mapper);
+//   } else {
+//     sorter =
+//       data.direction === "ascending"
+//         ? SORTERS.STRING_ASCENDING(mapper)
+//         : SORTERS.STRING_DESCENDING(mapper);
+//   }
+
+//   return sorter;
+// };
+
+
+let count = wards.length;
+const service = {
+  fetchItems: payload => {
+    const { activePage, itemsPerPage } = payload.pagination;
+    const start = (activePage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    let result = Array.from(wards);
+    // result = result.sort(getSorter(payload.sort));
+    return Promise.resolve(result.slice(start, end));
+  },
+  fetchTotal: payload => {
+    return Promise.resolve(wards.length);
+  },
+  create: ward => {
+    count += 1;
+    wards.push({
+      ...ward,
+      ward_no: count
+    });
+    return Promise.resolve(ward);
+  },
+  update: data => {
+    const ward = wards.find(t => t.ward_no === data.ward_no);
+    ward.ward_name = data.ward_name;
+    ward.description = data.description;
+    ward.total_beds = data.total_beds;
+    return Promise.resolve(ward);
+  },
+  delete: data => {
+    const ward = wards.find(t => t.ward_no === data.ward_no);
+    wards = wards.filter(t => t.ward_no !== ward.ward_no);
+    return Promise.resolve(ward);
+  }
+};
+
+const styles = {
+  container: { margin: "auto", width: "max-content" }
+};
+
+export default function WardsList() {
+return (
+  <div style={styles.container}>
+    <CRUDTable
+      caption="WARDS"
+      fetchItems={payload => service.fetchItems(payload)}
+    >
+      <Fields>
+        <Field name="ward_no" label="WARD NO" hideInCreateForm />
+        <Field name="ward_name" label="WARD NAME" placeholder="Enter Ward Name" />5
+        <Field name="total_beds" type="number" label="TOTAL BEDS" placeholder="Enter Total number of Beds" />
+      </Fields>
+
+      
+      <CreateForm
+        Ward Name="Ward Creation"
+        message="Create a new ward!"
+        trigger="ADD NEW WARDS"
+        onSubmit={ward => service.create(ward)}
+        submitText="CREATE"
+        validate={values => {
+          const errors = {};
+          if (!values.ward_name) {
+            errors.ward_name = "Please, provide ward's Ward Name";
+          }
+
+          return errors;
+        }}
+      />
+
+      <UpdateForm
+        title="Ward Update Process"
+        message="Update ward"
+        trigger="UPDATE"
+        onSubmit={ward => service.update(ward)}
+        submitText="Update"
+        validate={values => {
+          const errors = {};
+
+          if (!values.ward_no) {
+            errors.ward_no = "Please, provide Ward Number";
+          }
+
+          if (!values.ward_name) {
+            errors.ward_name = "Please, provide ward's Ward Name";
+          }
+
+
+          return errors;
+        }}
+      />
+
+      <DeleteForm
+        title="Ward Delete Process"
+        message="Are you sure you want to delete the Ward?"
+        trigger="DELETE"
+        onSubmit={ward => service.delete(ward)}
+        submitText="Delete"
+        validate={values => {
+          const errors = {};
+          if (!values.ward_no) {
+            errors.ward_no = "Please, provide Ward Number";
+          }
+          return errors;
+        }}
+      />
+      <Pagination
+        itemsPerPage={3}
+        fetchTotalOfItems={payload => service.fetchTotal(payload)}
+      />
+    </CRUDTable>
+  </div>
+);
+
+      }
 /**
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useTable } from "react-table";
@@ -213,92 +398,3 @@ const WardsList = (props) => {
 };
 
 export default WardsList*/
-
-
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import { DeleteOutline } from "@material-ui/icons";
-import {Link} from "react-router-dom";
-import './wardList.css';
-
-import { useState } from "react";
-
-const useStyles = makeStyles({
-  table: {
-    minWidth: 650
-  }
-});
-
-function createData(ward_id, ward_name, allocated_beds, empty_beds) {
-  return {
-    ward_id,
-    ward_name,
-    allocated_beds,
-    empty_beds,
-  };
-}
-
-const rows = [
-  createData(1, 'Labour Ward','2','3' ),
-  createData(2, 'Labour Ward','2','3'),
-  createData(3, 'Labour Ward','2','3'),
-  createData(4, 'Labour Ward','2','3'),
-  createData(5, 'Labour Ward','2','3'),
-  
-];
-
-export default function WardsList() {
-  const [data, setData] = useState(rows)
-  const classes = useStyles();
-
-  //const auth = useSelector(state => state.auth);
-
-  const handleDelete = (ward_id)=>{
-    setData(data.filter((item)=>item.ward_id !== ward_id));
-  };
-
-  return (
-    <TableContainer component={Paper}>
-      <Link to="/hospital/addWard"><button className="wardAddButton">New Ward</button></Link>
-      <Table className={classes.table} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell align="left">Ward Name</TableCell>
-            <TableCell align="left">Allocated Beds</TableCell>
-            <TableCell align="left">Empty Beds</TableCell>
-            <TableCell align="left">Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map(row => (
-            <TableRow key={row.ward_id}>
-              <TableCell component="th" scope="row">
-                {row.ward_id}
-              </TableCell>
-              <TableCell align="left">{row.ward_name}</TableCell>
-              <TableCell align="left">{row.allocated_beds}</TableCell>
-              <TableCell align="left">{row.empty_beds}</TableCell>
-
-              <>
-              <TableCell align="left">
-                <Link to={"/wards/"+row.ward_id}>
-                <button className="wardListEdit" aria-label="edit" >
-                  Edit 
-                </button></Link><DeleteOutline className="wardListDelete" onclick={()=>handleDelete(data.ward_id)}/>
-              </TableCell></>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
-}

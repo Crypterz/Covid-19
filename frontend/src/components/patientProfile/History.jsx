@@ -2,9 +2,10 @@ import React, {useEffect, useState} from 'react'
 import {Card} from 'react-bootstrap'
 import { loadPatients , getPatientById, getAllPatients, getPatientsLoadingStatus, updateTransferPatient, loadPatient} from '../../store/entities/patients';
 
-const History = ({patientHistory, filteredHistory}) => {
+const History = ({patientHistory, filteredHistory, hospital}) => {
    // console.log(patientHistory)
    // console.log(filteredHistory)
+   // console.log(hospital)
     // const dispatch = useDispatch()
     // const patientDetails = useSelector(getAllPatients);
     // const patient = patientDetails.list
@@ -20,7 +21,7 @@ const History = ({patientHistory, filteredHistory}) => {
                         <li>
                             <div className="field">Hospital Name:</div>
                             {filteredHistory.length !== 0 ?
-                            <div className="value">{patientHistory.name}</div>:''}
+                            <div className="value">{hospital}</div>:''}
                         </li>
                         <li>
                             <div className="field">Admitted Date:</div>
@@ -89,14 +90,12 @@ function objectDestructure ( histories, type){
     const {drugDetails, symptoms } = histories
     if(drugDetails){
          if(type === "drugs"){
-            // console.log(drugDetails.length)
             return drugDetails
          }
     }
 
     if(symptoms){
         if(type === "symptoms"){
-            //console.log(medicalHistory)
            return symptoms
         }
     }

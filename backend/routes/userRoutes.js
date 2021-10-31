@@ -12,9 +12,9 @@ router.patch('/resetpassword/:token',authController.resetPassword)
 router.patch('/update',userController.updateUserInformation)
 module.exports = router;
 
-// router
-//   .route('/')
-//   .get( userController.getAllUsers)
-//   .post(userController.createUser)
+router
+  .route('/')
+  .get( userController.getAllUsers)
+  .post(userController.createUser)
 
 module.exports = router;
