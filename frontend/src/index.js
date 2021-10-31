@@ -17,7 +17,8 @@ store.subscribe(() => {
     entities: {
       patients: store.getState().entities.patients,
       pcr: store.getState().entities.pcr,
-      hospital: store.getState().entities.hospital
+      hospital: store.getState().entities.hospital,
+      dashboard: store.getState().entities.dashboard
     }
   });
 });

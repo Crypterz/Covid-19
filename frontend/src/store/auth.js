@@ -1,6 +1,5 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 import { apiCallBegan } from './apiActions';
-import Cookies from 'js-cookie';
 //Auth Slice
 
 const slice = createSlice({
@@ -29,6 +28,7 @@ const slice = createSlice({
             user.token = action.payload.token; 
             //Cookies.set("token", user.token) 
             user.loggedIn = true;
+            console.log(user.data)
         },
 
         // userLoginRequested(user, action){
@@ -108,7 +108,7 @@ export const getAuthDetails = createSelector(
 
 export const getAllAuthDetails = createSelector(
     state => state.auth,
-    userData => userData
+    auth => auth
 );
 
 

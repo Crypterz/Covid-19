@@ -14,7 +14,6 @@ const AprovePcrResults = ({}) => {
     const [userType, setUserType] = useState('')
 
     const pcrList = useSelector(getAllPcrs);
-    console.log(pcrList)
 
     const [patientState, setPatientState] = useState(getOnlyIds(pcrList));
     const [selected, setSelected] = useState([]);
@@ -28,20 +27,23 @@ const AprovePcrResults = ({}) => {
        setUserType(auth.data.user.role)
        dispatch(loadPcrs());
 
-        setPatientState(
-            pcrList.map( p=>{
-                return {
-                     select: false,
-                    _id: p._id,
-                    name: objectDestructure(p, "name"),
-                    age: p.age,
-                    telephone:p.contactNumber,
-                    result:p.result
-                }
-            })
-        )
+       if(pcrList){
+            setPatientState(
+                pcrList.map( p=>{
+                    return {
+                        select: false,
+                        _id: p._id,
+                        name: objectDestructure(p, "name"),
+                        age: p.age,
+                        telephone:p.contactNumber,
+                        result:p.result
+                    }
+                })
+            )
+       }
 
-    },[dispatch])
+
+    },[dispatch, pcrList])
 
     const Aproval = (decision, patientId)=>{
         const updateAprove = {
@@ -53,7 +55,7 @@ const AprovePcrResults = ({}) => {
         console.log(updateAprove)
 
         dispatch(updatePcrAproval(updateAprove));
-        setPatientState(patientState.filter(p=>p._id !== patientId))
+       // setPatientState(patientState.filter(p=>p._id !== patientId))
     }
 
     const AproveSelected =(dicision) =>{
@@ -214,10 +216,14 @@ export default AprovePcrResults
 function getOnlyIds(pcrList){
     let list =[]
 
-    if ( pcrList.length === 0) return list;
+    if(pcrList){
+        if ( pcrList.length === 0) return list;
 
-    for ( let i =0; i<= pcrList.length-1 ; i++){
-        list.push(pcrList[i]._id)
+        for ( let i =0; i<= pcrList.length-1 ; i++){
+            list.push(pcrList[i]._id)
+        }
+
+        return list;
     }
     //console.log(list)
     return list;

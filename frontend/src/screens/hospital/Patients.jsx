@@ -9,6 +9,7 @@ import { loadPatients, getAllPatients, getPatientsLoadingStatus } from '../../st
 import { useLocation, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 
+
 const Patients = ({history}) => {
     const dispatch = useDispatch()
 
@@ -54,6 +55,7 @@ const Patients = ({history}) => {
        // getFilteredSearchedPatients(patients, searchKeyword)
        // console.log(searchKeyword)
     },[searchKeyword])
+
 
     return (
         <>

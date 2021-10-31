@@ -45,6 +45,9 @@ function createData(hospital_id,name, contact, city, district, province) {
 export default function Hospitals() {
   const dispatch = useDispatch()
 
+  const auth = useSelector(state => state.auth);
+//  console.log(auth)
+
   const hospital = useSelector(getAllHospitals)
   const hospitalsLoading = useSelector(getHospitalLoadingStatus);
 

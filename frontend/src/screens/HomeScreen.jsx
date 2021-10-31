@@ -5,12 +5,32 @@ import FigureOne from '../components/common/FigureOne'
 import FigureTwo from '../components/common/FigureTwo';
 import { Card } from 'react-bootstrap'
 import Loader from '../components/Loader'
-import { loadPatients} from '../store/entities/patients';
 import { useDispatch, useSelector } from 'react-redux';
+import { loadPublicDashboard, getPublicDashboard} from '../store/entities/dashboard';
 
 
 const HomeScreen = () => {
     const dispatch = useDispatch()
+
+   // const dashBoard = useSelector(getPublicDashboard)
+    // console.log(dashBoard);
+
+    const getData = async() => {
+        try{
+            const response = await axios.request({
+                url: 'http://localhost:8000/api/v1/dashboard/publicdashboard',
+                method: 'get',
+                data: {},
+            });
+            console.log(response);
+        }catch(e){
+            //dispatch(toastAction({ message: "Getting data...", type: 'error' }));
+            console.log('error')
+        }
+        
+    }
+
+
     const [overall, setOverall] = useState([])
     const [dates, setDates] =useState([])
     const [cases, setCases] =useState([])
@@ -44,6 +64,8 @@ const HomeScreen = () => {
 
         console.log("4..........................")
 
+       // dispatch(loadPublicDashboard());
+        getData()
 
     },[dispatch])
 

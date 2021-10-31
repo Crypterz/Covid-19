@@ -84,6 +84,7 @@ export const {
     hospitalCreateRequestFailed,
     hospitalCreateRequestSucceeded,
     wardUpdated,
+    wardDelete,
     wardCreateRequested,
     wardCreateRequestFailed,
     wardCreateRequestSucceeded,
@@ -139,10 +140,10 @@ export const getAllHospitals = createSelector(
 );
 
 export const addWard = (ward, hospitalId) => (dispatch) => {
-   // console.log(hospital)
+    console.log(ward)
     return dispatch(
         apiCallBegan({
-            url: hospitalURL + `hospital/wards/${hospitalId}`,
+            url: hospitalURL + `hospital/ward`,
             method: "post",
             data: ward,
             onStart: wardCreateRequested,
@@ -155,7 +156,6 @@ export const addWard = (ward, hospitalId) => (dispatch) => {
 export const updateWard= (ward, id) => (dispatch) => {
     console.log(ward, id)
     return dispatch(
-      // console.log(patient);
         apiCallBegan({
             url: hospitalURL + `wards/${id}`,
             method: "patch",
@@ -164,6 +164,18 @@ export const updateWard= (ward, id) => (dispatch) => {
         })
     );
 
+}
+
+export const deleteWard= (ward, id) => (dispatch) => {
+    console.log(ward, id)
+    return dispatch(
+        apiCallBegan({
+            url: hospitalURL + `wards/${id}`,
+            method: "patch",
+            data: ward,
+            onSuccess: wardDelete.type,
+        })
+    );
 }
 
 // export const updatePcrAproval = (pcrIds) =>{

@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
 import FigureOne from '../../components/healthMinistryComponents/FigureOne'
 import FigureTwo from '../../components/healthMinistryComponents/FigureTwo'
 import PieChart from '../../components/PieChart'
@@ -8,12 +9,53 @@ import { Card } from 'react-bootstrap'
 
 const Dashboard = () => {
 
+    const [totalCases, setTotalCases] = useState([])
+    const [values, setValues] = useState([])
+    const [district, setDistrict] = useState([])
+   // console.log(district)
+    const [districtValues, setDistrictValues] = useState([])
+    //console.log(districtValues)
+
+
     const hospitals = [ 'National Hospital of Sri Lanka', 'Lady Ridgeway Hospital for Children',
                         'Castle Street Hospital for Women', 'Base Hospital Mulleriyawa',
                         'North Colombo Teaching Hospital','District General Hospital Negombo',
                         'District General Hospital Gampaha','National Hospital Kandy',
                         'Teaching Hospital Karapitiya','District General Hospital Hambantota']
-    const districts = ['Colombo','Gampaha','Kalutara','Galle','Kandy','Matara','Kurunegala','Jaffna','Anuradhapura','Puttalam']
+    ///const districts = ['Colombo','Gampaha','Kalutara','Galle','Kandy','Matara','Kurunegala','Jaffna','Anuradhapura','Puttalam']
+
+    useEffect(() => {
+
+        const fetchOverall = async () => {
+            const response = await axios.request({
+                url: 'http://localhost:8000/api/v1/dashboard/publicdashboard',
+                method: 'get',
+                data: {},
+            });
+
+            const response2 = await axios.request({
+                url: 'http://localhost:8000/api/v1/dashboard/1',
+                method: 'get',
+                data: {},
+            });
+
+            console.log(response2)
+
+            if (response){
+              //  console.log(response)
+                const {data} = response.data;
+              //  console.log(data)
+               // const {districtTotals} = data.total
+                setDistrict(Object.keys(data['total']['districtTotals']))
+                setDistrictValues(Object.values(data['total']['districtTotals']))
+               // setCases(Object.values(data2['timeline']['cases']))
+                //console.log(districtTotals)
+            }
+        }
+
+        fetchOverall()
+
+     },[])
 
     return (
         <div>
@@ -52,7 +94,7 @@ const Dashboard = () => {
                         <h3 style={{textAlign:'center', margin:'2%'}}>Most Covid Patient Admitted Hospitals</h3>
                         </div>
                         <div style={{position:'relative' ,margin:'2%'}}>
-                            <HorizontalBarChart myProp1={hospitals}></HorizontalBarChart>
+                            <HorizontalBarChart keys={hospitals} values={districtValues}></HorizontalBarChart>
                         </div>
                     </Card>
                 </div>
@@ -64,7 +106,7 @@ const Dashboard = () => {
                         <h3 style={{textAlign:'center', margin:'2%'}}>Most Covid Patient Recorded Districts</h3>
                         </div>
                         <div style={{position:'relative' ,margin:'2%'}}>
-                            <HorizontalBarChart myProp1={hospitals}></HorizontalBarChart>
+                            <HorizontalBarChart keys={district} values={districtValues}></HorizontalBarChart>
                         </div>
                     </Card>
                 </div>
