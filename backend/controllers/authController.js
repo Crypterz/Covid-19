@@ -1,5 +1,6 @@
 const {promisify} =require('util')
 const User=require('./../models/userModel')
+const Admin=require('./../models/adminModel')
 const jwt = require('jsonwebtoken')
 const catchAsync= require('./../utils/catchAsync');
 const AppError = require('../utils/appError');
@@ -7,7 +8,6 @@ const sendEmail = require('../utils/email');
 const crypto = require('crypto')
 
 const Patient=require('./../models/patientModel')
-const Admin=require('./../models/adminModel')
 
 const signToken = id =>{
     console.log('new token ............')
@@ -72,12 +72,23 @@ exports.login=catchAsync(async(req, res, next)=>{
     if(!email || !password){
         return next(new AppError('Please provide email and password',400))
     }
-    const user=await User.findOne({email:email}).select('+password')
+    var user=await User.findOne({email:email}).select('+password')
     // console.log(user)
     // const correct = await user.correctPassword(password, user.password);
     if(!user || !(await user.correctPassword(password, user.password))) {
         return next(new AppError('Incorrect email or password',401))
     }
+    if(user.role=="hospitalAdmin"){
+        const admin =await Admin.findOne({'user':user._id}).populate({
+            path:'hospital',
+            populate:{
+                path:'wards'
+            }
+        });
+        user={user,admin};
+    }
+    
+    // console.log(user)
     // console.log(user)
     // const token=signToken(user._id)
     // res.status(200).json({
