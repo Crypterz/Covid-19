@@ -94,6 +94,8 @@ exports.createPCRTest= catchAsync(async (req,res)=>{
 })
 
 exports.confirmPCRTest=catchAsync(async (req,res)=>{
+   console.log('fghfhfyhfhhhhhhhhhhhhhhhhhhhhhhhhhh')
+   // console.log(req.user._id)
     const test=await PCRTest.updateMany({_id:{
         $in:req.body.ids
     }},{
@@ -106,6 +108,8 @@ exports.confirmPCRTest=catchAsync(async (req,res)=>{
     //     negative:negative,
     //     creation:req.user
     // })
+    console.log("afwefwefwefw")
+    console.log(test)
     await dashBoardController.addPCRResults(Date.now(),positive,negative,req.user)
     if(!test){
         return next(new AppError("No patient found with that ID",404))    //used return statement to avoid executing code below

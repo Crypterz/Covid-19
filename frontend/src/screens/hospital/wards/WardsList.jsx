@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
+import { getAllHospitals, getHospitalLoadingStatus, loadHospitals, updateWard,addWard, deleteWard} from '../../../store/entities/hospitals';
+import { useDispatch, useSelector } from 'react-redux';
 
 import CRUDTable, {
   Fields,
@@ -17,18 +19,21 @@ const DescriptionRenderer = ({ field }) => <textarea {...field} />;
 
 let wards = [
   {
+    ward_id: "1",
     ward_no: 1,
     ward_name: "Ward 1",
     description: "Labour Ward 1",
     total_beds: "45"
   },
   {
+    ward_id: "2",
     ward_no: 2,
     ward_name: "Ward 2",
     description: "Labour Ward 2",
     total_beds: "19"
   },
   {
+    ward_id: "3",
     ward_no: 3,
     ward_name: "Ward 3",
     description: "Pediatric Ward 1",
@@ -70,6 +75,7 @@ let wards = [
 
 
 let count = wards.length;
+console.log(count)
 const service = {
   fetchItems: payload => {
     const { activePage, itemsPerPage } = payload.pagination;
@@ -95,6 +101,7 @@ const service = {
     ward.ward_name = data.ward_name;
     ward.description = data.description;
     ward.total_beds = data.total_beds;
+  //  updateData(ward)
     return Promise.resolve(ward);
   },
   delete: data => {
@@ -109,6 +116,67 @@ const styles = {
 };
 
 export default function WardsList() {
+
+  const dispatch = useDispatch()
+
+  const auth = useSelector(state => state.auth);
+  console.log(auth)
+
+  const hospital = useSelector(getAllHospitals)
+  console.log(hospital)
+ // const hospitalsLoading = useSelector(getHospitalLoadingStatus);
+
+ function updateCurrentWard(ward){
+   // console.log(ward)
+    const wardDetails = {
+       //wardNo: ward.ward_no,
+       name: ward.ward_name,
+       totalBeds: ward.total_beds,
+      // admittedPatients: ward.admitted_patients,
+      //description: ward.description
+    }
+
+    count += 1;
+    wards.push({
+      ...ward,
+      ward_no: count
+    });
+
+    dispatch(updateWard(wardDetails, ward.ward_id))
+    return Promise.resolve(ward)
+ }
+
+ function addNewWard(ward){
+  // console.log(ward)
+   const wardDetails = {
+      //wardNo: ward.ward_no,
+      name: ward.ward_name,
+      totalBeds: ward.total_beds,
+     // admittedPatients: ward.admitted_patients,
+     //description: ward.description
+   }
+   dispatch(addWard(wardDetails, ward.ward_id))
+   return Promise.resolve(ward)
+}
+
+function deleteCurrentWard(ward){
+  // console.log(ward)
+   const wardDetails = {
+      //wardNo: ward.ward_no,
+      name: ward.ward_name,
+      totalBeds: ward.total_beds,
+     // admittedPatients: ward.admitted_patients,
+     //description: ward.description
+   }
+   dispatch(deleteWard(wardDetails, ward.ward_id))
+   return Promise.resolve(ward)
+}
+
+ useEffect (() => {
+   dispatch(loadHospitals())
+ })
+
+
 return (
   <div style={styles.container}>
     <CRUDTable
@@ -126,7 +194,7 @@ return (
         Ward Name="Ward Creation"
         message="Create a new ward!"
         trigger="ADD NEW WARDS"
-        onSubmit={ward => service.create(ward)}
+        onSubmit={ward => addNewWard(ward)}
         submitText="CREATE"
         validate={values => {
           const errors = {};
@@ -142,7 +210,8 @@ return (
         title="Ward Update Process"
         message="Update ward"
         trigger="UPDATE"
-        onSubmit={ward => service.update(ward)}
+       // onSubmit={ward => service.update(ward)}
+        onSubmit = { ward => updateCurrentWard(ward)}
         submitText="Update"
         validate={values => {
           const errors = {};
@@ -164,7 +233,7 @@ return (
         title="Ward Delete Process"
         message="Are you sure you want to delete the Ward?"
         trigger="DELETE"
-        onSubmit={ward => service.delete(ward)}
+        onSubmit={ward => deleteCurrentWard(ward)}
         submitText="Delete"
         validate={values => {
           const errors = {};

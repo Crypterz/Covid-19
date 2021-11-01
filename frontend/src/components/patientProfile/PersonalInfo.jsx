@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Card} from 'react-bootstrap'
 
-const PersonalInfo = ({patients, currentHospital, userHospital}) => {
+const PersonalInfo = ({patients, currentHospital, userHospital, id}) => {
 
     return (
             <Card  className="m-2" bg="#ffffff" text="black" style={{ width: '100%'}}>
@@ -36,7 +36,7 @@ const PersonalInfo = ({patients, currentHospital, userHospital}) => {
                             <Button 
                                 type='submit'  
                                 className='btn btn-primary' 
-                                onClick={()=> window.location=`/hospital/editProfile/${patients._id}`}
+                                onClick={()=> window.location=`/hospital/editProfile/${id}`}
                             >Edit Profile</Button>
                         </div>:''}
                 </ul>
