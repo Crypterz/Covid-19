@@ -53,7 +53,7 @@ export default function StaffList() {
         </TableHead>
         <TableBody>
           {data
-          .filter(row=>row.role === 'hospitalStaff')
+          .filter(row=>row.role === 'hospital user')
           .map(row => (
             <TableRow key={row._id}>
               <TableCell align="left">{row.name.firstName}</TableCell>
