@@ -35,6 +35,7 @@ export default function AddHospital(props) {
         dispatch(toastAction({ message: "Hospital Adding Failed", type: 'error' }))
       }
       //console.log(hospital)
+      window.location.href = "/healthMinistry/hospital";
     };
         
     return (
