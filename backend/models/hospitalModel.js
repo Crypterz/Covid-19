@@ -23,6 +23,12 @@ const hospitalSchema =new mongoose.Schema({
         default:Date.now(),
         select:false
     },
+    wards:[
+        {
+            type:mongoose.Schema.ObjectId,
+            ref:'Ward'
+        }
+    ]
     // wards:[{
     //     name:{
     //         type:String,

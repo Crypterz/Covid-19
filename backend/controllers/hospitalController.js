@@ -57,6 +57,7 @@ exports.createHospital= catchAsync(async (req,res)=>{
 exports.createWard= catchAsync(async (req,res)=>{
     req.body.hospital=req.user.hospital
     const newWard=await Ward.create(req.body)
+    await Ward.findByIdAndUpdate(req.body.hospital,{$push:{wards:newWard._id}},)
     res.status(201).json({
         status:'success',
         data:{

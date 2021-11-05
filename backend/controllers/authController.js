@@ -108,31 +108,35 @@ exports.login=catchAsync(async(req, res, next)=>{
     if(!email || !password){
         return next(new AppError('Please provide email and password',400))
     }
-    const user=await User.findOne({email:email}).select('+password')
+    var user=await User.findOne({email:email}).select('+password')
     // console.log(user)
     // const correct = await user.correctPassword(password, user.password);
     if(!user || !(await user.correctPassword(password, user.password))) {
         return next(new AppError('Incorrect email or password',401))
     }
-    // if(user.role=="hospitalAdmin"){
-    //     const admin =await Admin.findOne({'user':user._id}).populate({
-    //         path:'hospital',
-    //         populate:{
-    //             path:'wards'
-    //         }
-    //     });
-    //     // user={user,admin};
-    //     user.ad=admin
-        
-    // }
-    // console.log(user)
-    // console.log(user)
-    // const token=signToken(user._id)
-    // res.status(200).json({
-    //     status:'success',
-    //     token
-    // })
-    createSendToken(user,200,res)
+    const token = signToken(user._id)
+    if(user.role=="hospitalAdmin"){
+        const admin =await Admin.findOne({'user':user._id}).populate({
+            path:'hospital',
+            populate:{
+                path:'wards'
+            }
+        });
+        user={user,admin};
+    }
+    console.log(token)
+    res.cookie('jwt',token,{
+        expires:new Date(Date.now()+process.env.JWT_COOKIE_EXPIRES_IN*24*60*60*1000),
+        // secure:true,     //COOKIE WILL SEND ONLY ENCREPTED CONNECTION HTTPS 
+        httpOnly:true        // COKKIES CANT BE MODIFIES BY BROWSER - TO PREVENT CROSS SITE ATTACK
+    })
+    res.status(200).json({
+        status:'success',
+        token,
+        data:{
+            user
+        }
+    })
 
 })
 
