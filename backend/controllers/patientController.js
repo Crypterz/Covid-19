@@ -61,21 +61,21 @@ exports.getPatientByNIC = catchAsync(async (req, res,next) => {
     });
 })
 
-// exports.updatePatient=catchAsync(async (req,res)=>{
-//     const patient=await Patient.findByIdAndUpdate(req.params.id,req.body,{
-//         new:true,
-//         runValidators:true
-//     })
-//     if(!patient){
-//         return next(new AppError("No patient found with that ID",404))    //used return statement to avoid executing code below
-//     }
-//     res.status(200).json({
-//         status:'success',
-//         data:{
-//             patient:patient
-//         }
-//     });
-// })
+exports.updatePatient=catchAsync(async (req,res)=>{
+    const patient=await Patient.findByIdAndUpdate(req.params.id,req.body,{
+        new:true,
+        runValidators:true
+    })
+    if(!patient){
+        return next(new AppError("No patient found with that ID",404))    //used return statement to avoid executing code below
+    }
+    res.status(200).json({
+        status:'success',
+        data:{
+            patient:patient
+        }
+    });
+})
 
 // exports.deletePatient=async (req,res)=>{
 //     try{

@@ -15,7 +15,7 @@ router
 router
   .route('/:id')
   .get(patientController.getPatient)
-//   .patch(patientController.updatePatient)
+  .patch(patientController.updatePatient)
 //   .delete(patientController.deletePatient)
 
 router.post('/:id/history', authController.protect, authController.restrictTo('hospitalAdmin'), medicalHistoryController.createMedical)

@@ -80,7 +80,7 @@ const Profile =  ({match, history}) => {
                     <div className="vs-col vs-xs- vs-sm-12 vs-lg-3"style={{margin:'0%',width:'100%', position:'relative'}}>
                         <div className="set-animation from-left animate">
                             <PersonalInfo patients={objectDestructure(patients, "user")} currentHospital={currentHospital_id}
-                                userHospital={userHospital_id}>
+                                userHospital={userHospital_id} id={patients ._id}>
                             </PersonalInfo>
                         </div>
                     </div>

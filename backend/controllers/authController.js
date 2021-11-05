@@ -6,7 +6,7 @@ const catchAsync= require('./../utils/catchAsync');
 const AppError = require('../utils/appError');
 const sendEmail = require('../utils/email');
 const crypto = require('crypto')
-
+ 
 const Patient=require('./../models/patientModel')
 
 const signToken = id =>{
@@ -67,6 +67,40 @@ exports.signup =catchAsync( async (req,res, next)=>{
         })
 })
 
+// exports.login=catchAsync(async(req, res, next)=>{
+//     console.log('auth controller..........')
+//     console.log(req.body)
+//     const {email, password}=req.body
+//     if(!email || !password){
+//         return next(new AppError('Please provide email and password',400))
+//     }
+//     var user=await User.findOne({email:email}).select('+password')
+//     // console.log(user)
+//     // const correct = await user.correctPassword(password, user.password);
+//     if(!user || !(await user.correctPassword(password, user.password))) {
+//         return next(new AppError('Incorrect email or password',401))
+//     }
+//     if(user.role=="hospitalAdmin"){
+//         const admin =await Admin.findOne({'user':user._id}).populate({
+//             path:'hospital',
+//             populate:{
+//                 path:'wards'
+//             }
+//         });
+//         user={user,admin};
+//     }
+    
+//     // console.log(user)
+//     // console.log(user)
+//     // const token=signToken(user._id)
+//     // res.status(200).json({
+//     //     status:'success',
+//     //     token
+//     // })
+//     createSendToken(user,200,res)
+
+// })
+
 exports.login=catchAsync(async(req, res, next)=>{
     console.log('auth controller..........')
     console.log(req.body)
@@ -74,7 +108,7 @@ exports.login=catchAsync(async(req, res, next)=>{
     if(!email || !password){
         return next(new AppError('Please provide email and password',400))
     }
-    var user=await User.findOne({email:email}).select('+password')
+    const user=await User.findOne({email:email}).select('+password')
     // console.log(user)
     // const correct = await user.correctPassword(password, user.password);
     if(!user || !(await user.correctPassword(password, user.password))) {

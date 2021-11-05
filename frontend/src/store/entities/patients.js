@@ -180,7 +180,6 @@ export const registerPatients = (patient) => (dispatch) => {
 export const updatePatient= (patient, id) => (dispatch) => {
     console.log(patient, id)
     return dispatch(
-      // console.log(patient);
         apiCallBegan({
             url: patientURL + `patients/${id}`,
             method: "patch",

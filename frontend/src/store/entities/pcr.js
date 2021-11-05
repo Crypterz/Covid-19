@@ -43,14 +43,17 @@ const slice = createSlice({
 
         pcrReceived(pcr, action){
             //pcr.list = action.payload.pcr;
-            pcr.list = action.payload.data.pcr;
+            pcr.list = action.payload.data.tests;
             pcr.loading = false;
             pcr.lastFetch = Date.now();
             //console.log(pcr.list)
         },
 
         pcrAprovalUpdated(pcr, action){
-            //  const ids = action.payload.data.ids
+              const ids = action.payload.data.ids
+              const list = pcr.list.filter( p=> !p._id.includes(ids));
+              pcr.list = list;
+              console.log(list)
             //  console.log(action.payload.data)
             //  let lists = []
             //  pcr.list.map( p=> {
@@ -91,7 +94,7 @@ export const loadPcrs = () => (dispatch, getState) => {
     
     return dispatch(
         apiCallBegan({
-            url: pcrURL + 'pcr',
+            url: pcrURL + 'pcr/toconfirm',
             method: "get",
            // data: data,
             onStart: pcrRequested.type,
@@ -130,14 +133,16 @@ export const getAllPcrs = createSelector(
     pcr => pcr.list
 );
 
-export const updatePcrAproval = (ids)=> (dispatch) =>{
+export const updatePcrAproval = (ids) => (dispatch) =>{
     console.log(ids)
-    return apiCallBegan({
-        url: pcrURL + "pcr/confirm",
-        method: "post",
-        data: ids,
-        //header: token,
-        onSuccess: pcrAprovalUpdated.type,
-    });
+    return dispatch(
+        apiCallBegan({
+            url: pcrURL + "pcr/confirm",
+            method: "post",
+            data: ids,
+            //header: token,
+            onSuccess: pcrAprovalUpdated.type,
+        })
+    )
 }
 

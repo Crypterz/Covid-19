@@ -188,7 +188,6 @@ const EditCurrentDetails = ({match,history}) => {
             symList[i] = symptoms[i].description;
         }
         const data = { description: symList}
-        //const data ={ description : ["efdfs", "eefwef"]}
         dispatch(updateSymptomsInDB(data, medicalHistoryId))
     } 
 
@@ -198,9 +197,7 @@ const EditCurrentDetails = ({match,history}) => {
             drugList[i] = drugs[i].description;
         }
         const data = { description: drugList}
-        console.log(data)
-       // dispatch(updatePatient(drugUpdate,patientId));
-       //dispatch(updateDrugsInDB(drugs, medicalHistoryId))
+        dispatch(updateDrugsInDB(data, medicalHistoryId))
     }
 
 
