@@ -17,7 +17,9 @@ const signToken = id =>{
     })
 }
 const createSendToken = (user,statusCode, res)=>{
+    console.log(user)
     const token = signToken(user._id)
+    console.log(token)
     res.cookie('jwt',token,{
         expires:new Date(Date.now()+process.env.JWT_COOKIE_EXPIRES_IN*24*60*60*1000),
         // secure:true,     //COOKIE WILL SEND ONLY ENCREPTED CONNECTION HTTPS 
@@ -78,16 +80,17 @@ exports.login=catchAsync(async(req, res, next)=>{
     if(!user || !(await user.correctPassword(password, user.password))) {
         return next(new AppError('Incorrect email or password',401))
     }
-    if(user.role=="hospitalAdmin"){
-        const admin =await Admin.findOne({'user':user._id}).populate({
-            path:'hospital',
-            populate:{
-                path:'wards'
-            }
-        });
-        user={user,admin};
-    }
-    
+    // if(user.role=="hospitalAdmin"){
+    //     const admin =await Admin.findOne({'user':user._id}).populate({
+    //         path:'hospital',
+    //         populate:{
+    //             path:'wards'
+    //         }
+    //     });
+    //     // user={user,admin};
+    //     user.ad=admin
+        
+    // }
     // console.log(user)
     // console.log(user)
     // const token=signToken(user._id)

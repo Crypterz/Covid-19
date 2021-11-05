@@ -6,11 +6,11 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(medicalHistoryController.createMedical)
+  .post(authController.protect, authController.restrictTo('hospitalAdmin'), medicalHistoryController.createMedical)
 
 router
   .route('/:id')
-  .get(medicalHistoryController.getMedicalHistory)
+  .get(authController.protect, authController.restrictTo('hospitalAdmin'), medicalHistoryController.getMedicalHistory)
   // .patch(medicalHistoryController.addSymtomsDrugs)
 
   router.patch('/:id/adddrugs',medicalHistoryController.addDrugs)

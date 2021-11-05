@@ -9,6 +9,11 @@ const medicalHistorySchema=new mongoose.Schema({
         type:mongoose.Schema.ObjectId,
         ref:'Hospital'
     },
+    ward:{
+        type:mongoose.Schema.ObjectId,
+        ref:'Ward',
+        required:[true,'A medical report shoud have ward']
+    },
     symptoms:[{
         date:{
             type:Date,

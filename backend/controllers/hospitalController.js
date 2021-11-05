@@ -1,4 +1,5 @@
 const Hospital=require('../models/hospitalModel')
+const Ward=require('../models/wardModel')
 const APIfunctions=require('../utils/apiFunctions')
 const catchAsync= require('../utils/catchAsync');
 const AppError = require('../utils/appError');
@@ -31,49 +32,132 @@ exports.createHospital= catchAsync(async (req,res)=>{
     })
 })
 
+// exports.createWard= catchAsync(async (req,res)=>{
+//     const hospital=req.user.hospital
+//     console.log(hospital)
+//     const updatedHospital=await Hospital.findByIdAndUpdate(
+//         hospital,   
+//         {$push:{
+//             wards:{
+//                 name:req.body.name,
+//                 totalBeds:req.body.totalBeds,
+//             }
+//         }},
+//         // {upsert: true},
+//         {new: true}
+//     )
+//     res.status(201).json({
+//         status:'success',
+//         data:{
+//             hospital:updatedHospital
+//         }
+//     })
+// })
+
 exports.createWard= catchAsync(async (req,res)=>{
-    const hospital=req.user.hospital
-    console.log(hospital)
-    const updatedHospital=await Hospital.findByIdAndUpdate(
-        hospital,   
-        {$push:{
-            wards:{
-                name:req.body.name,
-                totalBeds:req.body.totalBeds,
-            }
-        }},
-        // {upsert: true},
-        {new: true}
-    )
+    req.body.hospital=req.user.hospital
+    const newWard=await Ward.create(req.body)
     res.status(201).json({
         status:'success',
         data:{
-            hospital:updatedHospital
+            ward:newWard
         }
     })
+    // console.log(hospital)
+    // const updatedHospital=await Hospital.findByIdAndUpdate(
+    //     hospital,   
+    //     {$push:{
+    //         wards:{
+    //             name:req.body.name,
+    //             totalBeds:req.body.totalBeds,
+    //         }
+    //     }},
+    //     // {upsert: true},
+    //     {new: true}
+    // )
+    // res.status(201).json({
+    //     status:'success',
+    //     data:{
+    //         hospital:updatedHospital
+    //     }
+    // })
 })
 
-exports.updateWard= catchAsync(async (req,res)=>{
-    const hospital=req.user.hospital
-    const ward={}
-    if(req.body.name){
-        ward["wards.$.name"]=req.body.name
-    }
-    if(req.body.totalBeds){
-        ward["wards.$.totalBeds"]=req.body.totalBeds
-    }
-    console.log(ward)
-    console.log(hospital)
-    const updatedHospital=await Hospital.findOneAndUpdate(
-        { _id: hospital , "wards._id":req.params.wardId },
-        { $set:ward },
-        // { upsert: true },
-        {new: true} 
-    )
-    res.status(201).json({
+// exports.updateWard= catchAsync(async (req,res)=>{
+//     const hospital=req.user.hospital
+//     const ward={}
+//     if(req.body.name){
+//         ward["wards.$.name"]=req.body.name
+//     }
+//     if(req.body.totalBeds){
+//         ward["wards.$.totalBeds"]=req.body.totalBeds
+//     }
+//     console.log(ward)
+//     console.log(hospital)
+//     const updatedHospital=await Hospital.findOneAndUpdate(
+//         { _id: hospital , "wards._id":req.params.wardId },
+//         { $set:ward },
+//         // { upsert: true },
+//         {new: true} 
+//     )
+//     res.status(201).json({
+//         status:'success',
+//         data:{
+//             hospital:updatedHospital
+//         }
+//     })
+// })
+
+exports.getHospitalDetails= catchAsync(async (req,res,next)=>{
+    const stat = await Ward.aggregate([
+        {
+            $unwind:
+              {
+                path: '$admittedPatients',
+                preserveNullAndEmptyArrays: true
+              }
+        },
+        {
+            $group:{
+                _id:'$hospital',
+                totalBeds:{$sum:'$totalBeds'},
+                noWards:{$sum:1},
+                admittedPatients:{$push:'$admittedPatients'},
+            },
+            
+        },
+        { $lookup: {
+            from: "hospitals",
+            localField:"_id",
+            foreignField: "_id",
+            as: "hospitalDetails"
+       }},
+        {
+            $project: {
+               hospital: 1,
+               hospitalDetails:1,
+               noWards:1,
+               totalBeds:1,
+               admittedPatients : {$size:'$admittedPatients'},
+            }
+         },
+         {
+             $project:{
+                hospital: 1,
+                hospitalDetails:1,
+                noWards:1,
+                totalBeds:1,
+                admittedPatients:1,
+                freeBeds:{$subtract:['$totalBeds','$admittedPatients']}
+             }
+         }
+
+    ])
+
+    res.status(200).json({
         status:'success',
         data:{
-            hospital:updatedHospital
+            stat
         }
     })
 })

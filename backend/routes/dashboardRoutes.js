@@ -11,5 +11,7 @@ router
   .get(hospitalRecordController.refreshDashBoard)
 
 router.get('/publicdashboard',dashBoardController.publicDashBoard)
+router.get('/ch',dashBoardController.tot)
+router.get('/chi',dashBoardController.toti)
 
 module.exports = router;
