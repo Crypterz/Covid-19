@@ -56,13 +56,14 @@ const AddPcrResults = ({history}) => {
                         firstName : first_name,
                         lastName : last_name,
                     },
-                    contactNo : Tel_number,
+                    contactNumber : parseInt(Tel_number),
                     nic : {
                         nicno:NIC_number,
                         birthYear : birth_year
                     },
                     result : selectedResult,
                 }
+                console.log(Result)
                 dispatch(addPcr(Result));
                 setPcrState(true);
             } 

@@ -14,7 +14,13 @@ import AlertDialog from '../../components/dialog/Dialog';
 const Profile =  ({match, history}) => {
     const dispatch = useDispatch()
     const patientId = match.params.id
-    const auth = useSelector(state => state.auth);
+    
+    const userDetails = useSelector(state => state.auth);
+    const { admin, user } = userDetails.data.user
+    const {wards } = admin.hospital
+    const auth = user
+
+    console.log(auth)
     const patients = useSelector(getPatientById(patientId))
     console.log(patients)
     const hospitals = useSelector(getAllHospitals)
@@ -61,7 +67,7 @@ const Profile =  ({match, history}) => {
 
 
     useEffect(() => {
-        if(auth.data.user.role === 'patient'){
+        if(auth.role === 'patient'){
             dispatch(loadPatient(patientId))
         }else{
           //  dispatch(loadPatients())
@@ -72,7 +78,7 @@ const Profile =  ({match, history}) => {
 
     return (
         <Container>
-            {auth.loggedIn ? 
+            {userDetails.loggedIn ? 
             <div>
                 <h4 style={{textAlign:'center', fontWeight:'700'}}>PATIENT PROFILE</h4>
                 <div className="vs-row top-content" style={{display:'flex', width:'100%'}}>
@@ -99,11 +105,11 @@ const Profile =  ({match, history}) => {
                     </div>
 
 
-                    {auth.data.user.role !== 'patient' &&
+                    {auth.role !== 'patient' &&
                     <div className="vs-col vs-xs- vs-sm-12 vs-lg-3" style={{margin:'0%',width:'100%', position:'relative'}}>
                             <div className="set-animation from-left animate">
                             {currentHospital_id === userHospital_id ? 
-                                <Actions patients={patients} hospitals={hospitals} popUpHandler={setPopUp}></Actions> :''}
+                                <Actions patients={patients} hospitals={hospitals} wards ={wards} popUpHandler={setPopUp}></Actions> :''}
                             </div>
                     </div> }
                 </div>

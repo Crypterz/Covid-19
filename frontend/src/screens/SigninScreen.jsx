@@ -32,13 +32,17 @@ export default function SigninScreen(props) {
     }
     e.preventDefault();
     // TODO: sign in action
-    console.log(data);
+
     dispatch(login(data));
   };
 
     const loggedIn = useSelector(getLoggedInStatus)
-    const auth = useSelector(state => state.auth.data);
-    console.log(auth)
+
+    const userDetails = useSelector(state => state.auth.data);
+    const auth = userDetails
+
+    //console.log(auth.user.role)
+    //console.log(admin)
 
     
     useEffect(() => {
@@ -46,7 +50,7 @@ export default function SigninScreen(props) {
            //props.history.push(redirect);
            // console.log('logged in suceessfully');
             dispatch(toastAction({ message: "Logged in Success...", type: 'info' }));
-            if(auth.user.role === 'hospitalAdmin'){
+            if(auth.user.role === 'hospitalAdmin' || 'hospital user'){
                window.location ='/hospital/dashboard'
             }
             else if(auth.user.role === 'patient'){

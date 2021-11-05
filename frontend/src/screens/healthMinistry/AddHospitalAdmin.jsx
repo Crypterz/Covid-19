@@ -8,6 +8,7 @@ import { toastAction } from '../../store/toastActions';
 export default function AddHospitalAdmin(props) {
     const dispatch = useDispatch();
     const userAddedStatus = useSelector(getUserAddedStatus);
+    const [userState, setUserState] = useState(false)
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -32,13 +33,17 @@ export default function AddHospitalAdmin(props) {
 
       // TODO: sign in action
       dispatch(addUser(user))
-      if(userAddedStatus.userAdded){
-        dispatch(toastAction({ message: "Hospital Admin Added Successfully", type: 'info' }))
-      }else{
-        dispatch(toastAction({ message: "Hospital Admin Adding Failed", type: 'error' }))
-      }
+      setUserState(true)
     console.log("HIII")
     };
+
+    useEffect(() => {
+        if(userAddedStatus.userAdded && userState){
+            dispatch(toastAction({ message: "Hospital Admin Added Successfully", type: 'info' }))
+          }else{
+            dispatch(toastAction({ message: "Hospital Admin Adding Failed", type: 'error' }))
+          }
+     },[userAddedStatus])
 
     return (
             <div className="container-fluid">

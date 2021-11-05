@@ -1,5 +1,5 @@
 import React, {useEffect, useState, Component} from 'react'
-import { Container, Button, FormControl, InputGroup, Row, Card} from 'react-bootstrap'
+import { Container, Button, FormControl, InputGroup, Row, Card, Form} from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import { loadPatients, getAllPatients, getPatientsLoadingStatus, admitPatient } from '../../store/entities/patients';
 
@@ -11,9 +11,15 @@ const AdmitPatient = ({history}) => {
    // console.log(patients)
 
     const auth = useSelector(state => state.auth);
+    const { admin, user } = auth.data.user
+    const {wards } = admin.hospital
+   // console.log(wards)
+    //console.log(admin)
 
     const [searchKeyword, setSearchKeyword ] = useState('');
     const [patientName, setPatientName] = useState();
+    const [ward, setWard] = useState(wards[0].name);
+    console.log(ward)
 
     const serachPatient =() =>{
         const filteredPatient = getFilteredSearchedPatients(patients, searchKeyword)
@@ -21,14 +27,11 @@ const AdmitPatient = ({history}) => {
     }
 
     const AdmitPatient =() =>{
-       // console.log(patientName)
-        dispatch(admitPatient(patientName[0]._id))
-       // console.log('rgggegege')
+        dispatch(admitPatient(patientName[0]._id, ward))
     }
 
     useEffect(() => {
         if(!auth.loggedIn){
-           // window.location('/')
            history.push('/')
         }
         dispatch(loadPatients())
@@ -66,10 +69,23 @@ const AdmitPatient = ({history}) => {
                     {patientName[0].name} is already registered patient
                 </Card>
 
+                <Form.Group className='mt-2 w-25'>
+                    <Form.Control onChange = {(e) => {
+                        if(e.target.value !== "Select ward"){
+                            setWard(e.target.value);
+                        }
+                    }} as="select">
+                    {wards.map((c,index) => <option selected={index === 0? 'slected': null}>{`${c.name}`}</option>)}
+                    </Form.Control>
+                </Form.Group>
+
+                <p>{ward} is selected</p>
+
                 <Button 
                     className='text-center my-2'
                     onClick= { ()=> AdmitPatient()}
                 >Admit Patient</Button>
+
             </div>}
 
             {patientName && patientName.length ===0 &&
@@ -82,6 +98,8 @@ const AdmitPatient = ({history}) => {
                     onClick= { ()=> history.push('/hospital/addPatient')}
                 >Register New Patient</Button>
             </div>}
+
+
            
         </Container>
 
@@ -93,12 +111,8 @@ export default AdmitPatient
 function getFilteredSearchedPatients(patients, filterBy){
     let name;
     name =  patients.filter(p => 
-        //p.name.toLowerCase() === (filterBy) //||
-        //p.description.toLowerCase().includes(filterBy.toLowerCase())
-       // console.log(p.name.toLowerCase())
        objectDestructure(p, "nic") === filterBy.toString()
     );
-    //console.log(name)
     return name
 }
 

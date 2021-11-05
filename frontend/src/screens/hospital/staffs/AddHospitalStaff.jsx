@@ -10,6 +10,7 @@ import { toastAction } from '../../../store/toastActions';
 export default function AddHospitalStaff(props){
     const dispatch = useDispatch();
     const userAddedStatus = useSelector(getUserAddedStatus);
+    const [userState, setUserState] = useState(false)
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -34,13 +35,17 @@ export default function AddHospitalStaff(props){
   
         // TODO: sign in action
         dispatch(addUser(user))
-        if(userAddedStatus.userAdded){
-          dispatch(toastAction({ message: "Hospital Staff Added Successfully", type: 'info' }))
-        }else{
-          dispatch(toastAction({ message: "Hospital Staff Adding Failed", type: 'error' }))
-        }
+        setUserState(true)
         //console.log(hospital)
       };
+
+      useEffect(() => {
+        if(userAddedStatus.userAdded && userState){
+            dispatch(toastAction({ message: "Hospital Staff Added Successfully", type: 'info' }))
+          }else{
+            dispatch(toastAction({ message: "Hospital Staff Adding Failed", type: 'error' }))
+          }
+      },[userAddedStatus])
 
         return (
             <Container > 

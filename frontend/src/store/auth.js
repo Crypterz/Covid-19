@@ -8,7 +8,8 @@ const slice = createSlice({
         data: {},
         token: '',
         logging: false,
-        loggedIn : false
+        loggedIn : false,
+        wardAdded: false,
     },
     reducers: {
 
@@ -60,7 +61,29 @@ const slice = createSlice({
 
         authDataUpdated(user, action){
             user.data = {...user.data, ...action.payload};
-        }
+        },
+
+        wardCreateRequested(auth, action) {
+            // hospital.loading = true;
+             auth.wardAdded = false;
+        },
+
+        wardCreateRequestFailed(auth, action){
+           // hospital.loading = false;
+        },
+
+        wardCreateRequestSucceeded(auth, action){
+           // hospital.loading = false;
+            auth.wardAdded = true
+            const wardId = action.payload.data;
+            auth.data.user.admin.hospital = wardId.hospital
+        },
+
+        wardUpdated(auth, action){
+            const wardId = action.payload.data;
+            auth.data.user.admin.hospital = wardId.hospital
+            console.log(wardId)
+       }
     }
 });
 
@@ -75,14 +98,20 @@ export const {
     userLoginFailed, 
     userLoginSucceeded, 
     userLoggedOut,
-    authDataUpdated
+    authDataUpdated,
+    wardUpdated,
+    // wardDelete,
+    wardCreateRequested,
+    wardCreateRequestFailed,
+    wardCreateRequestSucceeded,
     } = slice.actions;
+
+const hospitalURL = "/api/v1/hospital";
 
 
 //Action Invokers
 export const login = (data) => (dispatch) => {
     const url = '/api/v1/users/login';
-    console.log(data);
     return dispatch(
         apiCallBegan({
             url,
@@ -119,4 +148,43 @@ export const getLoggedInStatus = createSelector(
 );
 
 export const updateAuthData = (data) => authDataUpdated(data);
+
+export const addWard = (ward) => (dispatch) => {
+    console.log(ward)
+    return dispatch(
+        apiCallBegan({
+            url: hospitalURL + `/ward`,
+            method: "post",
+            data: ward,
+            onStart: wardCreateRequested,
+            onSuccess: wardCreateRequestSucceeded.type,
+            onError: wardCreateRequestFailed
+        })
+    );
+}
+
+export const updateWard= (ward, id) => (dispatch) => {
+    console.log(id)
+    return dispatch(
+        apiCallBegan({
+            url: hospitalURL + `/ward/${id}`,
+            method: "patch",
+            data: ward,
+            onSuccess: wardUpdated.type,
+        })
+    );
+
+}
+
+// export const deleteWard= (ward, id) => (dispatch) => {
+//     console.log(ward, id)
+//     return dispatch(
+//         apiCallBegan({
+//             url: hospitalURL + `wards/${id}`,
+//             method: "patch",
+//             data: ward,
+//             onSuccess: wardDelete.type,
+//         })
+//     );
+// }
 

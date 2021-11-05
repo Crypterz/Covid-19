@@ -33,7 +33,7 @@ const Dashboard = () => {
                 data: {},
             });
 
-            console.log(response2)
+           // console.log(response2)
 
             // if (response){
             //   //  console.log(response)

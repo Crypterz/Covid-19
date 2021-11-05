@@ -13,13 +13,20 @@ import { useDispatch, useSelector } from 'react-redux';
 const Patients = ({history}) => {
     const dispatch = useDispatch()
 
-    const auth = useSelector(state => state.auth);
+   // const auth = useSelector(state => state.auth);
+
+    const userDetails = useSelector(state => state.auth);
+  // console.log(userDetails)
+    // const { user } = userDetails.data.user
+    // const auth = user
+
+  //  console.log(auth)
 
     const patientsDetails = useSelector(getAllPatients);
     const patients = patientsDetails.list;
    // const data = objectDestructure (patients);
    // const {medicalHistory, nic, pcrTest, user, _id } = patientsDetails.list;
-    console.log(patients)
+   // console.log(patients)
     const patientsLoading = useSelector(getPatientsLoadingStatus);
 
     const location = useLocation()
@@ -42,7 +49,7 @@ const Patients = ({history}) => {
 
 
     useEffect(() => {
-        if(!auth.loggedIn){
+        if(!userDetails.loggedIn){
            // window.location('/')
            history.push('/')
         }
@@ -149,9 +156,14 @@ const Patients = ({history}) => {
 }
 
 function getFilteredPatients(patients, categories, filter){
-   // console.log(patients)
+    console.log(filter)
     if(filter === "All") return patients;
-    const category = categories.find(c => c === filter);
+    if(filter === "Active"){
+        const patient = patients.filter(c => c.currentMedicalHistory)
+        console.log(patient)
+        return patient
+    }
+  //  const category = categories.find(c => c === filter);
    return patients;
 }
 

@@ -52,7 +52,7 @@ const pcrTestSchema =new mongoose.Schema({
     },
     nic:{
         nicno:{
-            type:Number
+            type:String
         },
         person:{
             type:String

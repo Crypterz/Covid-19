@@ -162,6 +162,17 @@ export const getPatientById = patientId =>
 
 );
 
+// export const getPatientByNIC = (nic) => (dispatch) => {
+//      return dispatch(
+//          apiCallBegan({
+//              url: patientURL + `patients/search/${nic}`,
+//              onStart: patientRequested.type,
+//              onSuccess: patientsReceived.type,
+//              onError: patientsRequestFailed.type
+//          })
+//      );
+//  };
+
 export const registerPatients = (patient) => (dispatch) => {
    // console.log(patient, 'efeferfrgre' )
     return dispatch(
