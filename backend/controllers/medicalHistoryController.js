@@ -3,7 +3,7 @@ const APIfunctions=require('./../utils/apiFunctions')
 const catchAsync= require('./../utils/catchAsync');
 const AppError = require('../utils/appError');
 const Patient=require('./../models/patientModel')
-
+const Ward=require('./../models/wardModel')
 
 // exports.getAllTest = async (req, res) => {
 //     try{
@@ -24,7 +24,7 @@ const Patient=require('./../models/patientModel')
 // };
 
 exports.createMedical= catchAsync(async (req,res,next)=>{
-    if(!req.body.patient){
+    if(req.body.patient==null){
         req.body.patient=req.params.id
     }
     const patient=await Patient.findById(req.body.patient)
@@ -35,9 +35,10 @@ exports.createMedical= catchAsync(async (req,res,next)=>{
         req.body.createdBy=req.user.id
     }
     req.body.hospital=req.user.hospital
-    console.log(req.body)
     const medHistory=await MedicalHistory.create(req.body)
-    await Patient.findByIdAndUpdate(req.body.patient,{"currentMedicalHistory":medHistory._id})
+    const patientID=await Patient.findByIdAndUpdate(req.body.patient,{"currentMedicalHistory":medHistory._id})
+    await Ward.findByIdAndUpdate(req.body.ward,
+        {$push:{admittedPatients:patientID._id}},)
     res.status(201).json({
         status:'success',
         data:{
@@ -120,7 +121,7 @@ exports.getAllMedicalHistory = catchAsync(async (req, res, next) => {
     });
 })
 
-exports.discharge = catchAsync(async (req,res)=>{
+exports.discharge = catchAsync(async (req,res,next)=>{
     const patient=await Patient.findByIdAndUpdate(req.params.patientID,
         {"currentMedicalHistory":null})
     console.log(patient)
@@ -131,6 +132,7 @@ exports.discharge = catchAsync(async (req,res)=>{
         patient.currentMedicalHistory,   
         {"dischargeDate.date":new Date()},
     )
+    await Ward.findByIdAndUpdate(medicalHistory.ward,{$pull:{admittedPatients:patient._id}})
     res.status(200).json({
         status:'success',
         data:{

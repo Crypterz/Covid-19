@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -7,14 +7,13 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import { DeleteOutline, AddCircleOutline, Edit} from "@material-ui/icons";
+import TablePagination from '@mui/material/TablePagination';
+import TextField from '@mui/material/TextField';
+import { AddCircleOutline} from "@material-ui/icons";
 import {Link} from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllHospitals, getHospitalLoadingStatus, loadHospitals} from '../../store/entities/hospitals';
 import './hospitals.css';
-
-import { useState } from "react";
 
 const useStyles = makeStyles({
   table: {
@@ -22,41 +21,29 @@ const useStyles = makeStyles({
   }
 });
 
-function createData(hospital_id,name, contact, city, district, province) {
-  return {
-    hospital_id,
-    name,
-    contact,
-    city,
-    district,
-    province,
-  };
-}
-
-// const rows = [
-//   createData(1, 'Royal Hospital','012-345-6789','Colombo','Colombo','Western'),
-//   createData(2, 'Royal Hospital','012-345-6789','Colombo','Colombo','Western'),
-//   createData(3, 'Royal Hospital','012-345-6789','Colombo','Colombo','Western'),
-//   createData(4, 'Royal Hospital','012-345-6789','Colombo','Colombo','Western'),
-//   createData(5, 'Royal Hospital','012-345-6789','Colombo','Colombo','Western'),
-  
-// ];
-
 export default function Hospitals() {
-  const dispatch = useDispatch()
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
+  const dispatch = useDispatch()
   const auth = useSelector(state => state.auth);
 //  console.log(auth)
 
   const hospital = useSelector(getAllHospitals)
   const hospitalsLoading = useSelector(getHospitalLoadingStatus);
 
-  const [data, setData] = useState(hospital)
+  const [data, setData] = useState(hospital);
+  const [searchKey, setSearchKey] = useState('');
   const classes = useStyles();
-
-  const handleDelete = (hospital_id)=>{
-    setData(data.filter((item)=>item.hospital_id !== hospital_id));
-  };
 
   useEffect(() => {
     dispatch(loadHospitals())
@@ -64,10 +51,16 @@ export default function Hospitals() {
 },[dispatch, hospital])
 
   return (
-    <TableContainer component={Paper}>
+    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+      <TableContainer sx={{ maxHeight: 600 }}>
       <Link to="/healthMinistry/addHospital"><button className="wardAddButton"><AddCircleOutline/>Add New Hospital</button></Link>
-      <Table className={classes.table} aria-label="simple table">
-        <TableHead>
+      <TextField id="search" label="Search ................" variant="filled" type="text" 
+      onChange= {(event) => {
+        setSearchKey(event.target.value);
+      }}
+      />
+    <Table className={classes.table} aria-label="simple table">
+          <TableHead>
           <TableRow>
             <TableCell align="left">NAME</TableCell>
             <TableCell align="left">CONTACT</TableCell>
@@ -78,7 +71,21 @@ export default function Hospitals() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map(row => (
+          {data
+          .filter((row)=>{
+            if (searchKey ==""){
+              return row
+            }else if(row.address.district.toLowerCase().includes(searchKey.toLowerCase())){
+              return row
+            }else if(row.address.province.toLowerCase().includes(searchKey.toLowerCase())){
+              return row
+            }else if(row.name.toLowerCase().includes(searchKey.toLowerCase())){
+              return row
+            }else if(row.address.city.toLowerCase().includes(searchKey.toLowerCase())){
+              return row
+          }})
+          .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+          .map(row => (
             <TableRow key={row._id}>
               <TableCell align="left">{row.name}</TableCell>
               <TableCell align="left">{row.Contact[0]}</TableCell>
@@ -98,5 +105,15 @@ export default function Hospitals() {
         </TableBody>
       </Table>
     </TableContainer>
+    <TablePagination
+        rowsPerPageOptions={[5, 10, 20]}
+        component="div"
+        count={data.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+    </Paper>
   );
 }

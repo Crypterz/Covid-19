@@ -18,14 +18,13 @@ export default function AddHospitalStaff(props){
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
 
-
     const submitHandler = (e) => {
         e.preventDefault();
         let user= {
             email: email,
           password: password,
           passwordConfirm: passwordConfirm,
-          role: 'hospitalStaff',
+          role: 'hospital user',
           name: {
             firstName: firstName,
             lastName: lastName
