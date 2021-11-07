@@ -14,6 +14,10 @@ router
 router
   .route('/ward')
   .post(authController.protect, authController.restrictTo('hospitalAdmin'), hospitalController.createWard)
+
+router
+  .route('/ward/:wardID')
+  .patch(authController.protect, authController.restrictTo('hospitalAdmin'), hospitalController.updateWard)  
   // .patch(authController.protect, authController.restrictTo('hospitalAdmin'), hospitalController.updateWard)
   // .patch(adminController.updatePatient)
   // .delete(adminController.deletePatient)

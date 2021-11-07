@@ -34,7 +34,7 @@ const createSendToken = (user,statusCode, res)=>{
     })
 }
 
-exports.signup =catchAsync( async (req,res, next)=>{
+exports.signup =catchAsync( async (req,res,next)=>{
     // console.log(req.cookie)
         // const newUser=await User.create(req.body)  //if we go this way, any user can change other fields too. ex: type of user
         const newUser = await User.create({
