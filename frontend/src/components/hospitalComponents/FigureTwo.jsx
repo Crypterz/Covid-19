@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const FigureTwo = () => {
+const FigureTwo = ({values}) => {
+    const {active, staff, transfered} = values
    // console.log(details);
     return (
         <div>
@@ -19,7 +20,7 @@ const FigureTwo = () => {
                         {/* <Link to={{ pathname :"/hospital/patients" ,  category : "Transffered" }}> */}
                             <h3 style={{fontSize:'14px', color:'#444444'}}>Transfered Patients</h3>
                         {/* </Link> */}
-                        {/* <h1 style={{color:'#6b85de'}}>{formatNumber(details['local_new_cases'])}</h1>    */}
+                        <h1 style={{color:'#6b85de', float:'left'}}>{formatNumber(transfered)}</h1>   
                     </div>
                 </div>
                 <div className='figures-div' style={{display:'flex'}}>
@@ -28,7 +29,7 @@ const FigureTwo = () => {
                     </div>
                     <div>
                         <h3 style={{fontSize:'14px'}}>Total Staff Members</h3>
-                        {/* <h1 style={{color:'#ff8c84'}}>{formatNumber(details['local_new_deaths'])}</h1> */}
+                        <h1 style={{color:'#ff8c84', float:'left'}}>{formatNumber(staff)}</h1>
                     </div>
                 </div>
                 <div className='figures-div' style={{display:'flex'}}>
@@ -41,7 +42,7 @@ const FigureTwo = () => {
                         {/* <Link to={{ pathname :"/hospital/patients" ,  category : "Active" }}> */}
                             <h3 style={{fontSize:'14px', color:'#444444'}}>Receiving Treatment</h3>
                         {/* </Link> */}
-                        {/* <h1 style={{color:'#fdb01a'}}>{formatNumber(details['local_total_number_of_individuals_in_hospitals'])}</h1> */}
+                        <h1 style={{color:'#fdb01a', float:'left'}}>{formatNumber(active)}</h1>
                     </div>
                 </div>
             </div>

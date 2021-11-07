@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
-import { getAllHospitals, getHospitalLoadingStatus, loadHospitals/*, updateWard,addWard*/, deleteWard} from '../../../store/entities/hospitals';
+import { getAllWards, getWardsLoadingStatus, loadWards/*, updateWard,addWard*/, deleteWard} from '../../../store/entities/hospitals';
 import { updateWard, addWard } from "../../../store/auth";
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -123,18 +123,13 @@ export default function WardsList() {
   const dispatch = useDispatch()
 
   const userDetails = useSelector(state => state.auth);
-  //console.log(userDetails)
+  console.log(userDetails)
   const { admin, user } = userDetails.data.user
   const { wards } = admin.hospital
-  const auth = user
 
- // const [status, setStatus] = useState(false)
-
-
-console.log(wards)
 
 let count = wards.length;
-console.log(count)
+console.log(wards)
 const service = {
   fetchItems: payload => {
     const { activePage, itemsPerPage } = payload.pagination;
@@ -227,8 +222,7 @@ function deleteCurrentWard(ward){
 }
 
  useEffect (() => {
-
-  // dispatch(loadHospitals())
+  // dispatch(loadWards())
  },[userDetails])
 
 

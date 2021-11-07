@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import Container from 'react-bootstrap/Container';
 import {Form, Button, Col, FormControl} from 'react-bootstrap';
-import {registerPatients} from '../../store/entities/patients'
+import { addUser } from '../../store/entities/users'
+//import {registerPatients} from '../../store/entities/patients'
 import { toastAction } from '../../store/toastActions';
 import { connect } from 'react-redux'
-import auth from '../../store/auth';
-import { useDispatch, useSelector } from 'react-redux';
 
 //validating empty fields for NHospital
 function validate(first_name, last_name, dob, nic, contact_number, address, city, district) {
@@ -308,7 +307,7 @@ const mapStateToProps = state => ({
 
 
 const mapDispatchToProps = dispatch => ({
-    registerPatients: (data) => dispatch(registerPatients(data)),
+    registerPatients: (data) => dispatch(addUser(data)),
    // addSuccessful: () => dispatch(toastAction({ message: "Patient Added Successfully...", type: 'info' }))
 });
 

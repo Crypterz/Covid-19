@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react'
+import axios from 'axios';
 import { useHistory } from "react-router-dom";
 import { Table, Container, Button, Row, Card} from 'react-bootstrap'
 import Loader from '../../components/Loader'
-import {getAllPcrs, loadPcrs, updatePcrAproval, getPcrLoadingStatus} from '../../store/entities/pcr';
+import { updatePcrAproval, getPcrLoadingStatus, getToConfirmPcrLoadingStatus, getToConfirmPcrs, loadToConfirmPcrs} from '../../store/entities/pcr';
 import { useDispatch, useSelector } from 'react-redux';
 
 
@@ -13,19 +14,19 @@ const AprovePcrResults = ({}) => {
     const auth = useSelector(state => state.auth);
     const [userType, setUserType] = useState('')
 
-    const pcrList = useSelector(getAllPcrs);
+    const pcrList = useSelector(getToConfirmPcrs);
 
     const [patientState, setPatientState] = useState(getOnlyIds(pcrList));
     const [selected, setSelected] = useState([]);
     const [allSelected, setAllSelected] = useState(false);
-    const patientsLoading = useSelector(getPcrLoadingStatus);
+    const patientsLoading = useSelector(getToConfirmPcrLoadingStatus);
 
     useEffect(() => {
        if(!auth.loggedIn){
            window.location='/'
        }
        setUserType(auth.data.user.role)
-       dispatch(loadPcrs());
+       dispatch(loadToConfirmPcrs());
 
        if(pcrList){
             setPatientState(

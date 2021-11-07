@@ -48,15 +48,16 @@ export default function SigninScreen(props) {
     useEffect(() => {
         if (loggedIn === true) {
            //props.history.push(redirect);
+          // console.log(auth.user.user)
            // console.log('logged in suceessfully');
             dispatch(toastAction({ message: "Logged in Success...", type: 'info' }));
             if(auth.user.role === 'hospitalAdmin' || 'hospital user'){
                window.location ='/hospital/dashboard'
             }
-            else if(auth.user.role === 'patient'){
+             if(auth.user.role === 'patient'){
                window.location =`/hospital/profile/${auth.user._id}`
             }
-            else if(auth.user.role === 'admin'){
+             if(auth.user.user.role === 'admin'){
               window.location ='/healthMinistry/dashboard'
             }
            /// ;

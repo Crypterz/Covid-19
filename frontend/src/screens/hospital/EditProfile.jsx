@@ -16,6 +16,7 @@ const EditProfile = ({match, history}) => {
     const patient = useSelector(getPatientById(patientId))
 
     const { address, birthday, contactNo, name } = patient.user
+   // console.log(birthday)
     const birthDay = birthday.split("-")
     const dateFormat = birthDay[0]+"-"+birthDay[1]+"-"+birthDay[2][0]+birthDay[2][1]
 
@@ -77,7 +78,7 @@ const EditProfile = ({match, history}) => {
               //  city,
               //  patientDistrict ,
         }
-       // console.log(Result)
+        console.log(Result)
 
         dispatch(updatePatient(Result, patientId));
         //dispatch(toastAction({ message: "Profile Updated Successfully", type: 'info' }))

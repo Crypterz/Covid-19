@@ -9,8 +9,9 @@ import { Card } from 'react-bootstrap'
 
 const Dashboard = () => {
 
-    const [totalCases, setTotalCases] = useState([])
-    const [values, setValues] = useState([])
+    const [figureOne, setFigureOne] = useState('')
+    const [figureTwo, setFigureTwo] = useState('')
+    const [chart, setChart] = useState('')
     const [district, setDistrict] = useState([])
    // console.log(district)
     const [districtValues, setDistrictValues] = useState([])
@@ -39,15 +40,36 @@ const Dashboard = () => {
                 data: {},
             });
 
-            console.log(response2)
 
             if (response){
-              //  console.log(response)
-                const {data} = response.data;
-              //  console.log(data)
+                const {dashboard, history, hospital} = response.data.data;
+
+                const {totalActiveCases, totalDeaths, totalRecovered} = dashboard
+                const valueSet_1 = {
+                    totalActiveCases:totalActiveCases,
+                    totalDeaths:totalDeaths,
+                    totalRecovered : totalRecovered
+                }
+                setFigureOne(valueSet_1)
+
+                const {nohospital, totalBeds, freeBeds, admittedPatients} = hospital
+                const valueSet_2 = {
+                    nohospital:nohospital,
+                    totalBeds:totalBeds,
+                    freeBeds : freeBeds
+                }
+                setFigureTwo(valueSet_2)
+                
+                const valueSet_4 = {
+                    firstValue:admittedPatients,
+                    secondValue : freeBeds
+                }
+                setChart(valueSet_4)
+
+              //  console.log(dashboard)
                // const {districtTotals} = data.total
-                setDistrict(Object.keys(data['total']['districtTotals']))
-                setDistrictValues(Object.values(data['total']['districtTotals']))
+                setDistrict(Object.keys(dashboard['districtTotals']))
+                setDistrictValues(Object.values(dashboard['districtTotals']))
                // setCases(Object.values(data2['timeline']['cases']))
                 //console.log(districtTotals)
             }
@@ -63,7 +85,7 @@ const Dashboard = () => {
                     <div className="vs-col vs-xs- vs-sm-12 vs-lg-3"style={{margin:'0%',width:'100%', position:'relative'}}>
                          <div className="set-animation from-left animate">
                             <Card className='m-2 con-vs-card text-center'>
-                                <FigureOne></FigureOne>
+                                <FigureOne values={figureOne}></FigureOne>
                             </Card>
                          </div>
 
@@ -74,14 +96,14 @@ const Dashboard = () => {
                              <h3 style={{textAlign:'center', margin:'2%'}}>Total vs Active Cases (SL)</h3>
                          </div>
                          <div style={{position:'relative' ,margin:'2%'}}>
-                            <PieChart/>
+                            <PieChart values={chart}/>
                          </div> 
                     </Card>
         
                      <div className="vs-col vs-xs- vs-sm-12 vs-lg-3" style={{margin:'0%',width:'100%', position:'relative'}}>
                         <div className="set-animation from-left animate">
                             <Card className='m-2 con-vs-card text-center'>
-                                <FigureTwo></FigureTwo>
+                                <FigureTwo values={figureTwo}></FigureTwo>
                             </Card>
                          </div>
                      </div>

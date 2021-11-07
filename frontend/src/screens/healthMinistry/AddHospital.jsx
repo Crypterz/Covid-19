@@ -14,6 +14,7 @@ export default function AddHospital(props) {
     const [district, setDistrict] = useState('');
     const [city, setCity] = useState('');
     const [province, setProvince] = useState('');
+    const [userState, setUserState] = useState(false)
 
 
     const submitHandler = (e) => {
@@ -27,16 +28,16 @@ export default function AddHospital(props) {
               province : province
           },
       }
-      // TODO: sign in action
       dispatch(addHospital(hospital))
-      if(hospitalAddedStatus.hospitalAdded){
-        dispatch(toastAction({ message: "Hospital Added Successfully", type: 'info' }))
-      }else{
-        dispatch(toastAction({ message: "Hospital Adding Failed", type: 'error' }))
-      }
-      //console.log(hospital)
-      window.location.href = "/healthMinistry/hospital";
+      setUserState(true)
     };
+
+    useEffect(() => {
+        if(hospitalAddedStatus.hospitalAdded && userState){
+          setUserState(false)
+          dispatch(toastAction({ message: "Hospital Added Successfully", type: 'info' }))
+        }
+     },[dispatch, hospitalAddedStatus])
         
     return (
             <div class="container-fluid">

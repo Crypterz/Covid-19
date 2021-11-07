@@ -1,6 +1,7 @@
 import React from 'react'
 
-const FigureTwo = ({details}) => {
+const FigureTwo = ({values}) => {
+    const { nohospital, totalBeds, freeBeds} = values
    // console.log(details);
     return (
         <div>
@@ -14,7 +15,7 @@ const FigureTwo = ({details}) => {
                     </div>
                     <div>
                         <h3 style={{fontSize:'14px'}}>Total Hospitals</h3>
-                        {/* <h1 style={{color:'#6b85de'}}>{formatNumber(details['local_new_cases'])}</h1>    */}
+                        <h1 style={{color:'#6b85de', float:'left'}}>{formatNumber(nohospital)}</h1>   
                     </div>
                 </div>
                 <div className='figures-div' style={{display:'flex'}}>
@@ -23,7 +24,7 @@ const FigureTwo = ({details}) => {
                     </div>
                     <div>
                         <h3 style={{fontSize:'14px'}}>Total Beds</h3>
-                        {/* <h1 style={{color:'#ff8c84'}}>{formatNumber(details['local_new_deaths'])}</h1> */}
+                        <h1 style={{color:'#ff8c84', float:'left'}}>{formatNumber( totalBeds)}</h1>
                     </div>
                 </div>
                 <div className='figures-div' style={{display:'flex'}}>
@@ -32,7 +33,7 @@ const FigureTwo = ({details}) => {
                     </div>
                     <div>
                         <h3 style={{fontSize:'14px'}}>Total Beds Left</h3>
-                        {/* <h1 style={{color:'#fdb01a'}}>{formatNumber(details['local_total_number_of_individuals_in_hospitals'])}</h1> */}
+                        <h1 style={{color:'#fdb01a', float:'left'}}>{formatNumber(freeBeds)}</h1>
                     </div>
                 </div>
             </div>

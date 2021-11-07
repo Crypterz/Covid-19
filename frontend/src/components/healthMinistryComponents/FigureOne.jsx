@@ -1,6 +1,7 @@
 import React from 'react'
 
-const FigureOne = ({details}) => {
+const FigureOne = ({values}) => {
+    const {totalActiveCases, totalDeaths, totalRecovered } = values
     return (
         <div>
             <div style={{justifyContent:'center'}}>
@@ -12,8 +13,8 @@ const FigureOne = ({details}) => {
                         <i className='fa fa-hospital-alt' style={{fontSize:'30px', color:'#6b85de',margin:'20px'}}></i>
                     </div>
                     <div>
-                        <h3 style={{fontSize:'14px'}}>Total Covid Patient</h3>
-                        {/* <h1 style={{color:'#6b85de'}}>{formatNumber(details['local_total_cases'])}</h1> */}
+                        <h3 style={{fontSize:'14px'}}>Total Cases</h3>
+                        <h1 style={{color:'#6b85de', float:'left'}}>{formatNumber(totalActiveCases)}</h1>
                     </div>
                 </div>
                 <div className='figures-div' style={{display:'flex'}}>
@@ -22,7 +23,7 @@ const FigureOne = ({details}) => {
                     </div>
                     <div>
                         <h3 style={{fontSize:'14px'}}>Deaths</h3>
-                        {/* <h1 style={{color:'#ff8c84'}}>{formatNumber(details['local_deaths'])}</h1> */}
+                        <h1 style={{color:'#ff8c84', float:'left'}}>{formatNumber(totalDeaths)}</h1>
                     </div>
                 </div>
                 <div className='figures-div' style={{display:'flex'}}>
@@ -31,7 +32,7 @@ const FigureOne = ({details}) => {
                     </div>
                     <div>
                         <h3 style={{fontSize:'14px'}}>Recovered</h3>
-                        {/* <h1 style={{color:'#7dca53'}}>{formatNumber(details['local_recovered'])}</h1> */}
+                        <h1 style={{color:'#7dca53', float:'left'}}>{formatNumber(totalRecovered)}</h1>
                     </div>
                 </div>
             </div>
