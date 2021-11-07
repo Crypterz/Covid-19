@@ -63,19 +63,16 @@ export default function AddHospitalAdmin(props) {
           },
           email: email,
           birthday: birthday,
-          contact: contact,
+          contactNo: contact,
           address:{
               line1: line1,
-              line2: line2
+              line2: line2,
+              city: city
           },
           password: password,
           passwordConfirm: passwordConfirm,
           role: 'hospitalAdmin',
-          name: {
-            firstName: firstName,
-            lastName: lastName
-          },
-          
+
           hospital_id: window.location.pathname.split('/')[3],
       }
 
