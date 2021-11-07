@@ -8,7 +8,10 @@ const slice = createSlice({
     name: "hospitals",
     initialState: {
         list: [],
+       // wards: [],
         loading: false,
+       // wardLoading: false,
+       // wardLastFetch: null,
         lastFetch: null,
         hospitalAdded: false,
         wardAdded: false
@@ -25,6 +28,9 @@ const slice = createSlice({
         },
 
         hospitalCreateRequestSucceeded(hospital, action){
+            const newHospital = action.payload.data.hospital
+            console.log(newHospital)
+            hospital.list.push(newHospital)
             hospital.loading = false;
             hospital.hospitalAdded = true
         },
@@ -71,7 +77,7 @@ const slice = createSlice({
              console.log(wardId)
             // const index = hospitals.list.wards.findIndex(c => c._id === wardId );
             // hospitals.list.wards[index] = action.payload.data.hospital;
-        }
+        },
     }
 });
 
@@ -124,8 +130,9 @@ export const addHospital = (hospital) => (dispatch) => {
     );
 }
 
+
 export const getHospitalLoadingStatus = createSelector(
-    state => state.entities.hospitalloading,
+    state => state.entities.loading,
     loading => loading
 );
 

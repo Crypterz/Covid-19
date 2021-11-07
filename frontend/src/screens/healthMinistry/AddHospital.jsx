@@ -29,6 +29,7 @@ export default function AddHospital(props) {
     const [district, setDistrict] = useState('');
     const [city, setCity] = useState('');
     const [province, setProvince] = useState('');
+    const [userState, setUserState] = useState(false)
 
 
     const submitHandler = (e) => {
@@ -42,25 +43,16 @@ export default function AddHospital(props) {
               province : province
           },
       }
-    if (!validateName(name)) {
-        alert("Hospital Name should not include digits");
-    }
-    else if (!validateContact(contact)) {
-        alert("Enter valid telephone number");
-    }
-    else if (!validateCity(city)) {
-        alert("City should not include digits");
-    }
-    else{  
-        dispatch(addHospital(hospital))
-        if(hospitalAddedStatus.hospitalAdded){
-          dispatch(toastAction({ message: "Hospital Added Successfully", type: 'info' }))
-        }else{
-          dispatch(toastAction({ message: "Hospital Adding Failed", type: 'error' }))
-        }
-        window.location.href = "/healthMinistry/hospital";
-    }
+      dispatch(addHospital(hospital))
+      setUserState(true)
     };
+
+    useEffect(() => {
+        if(hospitalAddedStatus.hospitalAdded && userState){
+          setUserState(false)
+          dispatch(toastAction({ message: "Hospital Added Successfully", type: 'info' }))
+        }
+     },[dispatch, hospitalAddedStatus])
         
     return (
             <div class="container-fluid">

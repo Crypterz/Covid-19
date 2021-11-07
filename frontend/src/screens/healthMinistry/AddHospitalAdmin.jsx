@@ -19,14 +19,15 @@ export default function AddHospitalAdmin(props) {
     const submitHandler = (e) => {
       e.preventDefault();
       let user= {
-          email: email,
-          password: password,
-          passwordConfirm: passwordConfirm,
-          role: 'hospitalAdmin',
           name: {
             firstName: firstName,
             lastName: lastName
           },
+          email: email,
+          password: password,
+          passwordConfirm: passwordConfirm,
+          role: 'hospitalAdmin',
+
           hospital_id: window.location.pathname.split('/')[3],
       }
 
@@ -39,10 +40,12 @@ export default function AddHospitalAdmin(props) {
 
     useEffect(() => {
         if(userAddedStatus.userAdded && userState){
+            setUserState(false)
             dispatch(toastAction({ message: "Hospital Admin Added Successfully", type: 'info' }))
-          }else{
-            dispatch(toastAction({ message: "Hospital Admin Adding Failed", type: 'error' }))
-          }
+        }
+        // if(!userAddedStatus.userAdded && userState){
+        //     dispatch(toastAction({ message: "Hospital Admin Adding Failed", type: 'error' }))
+        // }
      },[userAddedStatus])
 
     return (

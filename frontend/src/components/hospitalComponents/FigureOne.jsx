@@ -1,7 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const FigureOne = () => {
+const FigureOne = ({values}) => {
+    const { overall, recovered, death} = values
+    console.log(values)
     return (
         <div>
             <div style={{justifyContent:'center'}}>
@@ -20,7 +22,7 @@ const FigureOne = () => {
                         {/* <Link to={{ pathname :"/hospital/patients" ,  category : "All" }}>
                             <h3 style={{fontSize:'14px', color:'#444444'}}>Total Covid Patient</h3>
                         </Link> */}
-                        {/* <h1 style={{color:'#6b85de'}}>{formatNumber(details['local_total_cases'])}</h1> */}
+                        <h1 style={{color:'#6b85de', float:'left'}}>{formatNumber(overall)}</h1>
                     </div>
                 </div>
                 <div className='figures-div' style={{display:'flex'}}>
@@ -34,7 +36,7 @@ const FigureOne = () => {
                         {/* <Link to={{ pathname :"/hospital/patients" ,  category : "Deaths" }}> */}
                             <h3 style={{fontSize:'14px', color:'#444444'}}>Deaths</h3>
                         {/* </Link> */}
-                        {/* <h1 style={{color:'#ff8c84'}}>{formatNumber(details['local_deaths'])}</h1> */}
+                        <h1 style={{color:'#ff8c84', float:'left'}}>{formatNumber(death)}</h1>
                     </div>
                 </div>
                 <div className='figures-div' style={{display:'flex'}}>
@@ -47,7 +49,7 @@ const FigureOne = () => {
                         {/* <Link to={{ pathname :"/hospital/patients" ,  category : "Recovered" }}> */}
                             <h3 style={{fontSize:'14px', color:'#444444'}}>Recovered</h3>
                         {/* </Link> */}
-                        {/* <h1 style={{color:'#7dca53'}}>{formatNumber(details['local_recovered'])}</h1> */}
+                        <h1 style={{color:'#7dca53', float:'left'}}>{formatNumber(recovered)}</h1>
                     </div>
                 </div>
             </div>

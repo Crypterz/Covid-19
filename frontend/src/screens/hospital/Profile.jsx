@@ -20,11 +20,11 @@ const Profile =  ({match, history}) => {
     const {wards } = admin.hospital
     const auth = user
 
-    console.log(auth)
+    console.log(userDetails)
     const patients = useSelector(getPatientById(patientId))
     console.log(patients)
     const hospitals = useSelector(getAllHospitals)
-  //  console.log(hospitals)
+    console.log(hospitals)
     //const wardDetails = getWard(hospitals, auth.data.user.hospital_id)
 
 
@@ -74,7 +74,7 @@ const Profile =  ({match, history}) => {
             dispatch(loadHospitals())
         }
         
-    }, [patients ])
+    }, [patients, hospitals])
 
     return (
         <Container>
@@ -93,7 +93,7 @@ const Profile =  ({match, history}) => {
 
                     <div className="vs-col vs-xs- vs-sm-12 vs-lg-6"style={{margin:'0%',width:'100%', position:'relative'}}>
                         <div className="set-animation from-left animate">
-                            {objectDestructure(patients, "history").length > 0 ?
+                            {patients.currentMedicalHistory ?
                                 <CurrentInfo patients={objectDestructure(patients, "history").slice(-1)[0]} currentHospital={currentHospital_id}
                                     userHospital={userHospital_id} hospitals={hospitals}
                                 ></CurrentInfo> : 
@@ -109,7 +109,10 @@ const Profile =  ({match, history}) => {
                     <div className="vs-col vs-xs- vs-sm-12 vs-lg-3" style={{margin:'0%',width:'100%', position:'relative'}}>
                             <div className="set-animation from-left animate">
                             {currentHospital_id === userHospital_id ? 
-                                <Actions patients={patients} hospitals={hospitals} wards ={wards} popUpHandler={setPopUp}></Actions> :''}
+                                <Actions patients={patients} hospitals={hospitals} wards ={wards} popUpHandler={setPopUp}></Actions> 
+                               //<Card>rfergre</Card>
+                                :''
+                            }
                             </div>
                     </div> }
                 </div>
@@ -243,5 +246,5 @@ function getHospitalName(filteredhistory, hospitals){
         return ""
     }
     const hospitalName = hospitals.filter(p=> p._id === filteredhistory[0].hospital)
-    return hospitalName[0].name
+    return hospitalName[0]
 }

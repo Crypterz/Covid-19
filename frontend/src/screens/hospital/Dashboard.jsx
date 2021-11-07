@@ -11,6 +11,15 @@ const Dashboard = () => {
     const dispatch = useDispatch()
 
     //const {patients} = useSelector(getAllPatients);
+    const [figureOne, setFigureOne] = useState('')
+    const [figureTwo, setFigureTwo] = useState('')
+    // const [active, setActive] = useState('')
+    // const [recovered, setRecovered] = useState('')
+    // const [death, setDeath] = useState('')
+    const active = ""
+    const death = ""
+    const recovered=""
+    const date = ""
 
     useEffect(() => {
         //dispatch(listPatients())
@@ -27,24 +36,50 @@ const Dashboard = () => {
             //     data: {},
             // });
 
-            const response2 = await axios.request({
+            const response = await axios.request({
                 url: 'http://localhost:8000/api/v1/dashboard/1',
                 method: 'get',
                 data: {},
             });
 
-           // console.log(response2)
+            console.log(response)
 
-            // if (response){
-            //   //  console.log(response)
-            //     const {data} = response.data;
-            //   //  console.log(data)
-            //    // const {districtTotals} = data.total
-            //     setDistrict(Object.keys(data['total']['districtTotals']))
-            //     setDistrictValues(Object.values(data['total']['districtTotals']))
-            //    // setCases(Object.values(data2['timeline']['cases']))
-            //     //console.log(districtTotals)
-            // }
+            if (response){
+              //  console.log(response)
+                const {test} = response.data.data;
+                console.log(test)
+
+                if(test.length > 0){
+                    const { active, death, recovered, date} = test[0]
+                    active = active
+                    death = death
+                    recovered = recovered
+                    date = date
+                }
+                
+
+                const valueSet_1 = {
+                    overall : active.length+ death.length+recovered.length,
+                    recovered: recovered.length,
+                    death: death.length
+                }
+
+                const valuesSet_2 = {
+                    active: active.length,
+                    staff: '',
+                    transfered: ''
+                }
+
+                setFigureOne(valueSet_1)
+                setFigureTwo(valuesSet_2)
+
+              //  console.log(data)
+               // const {districtTotals} = data.total
+               // setDistrict(Object.keys(data['total']['districtTotals']))
+               // setDistrictValues(Object.values(data['total']['districtTotals']))
+               // setCases(Object.values(data2['timeline']['cases']))
+                //console.log(districtTotals)
+            }
         }
 
         fetchOverall()
@@ -57,7 +92,7 @@ const Dashboard = () => {
                     <div className="vs-col vs-xs- vs-sm-12 vs-lg-3"style={{margin:'0%',width:'100%', position:'relative'}}>
                          <div className="set-animation from-left animate">
                             <Card className='m-2 con-vs-card text-center'>
-                                <FigureOne></FigureOne>
+                                <FigureOne values={figureOne}></FigureOne>
                             </Card>
                          </div>
 
@@ -75,7 +110,7 @@ const Dashboard = () => {
                      <div className="vs-col vs-xs- vs-sm-12 vs-lg-3" style={{margin:'0%',width:'100%', position:'relative'}}>
                         <div className="set-animation from-left animate">
                             <Card className='m-2 con-vs-card text-center'>
-                                <FigureTwo></FigureTwo>
+                                <FigureTwo values={figureTwo}></FigureTwo>
                             </Card>
                          </div>
                      </div>

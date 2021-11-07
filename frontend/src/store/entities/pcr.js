@@ -8,6 +8,9 @@ const slice = createSlice({
     name: "pcr",
     initialState: {
         list: [],
+        toConfirm: [],
+        toConfirmLoading: false,
+        toConfirmLastFetch: null,
         loading: false,
         pcrAdded: false,
         lastFetch: null
@@ -41,50 +44,41 @@ const slice = createSlice({
         },
 
         pcrReceived(pcr, action){
-            console.log(action.payload.data)
             pcr.list = action.payload.data.tests;
             pcr.loading = false;
             pcr.lastFetch = Date.now();
         },
 
         pcrStatusChange(pcr, action){
-           // const pcrTest = pcr.list.filter(p => p._id === action.payload.data.test._id)
-            // const pcrTest = pcr.list.map(p => {
-            //     if(p._id === action.payload.data.test._id){
-            //         p =  action.payload.data.test
-            //     }
-            // })
-
             const index = pcr.list.findIndex(p => p._id === action.payload.data.test._id);
-            pcr.list[index] =  action.payload.data.test
-            //const pcrTest = pcr.list[index].status;
-            //pcrTest.status =  action.payload.data.test.result
+            console.log(index)
+            pcr.list[index].result =  action.payload.data.test.result
 
-          //  console.log(pcrTest)
-            console.log(action.payload.data.test._id)
+            console.log(action.payload.data.test)
         },
 
         
-        // allPcrRequested(pcr, action){
-        //     pcr.loading = true;
-        // },
+        toConfirmPcrRequested(pcr, action){
+            pcr.toConfirmLoading = true;
+        },
 
 
-        // allPcrRequestFailed(pcr, action){
-        //     pcr.loading = false;
+        toConfirmPcrRequestFailed(pcr, action){
+            pcr.toConfirmLoading = false;
             
-        // },
+        },
 
-        // allPcrReceived(pcr, action){
-        //     pcr.list = action.payload.data.tests;
-        //     pcr.loading = false;
-        //     pcr.lastFetch = Date.now();
-        // },
+        toConfirmPcrReceived(pcr, action){
+            console.log('efgrgerger')
+            pcr.toConfirm = action.payload.data.tests;
+            pcr.toConfirmLoading = false;
+            pcr.toConfirmLastFetch = Date.now();
+        },
 
         pcrAprovalUpdated(pcr, action){
               const ids = action.payload.data.ids
-              const list = pcr.list.filter( p=> !p._id.includes(ids));
-              pcr.list = list;
+              const list = pcr.toConfirm.filter( p=> !p._id.includes(ids));
+              pcr.toConfirm = list;
         }
     }
 });
@@ -100,9 +94,9 @@ export const {
     pcrCreateRequestSucceeded,
     pcrAprovalUpdated,
     pcrStatusChange,
-    // allPcrRequested,
-    // allPcrReceived,
-    // allPcrRequestFailed,
+    toConfirmPcrRequested,
+    toConfirmPcrReceived,
+    toConfirmPcrRequestFailed,
 } =slice.actions;
 
 const pcrURL = "/api/v1/";
@@ -125,21 +119,21 @@ export const loadPcrs = () => (dispatch, getState) => {
     );
 };
 
-// export const loadAllPcrs = () => (dispatch, getState) => {
-//     const { lastFetch } = getState().entities.pcr;
-//     const diffInMinutes = moment().diff(moment(lastFetch), "minutes");
-//     if (diffInMinutes < refreshTime) return;
+export const loadToConfirmPcrs = () => (dispatch, getState) => {
+    const { toConfirmLastFetch } = getState().entities.pcr;
+    const diffInMinutes = moment().diff(moment(toConfirmLastFetch), "minutes");
+    if (diffInMinutes < refreshTime) return;
       
-//      return dispatch(
-//          apiCallBegan({
-//              url: pcrURL + 'pcr/',
-//              method: "get",
-//              onStart: allPcrRequested.type,
-//              onSuccess: allPcrReceived.type,
-//              onError: allPcrRequestFailed.type,
-//          })
-//      );
-//  };
+     return dispatch(
+         apiCallBegan({
+             url: pcrURL + 'pcr/toconfirm',
+             method: "get",
+             onStart: toConfirmPcrRequested.type,
+             onSuccess: toConfirmPcrReceived.type,
+             onError: toConfirmPcrRequestFailed.type,
+         })
+     );
+ };
 
 export const addPcr = (pcr) => (dispatch) => {
     console.log(pcr)
@@ -168,6 +162,17 @@ export const getPcrAddedStatus = createSelector(
 export const getAllPcrs = createSelector(
     state => state.entities.pcr,
     pcr => pcr.list
+);
+
+export const getToConfirmPcrLoadingStatus = createSelector(
+    state => state.entities.pcr.toConfirmLoading,
+    toConfirmLoading => toConfirmLoading
+);
+
+
+export const getToConfirmPcrs = createSelector(
+    state => state.entities.pcr,
+    pcr => pcr.toConfirm
 );
 
 export const changeStatus = (id, status) => (dispatch) =>{

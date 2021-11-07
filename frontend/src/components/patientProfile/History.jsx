@@ -5,7 +5,7 @@ import { loadPatients , getPatientById, getAllPatients, getPatientsLoadingStatus
 const History = ({patientHistory, filteredHistory, hospital}) => {
    // console.log(patientHistory)
    // console.log(filteredHistory)
-   // console.log(hospital)
+    console.log(hospital)
     // const dispatch = useDispatch()
     // const patientDetails = useSelector(getAllPatients);
     // const patient = patientDetails.list
@@ -21,7 +21,7 @@ const History = ({patientHistory, filteredHistory, hospital}) => {
                         <li>
                             <div className="field">Hospital Name:</div>
                             {filteredHistory.length !== 0 ?
-                            <div className="value">{hospital}</div>:''}
+                            <div className="value">{hospital.name}</div>:''}
                         </li>
                         <li>
                             <div className="field">Admitted Date:</div>
@@ -29,13 +29,8 @@ const History = ({patientHistory, filteredHistory, hospital}) => {
                             <div className="value">{patientHistory.admittedDate}</div>:''}
                         </li>
                         <li>
-                            <div className="field">Doctor:</div>
-                            {filteredHistory.length !== 0 ?
-                            <div className="value">{patientHistory.name}</div>:''}
-                        </li>
-                        <li>
                             <div className="field">Ward No:</div>
-                            <div className="value">fwfwefw</div>
+                            <div className="value">{patientHistory.ward}</div>
                         </li>
                         <li>
                             <div className="field">Symptoms:</div>
@@ -53,7 +48,7 @@ const History = ({patientHistory, filteredHistory, hospital}) => {
                     <li className='current' style={{width:'50%',float:'left',position:'relative'}}>
                         <li>
                             <div className="field">Discharged Date:</div>
-                            <div className="value">55</div>
+                            <div className="value">{patientHistory.dischargeDate}</div>
                         </li>
                         <li>
                             <div className="field">Transfer Date:</div>

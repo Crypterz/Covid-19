@@ -5,9 +5,14 @@ import { Card, Button, Col, Form,} from 'react-bootstrap';
 import PopUp from '../popUp/PopUp';
 
 const Actions = ({patients, hospitals, wards, popUpHandler}) => {
+    console.log(hospitals)
     const dispatch = useDispatch()
     const [tranferSt, transferState ] = useState('false');
-    const [hospitalName, setTransferHospital] = useState(hospitals[0].name)
+    const [hospitalName, setTransferHospital] = useState('')
+
+    if(typeof(hospitals) ==! undefined && hospitals.length > 0){
+        setTransferHospital(hospitals[0].name)
+    }
 
    // const [popup, setPopUp] = useState(false);
 
@@ -35,9 +40,7 @@ const Actions = ({patients, hospitals, wards, popUpHandler}) => {
             <Button 
                 type='submit'  
                 className=' w-50 text-center' 
-                //onClick = { () => window.location=`/hospital/editCurrentDetails/${patients._id}`}
-               // onClick ={ () => setPopUp(true)}
-               onClick ={ () => popUpHandler(true)}
+                onClick ={ () => popUpHandler(true)}
             >Discharge</Button></div>
 
             
@@ -84,7 +87,6 @@ const Actions = ({patients, hospitals, wards, popUpHandler}) => {
                 
             </div>
 
-            {/* {popup && <PopUp closePopUp={setPopUp}/>} */}
         </Card>
     )
 }

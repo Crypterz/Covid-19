@@ -19,30 +19,27 @@ const CurrentInfo = ({patients, currentHospital, userHospital, hospitals}) => {
                             <div className="field">Admitted Date:</div>
                             <div className="value">{patients.admittedDate}</div>
                         </li>
-                        <li>
-                            <div className="field">Doctor:</div>
-                            <div className="value">grgrg</div>
-                        </li>
+
                         <li>
                             <div className="field">Ward No:</div>
-                            <div className="value">fwfwefw</div>
+                            <div className="value">{patients.ward}</div>
                         </li>
                         <li>
                             <div className="field">Symptoms:</div>
                             {objectDestructure(patients, "symptoms").length > 0 ? 
                             <ul className="value">
                                 {objectDestructure(patients, "symptoms").map(p=> 
-                                    <li>{p.date} - {p.description}</li>
+                                    // <p>{p.date} - {p.description}</p>
+                                    // <p>{p.date}</p>
+                                    p.description.map(q=> 
+                                        <li>{p.date} - {q}</li>
+                                    )
                                 )}
                             </ul> : "No data"}
                         </li>
                     </li>
 
                     <li className='current' style={{width:'50%',float:'left',position:'relative'}}>
-                        <li>
-                            <div className="field">Discharged Date:</div>
-                            <div className="value">55</div>
-                        </li>
                         <li>
                             <div className="field">Transfer Date:</div>
                             <div className="value m-2">Hospital Name: {} </div>
@@ -54,7 +51,10 @@ const CurrentInfo = ({patients, currentHospital, userHospital, hospitals}) => {
                             {objectDestructure(patients, "drugs").length > 0 ? 
                             <ul className="value">
                                 {objectDestructure(patients, "drugs").map(p=> 
-                                    <li>{p.date} - {p.description}</li>
+                                    //<li>{p.date} - {p.description}</li>
+                                    p.description.map(q=> 
+                                        <li>{p.date} - {q}</li>
+                                    )
                                 )}
                             </ul> 
                             
@@ -109,6 +109,9 @@ function objectDestructure ( histories, type){
  }
 
  function getHospitalName(patients, hospitals){
+     if(typeof(hospitals) === 'undefined' || hospitals.length === 0){
+         return ""
+     }
      const hospitalId = patients.hospital 
      const hospitalName = hospitals.filter(p => p._id === hospitalId)
      return hospitalName[0].name

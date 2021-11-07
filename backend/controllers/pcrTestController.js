@@ -40,7 +40,7 @@ const DashBoard=require('./../models/dashBoardModel')
 
 exports.getAllPCRTest_hospital = catchAsync(async (req, res, next) => {
     const hospital=req.user.hospital
-    const tests=await PCRTest.find({"hospital.creation":hospital})
+    const tests=await PCRTest.find({'hospital':req.user.hospital})
     if(!tests){
         return next(new AppError("No PCR Tests found with that ID",404)) 
     }

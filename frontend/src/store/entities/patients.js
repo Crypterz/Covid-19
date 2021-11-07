@@ -57,11 +57,12 @@ const slice = createSlice({
         },
 
         patientDrugsUpdated(patients, action){
-            const { patientId, symptoms  } = action.payload.data;
-            const index = patients.list.findIndex(p => p.patientId === patientId );
-            const symptom = patients.list[index].symptoms;
-          //  const variantIndex =variants.findIndex(v => v.name === variantName);
-          //  variants[variantIndex].countInStock = newCount;
+            //console.log(action.payload.data)
+            const { patient } = action.payload.data.medicalHistory;
+           // console.log(patient)
+            const index = patients.list.findIndex(p => p._id === patient );
+           // console.log(index)
+            patients.list[index].medicalHistory = action.payload.data.medicalHistory;
         },
 
         patientTransferUpdated(patients, action){
@@ -74,8 +75,10 @@ const slice = createSlice({
 
         patientUpdated(patients, action){
             const patientId = action.payload.data.patient._id;
+            console.log( action.payload.data.patient)
             const index = patients.list.findIndex(c => c._id === patientId );
-            patients.list[index] = action.payload.data.patient;
+            console.log(index)
+           /// patients.list[index] = action.payload.data.patient;
         },
 
         selectedPatientTransferUpdated(patients, actions){
@@ -215,12 +218,12 @@ export const updateSymptomsInDB = (symptoms, medicalHistoryId) => (dispatch) => 
 }
 
 export const updateDrugsInDB = (drugs, medicalHistoryId) => (dispatch) => {
-    //console.log(drugs)
+   // console.log(drugs)
     return dispatch(
         apiCallBegan({
             url: patientURL + `med/${medicalHistoryId}/adddrugs`,
             method: "patch",
-            data: drugs[0],
+            data: drugs,
             onSuccess: patientDrugsUpdated.type,
         })
     );

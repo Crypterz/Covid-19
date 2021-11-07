@@ -6,6 +6,7 @@ import {  useSelector } from 'react-redux';
 function Header() {
     const userDetails = useSelector(state => state.auth);
     let auth = "";
+    console.log(userDetails)
     if(userDetails.loggedIn){
         const { user } = userDetails.data.user
        // auth = userDetails.data.user
@@ -46,6 +47,10 @@ function Header() {
                         <Dropdown.Toggle   className='dropdown-toogle'>Hospital Admin</Dropdown.Toggle>
 
                         <Dropdown.Menu  className='dropdown-menu'>
+                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/dashboard'>
+                                    <Nav.Link ><span>Dashboard</span></Nav.Link>
+                            </LinkContainer></Dropdown.Item>
+
                             <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/patients'>
                                     <Nav.Link ><span>Patients</span></Nav.Link>
                             </LinkContainer></Dropdown.Item>

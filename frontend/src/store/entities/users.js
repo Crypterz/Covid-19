@@ -84,7 +84,7 @@ export const addUser = (user) => (dispatch) => {
     console.log(user)
     return dispatch(
         apiCallBegan({
-            url: userURL + 'users',
+            url: userURL + 'users/signup',
             method: "post",
             data: user,
             onStart: userCreateRequested,

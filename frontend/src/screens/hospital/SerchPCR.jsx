@@ -1,13 +1,9 @@
 import React, {useEffect, useState, Component} from 'react'
 import { Table, Container, Button, InputGroup, FormControl, Form} from 'react-bootstrap'
-import CommonListGroup from '../../components/common/CommonListGroup'
 import { paginate } from '../../utils/paginate';
 import Loader from '../../components/Loader'
 import Pagination from '../../components/Pagination';
-//import { listPatients } from '../../actions/patientActions'
-import { loadPatients, getAllPatients, getPatientsLoadingStatus } from '../../store/entities/patients';
-import {getAllPcrs, loadPcrs, updatePcrAproval, getPcrLoadingStatus,changeStatus} from '../../store/entities/pcr';
-import { useLocation, Link } from 'react-router-dom'
+import {getAllPcrs, loadPcrs, getPcrLoadingStatus,changeStatus} from '../../store/entities/pcr';
 import { useDispatch, useSelector } from 'react-redux';
 
 
@@ -18,7 +14,7 @@ const SearchPCR = ({history}) => {
    // console.log(auth)
 
     const pcrList = useSelector(getAllPcrs);
-    console.log(pcrList)
+   // console.log(pcrList)
 
     const pcrLoading = useSelector(getPcrLoadingStatus);
     const [filtered, setFiltered] = useState(pcrList);
@@ -52,6 +48,7 @@ const SearchPCR = ({history}) => {
         const updatedSearchFiltered = getFilteredSearchedPatients(pcrList, searchKeyword)
         setFiltered(updatedSearchFiltered);
         setPaginated(paginate(updatedSearchFiltered, currentPage, pageSize));
+
     },[dispatch, searchKeyword, pcrList])
 
 
@@ -115,7 +112,7 @@ const SearchPCR = ({history}) => {
                                 </Form.Group>
                             </td>
                             <td>
-                                {patientStatus && 
+                                {//patientStatus && 
                                     <Button 
                                         value = {p._id}
                                         onClick = { () => changePatientStatus(p._id)}

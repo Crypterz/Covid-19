@@ -26,7 +26,7 @@ const Patients = ({history}) => {
     const patients = patientsDetails.list;
    // const data = objectDestructure (patients);
    // const {medicalHistory, nic, pcrTest, user, _id } = patientsDetails.list;
-   // console.log(patients)
+    console.log(patients)
     const patientsLoading = useSelector(getPatientsLoadingStatus);
 
     const location = useLocation()
