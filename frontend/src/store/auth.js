@@ -10,6 +10,7 @@ const slice = createSlice({
         logging: false,
         loggedIn : false,
         wardAdded: false,
+        wardUpdated:false
     },
     reducers: {
 
@@ -73,16 +74,17 @@ const slice = createSlice({
         },
 
         wardCreateRequestSucceeded(auth, action){
-           // hospital.loading = false;
             auth.wardAdded = true
-            const wardId = action.payload.data;
-            auth.data.user.admin.hospital = wardId.hospital
+            auth.data.user.admin.hospital.wards.push(action.payload.data.ward) //= wardId.hospital
         },
 
         wardUpdated(auth, action){
-            const wardId = action.payload.data;
-            auth.data.user.admin.hospital = wardId.hospital
-            console.log(wardId)
+          //  auth.wardUpdated = true
+            console.log(action.payload.data.hospital)
+            // const updatedWard = action.payload.data.ward;
+            // const index =  auth.data.user.admin.hospital.wards.find(p => p.name === updatedWard.name)
+            // auth.data.user.admin.hospital.wards[index].totalBeds = updatedWard.totalBeds
+           
        }
     }
 });
@@ -163,11 +165,11 @@ export const addWard = (ward) => (dispatch) => {
     );
 }
 
-export const updateWard= (ward, id) => (dispatch) => {
-    console.log(id)
+export const updateWard= (ward, wardId) => (dispatch) => {
+    console.log(ward)
     return dispatch(
         apiCallBegan({
-            url: hospitalURL + `/ward/${id}`,
+            url: hospitalURL + `/ward/${wardId}`,
             method: "patch",
             data: ward,
             onSuccess: wardUpdated.type,

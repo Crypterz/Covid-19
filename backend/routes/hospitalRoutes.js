@@ -14,12 +14,12 @@ router
 router
   .route('/ward')
   .post(authController.protect, authController.restrictTo('hospitalAdmin'), hospitalController.createWard)
-  // .patch(authController.protect, authController.restrictTo('hospitalAdmin'), hospitalController.updateWard)
+  //.patch(authController.protect, authController.restrictTo('hospitalAdmin'), hospitalController.updateWard)
   // .patch(adminController.updatePatient)
   // .delete(adminController.deletePatient)
 router.get('/details',authController.protect, authController.restrictTo('hospitalAdmin'), hospitalController.getHospitalDetails)
 router.get('/admitted', authController.protect, authController.restrictTo('hospitalAdmin'), patientController.getAdmittedPatients)
-// router.patch('/ward/:wardId',authController.protect, authController.restrictTo('hospitalAdmin'), hospitalController.updateWard)
+router.patch('/ward/:wardId',authController.protect, authController.restrictTo('hospitalAdmin'), hospitalController.updateWard)
 
 
 module.exports = router;

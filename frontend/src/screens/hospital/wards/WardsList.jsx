@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { getAllWards, getWardsLoadingStatus, loadWards/*, updateWard,addWard*/, deleteWard} from '../../../store/entities/hospitals';
 import { updateWard, addWard } from "../../../store/auth";
+import { toastAction } from '../../../store/toastActions';
 import { useDispatch, useSelector } from 'react-redux';
 
 import CRUDTable, {
@@ -127,6 +128,8 @@ export default function WardsList() {
   const { admin, user } = userDetails.data.user
   const { wards } = admin.hospital
 
+  const [wardState, setWardState] = useState(false)
+
 
 let count = wards.length;
 console.log(wards)
@@ -182,14 +185,15 @@ const styles = {
       //description: ward.description
     }
 
-    // count += 1;
-    // wards.push({
-    //   ...ward,
-    //   ward_no: count
-    // });
+    if(ward.totalBeds < ward.admittedPatients){
+       dispatch(toastAction({ message: "No of Beds cannot be lass than admitted patients" , type: 'error'}))
+    }
+    else{
+      //dispatch(toastAction({ message: "No of Beds cannot be lass than admitted patients" , type: 'info'}))
+      dispatch(updateWard(wardDetails, ward._id))
+      setWardState(true)
+    }
 
-    dispatch(updateWard(wardDetails, ward._id))
-    //update(ward)
     return Promise.resolve(ward)
  }
 
@@ -203,6 +207,7 @@ const styles = {
      //description: ward.description
    }
    dispatch(addWard(wardDetails))
+   setWardState(true)
    return Promise.resolve(ward)
 }
 
@@ -222,6 +227,14 @@ function deleteCurrentWard(ward){
 }
 
  useEffect (() => {
+   if(userDetails.wardAdded && wardState){
+      setWardState(false)
+      dispatch(toastAction({ message: "Ward Addes Successfully, Please Refresh Page..." , type: 'info'}))
+   }
+   if(userDetails.wardUpdated && wardState){
+    setWardState(false)
+    dispatch(toastAction({ message: "Ward Updated Successfully, Please Refresh Page..." , type: 'info'}))
+ }
   // dispatch(loadWards())
  },[userDetails])
 
