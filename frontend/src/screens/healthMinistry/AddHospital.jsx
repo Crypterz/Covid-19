@@ -6,6 +6,21 @@ import { addHospital, getHospitalAddedStatus} from '../../store/entities/hospita
 import { toastAction } from '../../store/toastActions';
 
 export default function AddHospital(props) {
+    const validateContact = (contact) => {
+        const reg = /^(0)([0-9]{9})$/;
+        return reg.test(contact);
+    }
+
+    const validateName = (name) =>{
+        const reg = /^[A-Za-z\b]+$/;
+        return reg.test(name)
+    } 
+    
+    const validateCity = (city) =>{
+        const reg = /^[A-Za-z\b]+$/;
+        return reg.test(city)
+    } 
+
     const dispatch = useDispatch();
     const hospitalAddedStatus = useSelector(getHospitalAddedStatus);
 
@@ -46,7 +61,6 @@ export default function AddHospital(props) {
                             <strong class="banner-title">Want to Add new Hospital?</strong></h3></div>
             <Container >
                 <Form className="form" onSubmit={submitHandler}>
-                    <Form.Row>
                     <Form.Group controlId='name'>
                     <Form.Label class="float-left" className = 'form-label'>Hospital Name:</Form.Label>
                     <Form.Control 
@@ -54,6 +68,7 @@ export default function AddHospital(props) {
                         id='name' 
                         placeholder='Enter Hospital Name'
                         onChange={(e) => setName(e.target.value)}
+                        size='sm'
                         required
                     />
                     </Form.Group>
@@ -63,15 +78,13 @@ export default function AddHospital(props) {
                     <Form.Control 
                         type='number'
                         id='contact'
-                        placeholder="123-45-678"  
-                        //pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" 
+                        placeholder="0XX XXX XXXX"  
+                        pattern="(0)[0-9]{2} [0-9]{3} [0-9]{4}" 
+                        size = 'sm'
                         required
                         onChange={(e) => setContact(e.target.value)} 
-                    />
-                    
-                    <small>Format: 123-45-678</small> 
-
-                    <FormControl.Feedback type='invalid'>This field only takes text!</FormControl.Feedback>
+                    />  
+                    <small>*Should start with 0 <br/>*Should consist of 10 digits</small>
                     </Form.Group>
 
                     <Form.Group controlId="formCity">
@@ -79,19 +92,20 @@ export default function AddHospital(props) {
                                 <Form.Control
                                 type="text"
                                 id="city"
+                                size = 'sm'
                                 required 
                                 placeholder='Enter City'
                                 onChange={(e) => setCity(e.target.value)}/>
                                 </Form.Group>
-                    
+                    <Form.Row>
                     <Form.Group  as={Col} controlId="formDistrict">
                                 <Form.Label class="float-left" className = 'form-label'>District:</Form.Label>
                                 <Form.Control 
                                 as="select" 
                                 id="district" 
                                 onChange={(e) => setDistrict(e.target.value)}
-                                aria-label="Default select example">
-                                    <option>Select Here </option>
+                                required>
+                                    <option value="" disabled selected >Select Here </option>
                                     <option value="Colombo">Colombo</option>
                                     <option value="Gampaha">Gampaha</option>
                                     <option value="Kalutara">Kalutara</option>
@@ -125,8 +139,8 @@ export default function AddHospital(props) {
                                 as="select" 
                                 id="province" 
                                 onChange={(e) => setProvince(e.target.value)}
-                                aria-label="Default select example">
-                                    <option>Select Here </option>
+                                required>
+                                    <option value="" disabled selected >Select Here </option>
                                     <option value="Central">Central Province</option>
                                     <option value="Eastern">Eastern Province</option>
                                     <option value="Northern">Northern Province</option>
@@ -141,7 +155,6 @@ export default function AddHospital(props) {
                                 </Form.Group>
                             </Form.Row>
                         <div>
-                        <label />
                         <Button variant="primary" type="submit">Submit</Button>
                         </div>
                 </Form>

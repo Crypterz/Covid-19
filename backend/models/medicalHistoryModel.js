@@ -37,13 +37,8 @@ const medicalHistorySchema=new mongoose.Schema({
         default:Date.now
     },
     dischargeDate:{
-        date:{
-            type:Date
-        },
-        changed:{
-            type:Boolean,
-            default:false
-        }
+        type:Date,
+        default:null
     }
 })
 

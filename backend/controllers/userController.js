@@ -4,13 +4,16 @@ const catchAsync= require('./../utils/catchAsync');
 const AppError = require('../utils/appError');
 
 exports.updateUserInformation=catchAsync(async (req,res)=>{
-    const user=await Patient.findByIdAndUpdate(req.user._id,req.body,{
+    console.log(req.body)
+    const user=await User.findByIdAndUpdate(req.user.id,req.body,{
         new:true,
         runValidators:true
     })
+    console.log(user)
     if(!user){
         return next(new AppError("User not found",404))    //used return statement to avoid executing code below
     }
+    console.log(user)
     res.status(200).json({
         status:'success',
         data:{
