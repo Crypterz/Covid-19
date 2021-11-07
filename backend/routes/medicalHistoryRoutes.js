@@ -7,6 +7,7 @@ const router = express.Router();
 router
   .route('/')
   .post(authController.protect, authController.restrictTo('hospitalAdmin'), medicalHistoryController.createMedical)
+  .get(authController.protect, authController.restrictTo('hospitalAdmin','patient'), medicalHistoryController.getAllMedicalHistory)
 
 router
   .route('/:id')

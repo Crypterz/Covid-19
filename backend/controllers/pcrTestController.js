@@ -50,22 +50,100 @@ exports.getAllPCRTest_hospital = catchAsync(async (req, res, next) => {
     });
 })
 
+// exports.getAllPCRTest_Patient = catchAsync(async (req, res, next) => {
+//     let patientID;
+//     if(req.params.id){
+//         patientID=req.params.id
+//     }else{
+//         patientID=await Patient.findOne({user:req.user._id}).select('user');
+//     }
+//     if(patientID==null){
+//         return next(new AppError("patientID cant be null",404))
+//     }
+//     const tests=await Patient.find({user:req.user._id}).select('pcrTest').populate({path:'pcrTest',populate:{path:'hospital'}})
+//     console.log(tests)
+//     if(!tests){
+//         return next(new AppError("No PCR Tests found with that ID",404)) 
+//     }
+//     res.status(200).json({
+//     status: 'success',
+//     data: {tests}
+//     });
+// })
+
 exports.getAllPCRTest_Patient = catchAsync(async (req, res, next) => {
-    let id;
-    if(req.params.id){
-        id=req.params.id
-    }else{
-        id=req.user._id
-    }
-    const tests=await PCRTest.findById(id)
-    if(!tests){
-        return next(new AppError("No PCR Tests found with that ID",404)) 
-    }
-    res.status(200).json({
-    status: 'success',
-    data: {tests}
-    });
-})
+  var tests = await Patient.aggregate([
+    {
+      $match: {
+        user: req.user._id,
+      },
+    },
+    {
+      $project: {
+        pcrTest: 1,
+      },
+    },
+    {
+      $unwind: {
+        path: "$pcrTest",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "pcrtests",
+        localField: "pcrTest",
+        foreignField: "_id",
+        as: "pcr",
+      },
+    },
+    {
+      $unwind: {
+        path: "$pcr",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $project: {
+        name: "$pcr.name",
+        result: "$pcr.result",
+        hospital: "$pcr.hospital",
+        status: "$pcr.status",
+        date:"$pcr.createdAt"
+      },
+    },
+    {
+      $lookup: {
+        from: "hospitals",
+        localField: "hospital",
+        foreignField: "_id",
+        as: "hospitalD",
+      },
+    },
+    {
+      $project: {
+        name: 1,
+        result: 1,
+        hospital: "$hospitalD.name",
+        status: 1,
+        date:1
+      },
+    },
+    {
+      $unwind: {
+        path: "$hospital",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+  ]);
+  if (!tests) {
+    return next(new AppError("No PCR Tests found with that ID", 404));
+  }
+  res.status(200).json({
+    status: "success",
+    data: { tests },
+  });
+});
 
 exports.createPCRTest= catchAsync(async (req,res)=>{
     const d = new Date()

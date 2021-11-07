@@ -105,21 +105,49 @@ exports.getMedicalHistory = catchAsync(async (req, res,next) => {
 })
 
 exports.getAllMedicalHistory = catchAsync(async (req, res, next) => {
-    let id;
-    if(req.params.id){
-        id=req.params.id
+    var patientID
+    if(req.user.role=="patient"){
+        patientID=await Patient.findOne({user:req.user._id}).select('_id');
+        console.log(patientID)
+        patientID=patientID._id
+        console.log(patientID)
     }else{
-        id=req.user._id
+        patientID=req.params.id;
     }
-    const med=await MedicalHistory.findById(id)    //Patient.findOne({_id:req.params.id})
+    if(patientID==null){
+        return next(new AppError("patientID cant be null",404))
+    }
+    console.log(patientID)
+    const med=await MedicalHistory.find({patient:patientID}).populate({
+        path:'hospital',
+        select:'name -_id'
+    })  //Patient.findOne({_id:req.params.id})
     if(!med){
         return next(new AppError("No meical History found with that ID",404))    //used return statement to avoid executing code below
     }
+    console.log(med);
     res.status(200).json({
     status: 'success',
     data: {med}
     });
 })
+
+// exports.getAllMedicalHistory_Patient = catchAsync(async (req, res, next) => {
+//     let id;
+//     if(req.params.id){
+//         id=req.params.id
+//     }else{
+//         id=req.user._id
+//     }
+//     const med=await MedicalHistory.findById(id)    //Patient.findOne({_id:req.params.id})
+//     if(!med){
+//         return next(new AppError("No meical History found with that ID",404))    //used return statement to avoid executing code below
+//     }
+//     res.status(200).json({
+//     status: 'success',
+//     data: {med}
+//     });
+// })
 
 exports.discharge = catchAsync(async (req,res,next)=>{
     const patient=await Patient.findByIdAndUpdate(req.params.patientID,
@@ -130,7 +158,7 @@ exports.discharge = catchAsync(async (req,res,next)=>{
     }
     const medicalHistory=await MedicalHistory.findByIdAndUpdate(
         patient.currentMedicalHistory,   
-        {"dischargeDate.date":new Date()},
+        {"dischargeDate":new Date()},
     )
     await Ward.findByIdAndUpdate(medicalHistory.ward,{$pull:{admittedPatients:patient._id}})
     res.status(200).json({

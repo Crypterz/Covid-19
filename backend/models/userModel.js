@@ -43,7 +43,7 @@ const userSchema=new mongoose.Schema({
         city:{
             type:String
         },
-        province:{
+        district:{
             type:String
         },
     },

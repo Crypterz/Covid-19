@@ -9,7 +9,7 @@ router.post('/signup', authController.protect, authController.restrictTo('hospit
 router.post('/login',authController.login)
 router.post('/forgotpassword',authController.forgotPassword)
 router.patch('/resetpassword/:token',authController.resetPassword)
-router.patch('/update',userController.updateUserInformation)
+router.patch('/update',authController.protect,userController.updateUserInformation)
 module.exports = router;
 
 router
