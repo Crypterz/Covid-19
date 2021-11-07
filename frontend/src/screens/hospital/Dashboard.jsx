@@ -103,7 +103,7 @@ const Dashboard = () => {
                              <h3 style={{textAlign:'center', margin:'2%'}}>Total vs Active Cases</h3>
                          </div>
                          <div style={{position:'relative' ,margin:'2%'}}>
-                            <PieChart/>
+                            <PieChart />
                          </div> 
                     </Card>
         

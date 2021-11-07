@@ -99,33 +99,6 @@ exports.updateWard= catchAsync(async (req,res)=>{
     });
 })
 
-<<<<<<< HEAD
-exports.updateWard= catchAsync(async (req,res)=>{
-    const hospital=req.user.hospital
-    const ward={}
-    if(req.body.name){
-        ward["wards.$.name"]=req.body.name
-    }
-    if(req.body.totalBeds){
-        ward["wards.$.totalBeds"]=req.body.totalBeds
-    }
-    console.log(ward)
-    console.log(hospital)
-    const updatedHospital=await Hospital.findOneAndUpdate(
-        { _id: hospital , "wards._id":req.params.wardId },
-        { $set:ward },
-        // { upsert: true },
-        {new: true} 
-    )
-    res.status(201).json({
-        status:'success',
-        data:{
-            hospital:updatedHospital
-        }
-    })
-})
-=======
->>>>>>> 0016c00ae587edb728171134e91acb58d0e3ab5e
 
 exports.getHospitalDetails= catchAsync(async (req,res,next)=>{
     const stat = await Ward.aggregate([

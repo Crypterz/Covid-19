@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 
 const FigureOne = ({values}) => {
     const { overall, recovered, death} = values
-    console.log(values)
     return (
         <div>
             <div style={{justifyContent:'center'}}>

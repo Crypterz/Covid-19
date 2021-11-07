@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 
 const FigureTwo = ({values}) => {
     const {active, staff, transfered} = values
-   // console.log(details);
     return (
         <div>
             <div style={{justifyContent:'center'}}>

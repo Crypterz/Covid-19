@@ -10,7 +10,8 @@ const slice = createSlice({
         logging: false,
         loggedIn : false,
         wardAdded: false,
-        wardUpdated:false
+        wardUpdated:false,
+        wardDelete: false
     },
     reducers: {
 
@@ -79,12 +80,17 @@ const slice = createSlice({
         },
 
         wardUpdated(auth, action){
-          //  auth.wardUpdated = true
-            console.log(action.payload.data.hospital)
-            // const updatedWard = action.payload.data.ward;
-            // const index =  auth.data.user.admin.hospital.wards.find(p => p.name === updatedWard.name)
-            // auth.data.user.admin.hospital.wards[index].totalBeds = updatedWard.totalBeds
+            auth.wardUpdated = true
+            //console.log(action.payload.data.ward.totalBeds)
+            const index =  auth.data.user.admin.hospital.wards.findIndex(p => p.name === action.payload.data.ward.name)
+            auth.data.user.admin.hospital.wards[index].totalBeds = action.payload.data.ward.totalBeds
            
+       },
+
+       wardDelete(auth, action){
+           auth.wardDelete = true;
+           const newWardList = auth.data.user.admin.hospital.wards.filter(p => p.name !== action.payload.data.ward.name)
+           auth.data.user.admin.hospital.wards = newWardList
        }
     }
 });
@@ -102,7 +108,7 @@ export const {
     userLoggedOut,
     authDataUpdated,
     wardUpdated,
-    // wardDelete,
+    wardDelete,
     wardCreateRequested,
     wardCreateRequestFailed,
     wardCreateRequestSucceeded,
@@ -178,15 +184,15 @@ export const updateWard= (ward, wardId) => (dispatch) => {
 
 }
 
-// export const deleteWard= (ward, id) => (dispatch) => {
-//     console.log(ward, id)
-//     return dispatch(
-//         apiCallBegan({
-//             url: hospitalURL + `wards/${id}`,
-//             method: "patch",
-//             data: ward,
-//             onSuccess: wardDelete.type,
-//         })
-//     );
-// }
+export const deleteWard= (ward, id) => (dispatch) => {
+    console.log(ward, id)
+    return dispatch(
+        apiCallBegan({
+            url: hospitalURL + `wards/${id}`,
+            method: "patch",
+            data: ward,
+            onSuccess: wardDelete.type,
+        })
+    );
+}
 
