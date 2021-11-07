@@ -67,9 +67,10 @@ const slice = createSlice({
         },
 
         wardUpdated(hospitals, action){
-            const wardId = action.payload.data.hospitals.wards;
-            const index = hospitals.list.wards.findIndex(c => c._id === wardId );
-            hospitals.list.wards[index] = action.payload.data.hospital;
+             const wardId = action.payload.data;
+             console.log(wardId)
+            // const index = hospitals.list.wards.findIndex(c => c._id === wardId );
+            // hospitals.list.wards[index] = action.payload.data.hospital;
         }
     }
 });
@@ -90,7 +91,7 @@ export const {
     wardCreateRequestSucceeded,
 } =slice.actions;
 
-const hospitalURL = "/api/v1/";
+const hospitalURL = "/api/v1/hospital";
 const refreshTime = configData.REFRESH_TIME;
 
 export const loadHospitals = () => (dispatch, getState) => {
@@ -101,7 +102,7 @@ export const loadHospitals = () => (dispatch, getState) => {
     
     return dispatch(
         apiCallBegan({
-            url: hospitalURL + 'hospital',
+            url: hospitalURL,
             onStart: hospitalRequested.type,
             onSuccess: hospitalReceived.type,
             onError: hospitalRequestFailed.type
@@ -113,7 +114,7 @@ export const addHospital = (hospital) => (dispatch) => {
     console.log(hospital)
     return dispatch(
         apiCallBegan({
-            url: hospitalURL + 'hospital',
+            url: hospitalURL,
             method: "post",
             data: hospital,
             onStart: hospitalCreateRequested,
@@ -139,11 +140,11 @@ export const getAllHospitals = createSelector(
     hospital => hospital.list
 );
 
-export const addWard = (ward, hospitalId) => (dispatch) => {
+export const addWard = (ward) => (dispatch) => {
     console.log(ward)
     return dispatch(
         apiCallBegan({
-            url: hospitalURL + `hospital/ward`,
+            url: hospitalURL + `ward`,
             method: "post",
             data: ward,
             onStart: wardCreateRequested,
@@ -154,10 +155,10 @@ export const addWard = (ward, hospitalId) => (dispatch) => {
 }
 
 export const updateWard= (ward, id) => (dispatch) => {
-    console.log(ward, id)
+    console.log(id)
     return dispatch(
         apiCallBegan({
-            url: hospitalURL + `wards/${id}`,
+            url: hospitalURL + `/ward/${id}`,
             method: "patch",
             data: ward,
             onSuccess: wardUpdated.type,

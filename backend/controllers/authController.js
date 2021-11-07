@@ -123,6 +123,8 @@ exports.login=catchAsync(async(req, res, next)=>{
             }
         });
         user={user,admin};
+    }else{
+        user={user};
     }
     console.log(token)
     res.cookie('jwt',token,{

@@ -4,12 +4,18 @@ import { LinkContainer,Link } from 'react-router-bootstrap';
 import {  useSelector } from 'react-redux';
 
 function Header() {
-    const auth = useSelector(state => state.auth);
+    const userDetails = useSelector(state => state.auth);
+    let auth = "";
+    if(userDetails.loggedIn){
+        const { user } = userDetails.data.user
+       // auth = userDetails.data.user
+        auth = user
+    }
     const [userType, setUsertype] = useState('');
 
     useEffect(() => {
-        if(auth.loggedIn){
-            setUsertype(auth.data.user.role)
+        if(userDetails.loggedIn){
+            setUsertype(auth.role)
         }
     },[userType]);
 
@@ -22,20 +28,20 @@ function Header() {
                     <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ml-auto">
                         
-                        {!auth.loggedIn && <LinkContainer to = '/signin'>
+                        {!userDetails.loggedIn && <LinkContainer to = '/signin'>
                             <Nav.Link className = 'navbar-item'><span>Login</span></Nav.Link>
                         </LinkContainer>}
 
-                        {auth.loggedIn && <LinkContainer to = '/logout'>
+                        {userDetails.loggedIn && <LinkContainer to = '/logout'>
                             <Nav.Link className = 'navbar-item'><span>Log Out</span></Nav.Link>
                         </LinkContainer>}
 
-                        {auth.loggedIn && userType === 'patient' && <LinkContainer to = '/hospital/profile/'>
+                        {userDetails.loggedIn && userType === 'patient' && <LinkContainer to = '/hospital/profile/'>
                             <Nav.Link className = 'navbar-item'><span>Profile</span></Nav.Link>
                         </LinkContainer>}
 
                         
-                        {auth.loggedIn && userType === 'hospitalAdmin' && <Dropdown className="my-2 dropdown">
+                        {userDetails.loggedIn && userType === 'hospitalAdmin' && <Dropdown className="my-2 dropdown">
                         {/* {auth.loggedIn &&  <Dropdown className="my-2 dropdown"> */}
                         <Dropdown.Toggle   className='dropdown-toogle'>Hospital Admin</Dropdown.Toggle>
 
@@ -56,6 +62,10 @@ function Header() {
                                     <Nav.Link ><span>Aprove PCR Results</span></Nav.Link>
                             </LinkContainer></Dropdown.Item>
 
+                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/searchPCR'>
+                                    <Nav.Link ><span>Search PCR</span></Nav.Link>
+                            </LinkContainer></Dropdown.Item>
+
                             <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/wards'>
                                     <Nav.Link ><span>Wards</span></Nav.Link>
                             </LinkContainer></Dropdown.Item>
@@ -72,7 +82,41 @@ function Header() {
                         </Dropdown.Menu>
                         </Dropdown>}
 
-                        {auth.loggedIn && userType === 'admin' && <Dropdown className="my-2 dropdown">
+                        {userDetails.loggedIn && userType === 'hospital user' && <Dropdown className="my-2 dropdown">
+                        {/* {auth.loggedIn &&  <Dropdown className="my-2 dropdown"> */}
+                        <Dropdown.Toggle   className='dropdown-toogle'>Hospital Staff</Dropdown.Toggle>
+
+                        <Dropdown.Menu  className='dropdown-menu'>
+                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/patients'>
+                                    <Nav.Link ><span>Patients</span></Nav.Link>
+                            </LinkContainer></Dropdown.Item>
+                        
+
+                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/addPcrResults'>
+                                    <Nav.Link ><span>Add PCR Results</span></Nav.Link>
+                            </LinkContainer></Dropdown.Item>
+
+                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/searchPCR'>
+                                    <Nav.Link ><span>Search PCR</span></Nav.Link>
+                            </LinkContainer></Dropdown.Item>
+
+                            {/* <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/wards'>
+                                    <Nav.Link ><span>Wards</span></Nav.Link>
+                            </LinkContainer></Dropdown.Item> */}
+{/* 
+                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/healthMinistry/hospital'>
+                                    <Nav.Link ><span>Hospitals</span></Nav.Link>
+                            </LinkContainer></Dropdown.Item> */}
+
+                            {/* <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/staffs'>
+                                    <Nav.Link ><span>Staffs</span></Nav.Link>
+                            </LinkContainer></Dropdown.Item> */}
+
+
+                        </Dropdown.Menu>
+                        </Dropdown>}
+
+                        {userDetails.loggedIn && userType === 'admin' && <Dropdown className="my-2 dropdown">
                         {/* {auth.loggedIn &&  <Dropdown className="my-2 dropdown"> */}
                         <Dropdown.Toggle   className='dropdown-toogle'>Admin</Dropdown.Toggle>
 

@@ -4,7 +4,7 @@ import {  updateTransferPatient} from '../../store/entities/patients';
 import { Card, Button, Col, Form,} from 'react-bootstrap';
 import PopUp from '../popUp/PopUp';
 
-const Actions = ({patients, hospitals, popUpHandler}) => {
+const Actions = ({patients, hospitals, wards, popUpHandler}) => {
     const dispatch = useDispatch()
     const [tranferSt, transferState ] = useState('false');
     const [hospitalName, setTransferHospital] = useState(hospitals[0].name)
@@ -54,7 +54,7 @@ const Actions = ({patients, hospitals, popUpHandler}) => {
                                 setTransferHospital(e.target.value);
                             }
                         }} as="select">
-                        {hospitals.map((c,index) => <option selected={index === 0? 'slected': null}>{`${c.name}`}</option>)}
+                        {wards.map((c,index) => <option selected={index === 0? 'slected': null}>{`${c.name}`}</option>)}
                         </Form.Control>
                     </Form.Group>
                     <Button>Change Ward</Button>  
