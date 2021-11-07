@@ -83,7 +83,23 @@ exports.createWard= catchAsync(async (req,res)=>{
     //     }
     // })
 })
+exports.updateWard= catchAsync(async (req,res)=>{
+    const ward=await Ward.findByIdAndUpdate(req.params.wardID,req.body,{
+        new:true,
+        runValidators:true
+    })
+    if(!ward){
+        return next(new AppError("No ward found with that ID",404))
+    }
+    res.status(200).json({
+        status:'success',
+        data:{
+            ward:ward
+        }
+    });
+})
 
+<<<<<<< HEAD
 exports.updateWard= catchAsync(async (req,res)=>{
     const hospital=req.user.hospital
     const ward={}
@@ -108,6 +124,8 @@ exports.updateWard= catchAsync(async (req,res)=>{
         }
     })
 })
+=======
+>>>>>>> 0016c00ae587edb728171134e91acb58d0e3ab5e
 
 exports.getHospitalDetails= catchAsync(async (req,res,next)=>{
     const stat = await Ward.aggregate([

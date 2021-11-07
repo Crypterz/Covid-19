@@ -30,7 +30,9 @@ exports.publicDashBoard= catchAsync(async (req,res,next)=>{
     const d = new Date()
     const today=`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`.toString()
     const dashboard = await DashBoard.findOne({},{},{ sort: { 'date' : -1 } }).select('totalActiveCases totalRecovered totalDeaths districtTotals -_id');
-    const history = await DashBoard.find().select('totalActiveCases date -_id')
+    const activecases = await DashBoard.find().select('totalActiveCases date -_id')
+    const recovered = await DashBoard.find().select('totalRecovered date -_id')
+    const deaths = await DashBoard.find().select('totalDeaths date -_id')
     var hospital = await Ward.aggregate([
         {
             $unwind:
@@ -82,7 +84,9 @@ exports.publicDashBoard= catchAsync(async (req,res,next)=>{
         status:'success',
         data:{
             dashboard,
-            history,
+            activecases,
+            recovered,
+            deaths,
             hospital
         }
     })

@@ -21,12 +21,6 @@ const userSchema=new mongoose.Schema({
         lowercase:true,
         validate:[validator.isEmail, 'Please provide valid email']
     },
-    // nic:{
-    //     type:Number,
-    //     required:[true,'A user should have unique NIC'],
-    //     unique:true,
-    //     // length:12
-    // },
     birthday:{
         type:Date
     },
