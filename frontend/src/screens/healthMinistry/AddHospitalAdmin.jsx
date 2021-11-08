@@ -63,11 +63,7 @@ export default function AddHospitalAdmin(props) {
           },
           email: email,
           birthday: birthday,
-<<<<<<< HEAD
           contactNo: parseInt(contact),
-=======
-          contactNo: contact,
->>>>>>> 376f6d506b8fbd2c44956f7edce805d9f151c6f3
           address:{
               line1: line1,
               line2: line2,
@@ -76,16 +72,11 @@ export default function AddHospitalAdmin(props) {
           password: password,
           passwordConfirm: passwordConfirm,
           role: 'hospitalAdmin',
-<<<<<<< HEAD
           name: {
             firstName: firstName,
             lastName: lastName
           }, 
           hospital: window.location.pathname.split('/')[3],
-=======
-
-          hospital_id: window.location.pathname.split('/')[3],
->>>>>>> 376f6d506b8fbd2c44956f7edce805d9f151c6f3
       }
 
         if (!validateFirstName(firstName)) {

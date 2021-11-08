@@ -1,7 +1,12 @@
 import React from 'react'
+import { useSelector } from 'react-redux';
 import { Button, Card} from 'react-bootstrap'
 
 const PersonalInfo = ({patients, currentHospital, userHospital, id}) => {
+
+    const userDetails = useSelector(state => state.auth);
+    const { user } = userDetails.data.user
+    const auth = user
 
     return (
             <Card  className="m-2" bg="#ffffff" text="black" style={{ width: '100%'}}>
@@ -31,7 +36,7 @@ const PersonalInfo = ({patients, currentHospital, userHospital, id}) => {
                             </address>
                         </div>
                     </li>
-                        {currentHospital === userHospital ? 
+                        {currentHospital === userHospital && auth.role === "patient"? 
                         <div>
                             <Button 
                                 type='submit'  

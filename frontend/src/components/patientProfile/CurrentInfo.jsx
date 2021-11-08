@@ -2,9 +2,11 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import {Card, Button} from 'react-bootstrap';
 
-const CurrentInfo = ({patients, currentHospital, userHospital, hospitals}) => {
-    const auth = useSelector(state => state.auth);
-    //console.log(patients)
+const CurrentInfo = ({patients, userHospital, currentHospital,  hospitals}) => {
+
+    const userDetails = useSelector(state => state.auth);
+    const { user } = userDetails.data.user
+    const auth = user
     return (
         <Card className='m-2 con-vs-card'>
             <h5 className="text-center mt-2 font-weight-bold">CURRENT DETAILS</h5>
@@ -63,7 +65,7 @@ const CurrentInfo = ({patients, currentHospital, userHospital, hospitals}) => {
                     </li>
                 </ul>
                 </div>
-                    {auth.data.user.role !== 'patient' && objectDestructure(patients, "discharge") === false &&
+                    {auth.role !== 'patient' && patients &&
                     <div className='text-center m-2'>
                         {currentHospital === userHospital ?<Button 
                             type='submit'  

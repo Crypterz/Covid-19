@@ -94,6 +94,20 @@ export const addUser = (user) => (dispatch) => {
     );
 }
 
+// export const addUser = (user) => (dispatch) => {
+//     console.log(user)
+//     return dispatch(
+//         apiCallBegan({
+//             url: userURL + 'users/signup',
+//             method: "post",
+//             data: user,
+//             onStart: userCreateRequested,
+//             onSuccess: userCreateRequestSucceeded.type,
+//             onError: userCreateRequestFailed
+//         })
+//     );
+// }
+
 export const getUserLoadingStatus = createSelector(
     state => state.entities.userloading,
     loading => loading

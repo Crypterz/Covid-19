@@ -50,7 +50,7 @@ const EditProfile = ({match, history}) => {
     const [initialValues, setInitialValues ] = useState({
         first_name: firstName,
         last_name: lastName,
-        Tel_number: "0"+contactNo,
+        Tel_number: contactNo,
         line1: line1,
         line2: line2,
         city: city,
