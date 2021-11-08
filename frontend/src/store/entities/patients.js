@@ -10,7 +10,8 @@ const slice = createSlice({
         list: [],
         loading: false,
         lastFetch: null,
-        patientAdded : false
+        patientAdded : false,
+        medicalHistory : false,
     },
     reducers: {
 
@@ -49,20 +50,21 @@ const slice = createSlice({
         },
 
         patientSymptomsUpdated(patients, action){
-            const { patientId, symptoms  } = action.payload.data;
-            const index = patients.list.findIndex(p => p.patientId === patientId );
-            const symptom = patients.list[index].symptoms;
-          //  const variantIndex =variants.findIndex(v => v.name === variantName);
-          //  variants[variantIndex].countInStock = newCount;
+            console.log(action.payload.data)
+            const { patient, _id } = action.payload.data.medicalHistory;
+            const patientIndex = patients.list.findIndex(p => p._id === patient );
+            const histories = patients.list[patientIndex].medicalHistory
+            const historyIndex = histories.findIndex(p => p._id === _id)
+            histories[historyIndex].symptoms = action.payload.data.medicalHistory.symptoms
         },
 
         patientDrugsUpdated(patients, action){
-            //console.log(action.payload.data)
-            const { patient } = action.payload.data.medicalHistory;
-           // console.log(patient)
-            const index = patients.list.findIndex(p => p._id === patient );
-           // console.log(index)
-            patients.list[index].medicalHistory = action.payload.data.medicalHistory;
+            console.log(action.payload.data)
+            const { patient, _id } = action.payload.data.medicalHistory;
+             const patientIndex = patients.list.findIndex(p => p._id === patient );
+             const histories = patients.list[patientIndex].medicalHistory
+             const historyIndex = histories.findIndex(p => p._id === _id)
+             histories[historyIndex].drugDetails = action.payload.data.medicalHistory.drugDetails
         },
 
         patientTransferUpdated(patients, action){
@@ -81,8 +83,30 @@ const slice = createSlice({
            /// patients.list[index] = action.payload.data.patient;
         },
 
+        patientsAdmitRequest(patients, action){
+           // patients.loading = true;
+        },
+
+
+        patientsAdmitFailed(patients, action){
+            console.log(action.payload.data)
+            patients.medicalHistory = false;
+            
+        },
+
+    // payload: [message: , data: ]
+        patientsAdmitSuccess(patients, action){
+            console.log(action.payload.data)
+           // patients.medicalHistory = true
+            //patients.list = action.payload.data.patients;
+        },
+
         selectedPatientTransferUpdated(patients, actions){
             
+        },
+
+        patientDischarged(patients, action){
+
         }
     },
 });
@@ -104,7 +128,9 @@ export const {
     selectedPatientTransferUpdated,
     patientAdmitRequest,
     patientAdmitSuccess,
-    patientAdmitFailed } = slice.actions;
+    patientAdmitFailed,
+    patientDischarged
+ } = slice.actions;
                             
 
 const patientURL = "/api/v1/";
@@ -211,7 +237,7 @@ export const updateSymptomsInDB = (symptoms, medicalHistoryId) => (dispatch) => 
                 url: patientURL + `med/${medicalHistoryId}/addsymptoms`,
                 method: "patch",
                 data: symptoms,
-                onSuccess: patientSymptomsUpdated.type,
+                onSuccess: patientSymptomsUpdated,
             })
         );
 
@@ -224,7 +250,7 @@ export const updateDrugsInDB = (drugs, medicalHistoryId) => (dispatch) => {
             url: patientURL + `med/${medicalHistoryId}/adddrugs`,
             method: "patch",
             data: drugs,
-            onSuccess: patientDrugsUpdated.type,
+            onSuccess: patientDrugsUpdated,
         })
     );
 
@@ -255,15 +281,27 @@ export const updateSelectedTransferPatient = (value) => (dispatch) => {
 }
 
 
-export const admitPatient = (patientId) => (dispatch) => {
-    console.log(patientId)
+export const admitPatient = (patient) => (dispatch) => {
+    console.log(patient)
     return dispatch(
         apiCallBegan({
-            url: patientURL + `patients/${patientId}/admit`,
-            method: "get",
+            url: patientURL + 'med',
+            method: "post",
+            data : patient,
             onStart : patientAdmitRequest,
             onSuccess : patientAdmitSuccess,
             onError: patientAdmitFailed
+        })
+    )
+}
+
+export const diachargePatient = (patientId) => (dispatch) => {
+    console.log(patientId)
+    return dispatch(
+        apiCallBegan({
+            url: patientURL + `patients/${patientId}`,
+            method: "get",
+            onSuccess : patientDischarged,
         })
     )
 }

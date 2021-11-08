@@ -126,11 +126,13 @@ export default function AddPatient(props) {
     }
     useEffect(() => {
         if(userAddedStatus.userAdded && userState){
+            setUserState(false)
             dispatch(toastAction({ message: "Patient Added Successfully", type: 'info' }))
             //window.location.href = "/healthMinistry/hospital";
-        }else{
-            dispatch(toastAction({ message: "Pattient Adding Failed", type: 'error' }))
         }
+        // else{
+        //     dispatch(toastAction({ message: "Pattient Adding Failed", type: 'error' }))
+        // }
     },[userAddedStatus])
 
     return (

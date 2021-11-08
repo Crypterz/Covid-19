@@ -1,6 +1,7 @@
 import React, {useEffect, useState, Component} from 'react'
 import { Container, Button, FormControl, InputGroup, Row, Card, Form} from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
+import { toastAction } from '../../store/toastActions';
 import { loadPatients, getAllPatients, getPatientsLoadingStatus, admitPatient } from '../../store/entities/patients';
 
 const AdmitPatient = ({history}) => {
@@ -18,17 +19,58 @@ const AdmitPatient = ({history}) => {
 
     const [searchKeyword, setSearchKeyword ] = useState('');
     const [patientName, setPatientName] = useState();
+    console.log(patientName)
     const [ward, setWard] = useState(wards[0].name);
-    console.log(ward)
+    //const [wardId, setWardId] = useState(wards[0]._id);
+  //  console.log(ward)
+    const [isKid, setIsKid] = useState(false)
+   // console.log(isKid)
+    const [patient, selectedPatient] = useState();
 
     const serachPatient =() =>{
-        const filteredPatient = getFilteredSearchedPatients(patients, searchKeyword)
+        const filteredPatient = getFilteredSearchedPatients(patients, searchKeyword, isKid)
         setPatientName(filteredPatient)
+        selectedPatient(filteredPatient)
     }
 
     const AdmitPatient =() =>{
-        dispatch(admitPatient(patientName[0]._id, ward))
+        if(patientName.length > 1){
+            dispatch(toastAction({ message: "Please select only one patient", type: 'error' }))
+        }
+        else{
+            if(patientName[0]){
+                const patientDetails = {
+                    patient: patientName[0]._id,
+                    ward : getWardId(wards, ward)
+                }
+                dispatch(admitPatient(patientDetails))
+                console.log(patientDetails)
+            }
+            else{
+                const patientDetails = {
+                    patient: patientName._id,
+                    ward : getWardId(wards, ward)
+                }
+               dispatch(admitPatient(patientDetails))
+               console.log(patientDetails)
+            }
+           
+           // dispatch(admitPatient(patientName[0]._id, ward))
+        }
+
     }
+
+    // const selectPatient =(patient) => {
+
+    // }
+
+    // const handleSelected =(check) =>{
+    //     if(check === true){
+    //         setIsKid(true)
+    //     }if(check === false){
+    //         setIsKid(false)
+    //     }
+    // }
 
     useEffect(() => {
         if(!auth.loggedIn){
@@ -63,16 +105,46 @@ const AdmitPatient = ({history}) => {
                     >Search</Button>
                 </div>
             </Row>
-            {patientName && patientName.length !==0 &&
+
             <div>
+                <input 
+                    type='checkbox'
+                    style={{width:'5%', marginTop:'5px', marginLeft:'50px'}}
+                    onChange={(e) =>{
+                        let checked = e.target.checked;
+                        setIsKid(checked)
+                    }}
+                />
+                <Form.Label className = 'form-label w-75'>IF Patient is kid add select in check box</Form.Label> 
+            </div>
+            {patient && patient.length !==0 &&
+            <div> 
+                {patient.length === 1 && 
                 <Card style={{backgroundColor:'#0cce39', color:'#000f05', opacity:'0.5', padding:'10px', width:'80%'}}>
-                    {patientName[0].name} is already registered patient
-                </Card>
+                    {patientName[0].nic.nicno} is already registered patient
+                </Card>}
+
+                {patient.length > 1 && 
+                <div>
+                    <p>There are more than one patient registered under this NIC number, Please select correct one</p>
+                    <Card style={{backgroundColor:'#0cce39', color:'#000f05', opacity:'0.5', padding:'10px', width:'80%'}}>
+                    {patient.map( p=> 
+                                    <Button 
+                                        className="btn btn-light"
+                                        style={{width:'80%', borderRadius:'0px'}}
+                                        onClick={()=>setPatientName(p)}
+                                        >
+                                        {p.user.name.firstName + " " + p.user.name.lastName}
+                                    </Button>)}
+                    </Card>
+                </div>
+                }
 
                 <Form.Group className='mt-2 w-25'>
                     <Form.Control onChange = {(e) => {
                         if(e.target.value !== "Select ward"){
                             setWard(e.target.value);
+                            //setWardId(e.target.value)
                         }
                     }} as="select">
                     {wards.map((c,index) => <option selected={index === 0? 'slected': null}>{`${c.name}`}</option>)}
@@ -108,12 +180,27 @@ const AdmitPatient = ({history}) => {
 
 export default AdmitPatient
 
-function getFilteredSearchedPatients(patients, filterBy){
+function getFilteredSearchedPatients(patients, filterBy, isKid){
     let name;
-    name =  patients.filter(p => 
-       objectDestructure(p, "nic") === filterBy.toString()
-    );
-    return name
+    if(!isKid){
+        name =  patients.filter(p => 
+            objectDestructure(p, "nic") === filterBy.toString()  && getAge(p) > 18
+         );
+        //  if(name.length === 1){
+        //     return name[0]
+        //  }
+         return name
+    }
+    else{
+        name =  patients.filter(p => 
+            objectDestructure(p, "nic") === filterBy.toString() && getAge(p) < 18
+        );
+        // if(name.length === 1){
+        //     return name[0]
+        //  }
+        return name
+    }
+
 }
 
 function objectDestructure(patient, type){
@@ -132,4 +219,24 @@ function objectDestructure(patient, type){
     }else{
         return newList
     }
+}
+
+function getAge(patient){
+    let age = null
+    if(typeof(patient) === 'undefined' || patient.length === 0){
+        return age
+    } 
+
+    const { birthday } = patient.user
+    const onlyYear = birthday.split("/")[0]
+    const currentYear = new Date().getFullYear()
+    age =  (currentYear - parseInt(onlyYear))
+    console.log(age)
+    return age
+}
+
+function getWardId(wards, wardName){
+    const wardId = wards.filter( p=> p.name === wardName)
+    //console.log(wardId)
+    return wardId[0]._id
 }
