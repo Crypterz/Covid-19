@@ -16,23 +16,23 @@ const signToken = id =>{
         expiresIn:process.env.JWT_EXPIRES_IN
     })
 }
-const createSendToken = (user,statusCode, res)=>{
-    console.log(user)
-    const token = signToken(user._id)
-    console.log(token)
-    res.cookie('jwt',token,{
-        expires:new Date(Date.now()+process.env.JWT_COOKIE_EXPIRES_IN*24*60*60*1000),
-        // secure:true,     //COOKIE WILL SEND ONLY ENCREPTED CONNECTION HTTPS 
-        httpOnly:true        // COKKIES CANT BE MODIFIES BY BROWSER - TO PREVENT CROSS SITE ATTACK
-    })
-    res.status(statusCode).json({
-        status:'success',
-        token,
-        data:{
-            user
-        }
-    })
-}
+// const createSendToken = (user,statusCode, res)=>{
+//     console.log(user)
+//     const token = signToken(user._id)
+//     console.log(token)
+//     res.cookie('jwt',token,{
+//         expires:new Date(Date.now()+process.env.JWT_COOKIE_EXPIRES_IN*24*60*60*1000),
+//         // secure:true,     //COOKIE WILL SEND ONLY ENCREPTED CONNECTION HTTPS 
+//         httpOnly:true        // COKKIES CANT BE MODIFIES BY BROWSER - TO PREVENT CROSS SITE ATTACK
+//     })
+//     res.status(statusCode).json({
+//         status:'success',
+//         token,
+//         data:{
+//             user
+//         }
+//     })
+// }
 
 exports.signup =catchAsync( async (req,res,next)=>{
     // console.log(req.cookie)
@@ -67,42 +67,7 @@ exports.signup =catchAsync( async (req,res,next)=>{
         })
 })
 
-// exports.login=catchAsync(async(req, res, next)=>{
-//     console.log('auth controller..........')
-//     console.log(req.body)
-//     const {email, password}=req.body
-//     if(!email || !password){
-//         return next(new AppError('Please provide email and password',400))
-//     }
-//     var user=await User.findOne({email:email}).select('+password')
-//     // console.log(user)
-//     // const correct = await user.correctPassword(password, user.password);
-//     if(!user || !(await user.correctPassword(password, user.password))) {
-//         return next(new AppError('Incorrect email or password',401))
-//     }
-//     if(user.role=="hospitalAdmin"){
-//         const admin =await Admin.findOne({'user':user._id}).populate({
-//             path:'hospital',
-//             populate:{
-//                 path:'wards'
-//             }
-//         });
-//         user={user,admin};
-//     }
-    
-//     // console.log(user)
-//     // console.log(user)
-//     // const token=signToken(user._id)
-//     // res.status(200).json({
-//     //     status:'success',
-//     //     token
-//     // })
-//     createSendToken(user,200,res)
-
-// })
-
 exports.login=catchAsync(async(req, res, next)=>{
-    // console.log('auth controller..........')
     const {email, password}=req.body
     if(!email || !password){
         return next(new AppError('Please provide email and password',400))
@@ -137,7 +102,6 @@ exports.login=catchAsync(async(req, res, next)=>{
             user
         }
     })
-
 })
 
 exports.protect = catchAsync(async (req,res,next)=>{
