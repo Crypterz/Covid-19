@@ -44,6 +44,10 @@ const slice = createSlice({
             users.lastFetch = Date.now();
         },
 
+        sendMAilSuccess(users, action){
+            
+        }
+
         // userUpdated(user, action){
         //     console.log(action.payload.data.user)
         // },
@@ -59,6 +63,7 @@ export const {
     userCreateRequested,
     userCreateRequestFailed,
     userCreateRequestSucceeded,
+    sendMAilSuccess
    // userUpdated,
 } =slice.actions;
 
@@ -95,17 +100,17 @@ export const addUser = (user) => (dispatch) => {
     );
 }
 
-// export const updateUser = (user) => (dispatch) => {
-//     console.log(user)
-//     return dispatch(
-//         apiCallBegan({
-//             url: userURL + 'users/update',
-//             method: "patch",
-//             data: user,
-//             onSuccess: userUpdated.type,
-//         })
-//     );
-// }
+export const forgotPassword = (user) => (dispatch) => {
+    console.log(user)
+    return dispatch(
+        apiCallBegan({
+            url: userURL + 'users/forgotpassword',
+            method: "post",
+            data: user,
+            onSuccess: sendMAilSuccess,
+        })
+    );
+}
 
 export const getUserLoadingStatus = createSelector(
     state => state.entities.userloading,
