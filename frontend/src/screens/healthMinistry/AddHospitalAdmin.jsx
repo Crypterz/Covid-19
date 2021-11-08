@@ -63,7 +63,7 @@ export default function AddHospitalAdmin(props) {
           },
           email: email,
           birthday: birthday,
-          contact: contact,
+          contactNo: parseInt(contact),
           address:{
               line1: line1,
               line2: line2
@@ -74,9 +74,8 @@ export default function AddHospitalAdmin(props) {
           name: {
             firstName: firstName,
             lastName: lastName
-          },
-          
-          hospital_id: window.location.pathname.split('/')[3],
+          }, 
+          hospital: window.location.pathname.split('/')[3],
       }
 
         if (!validateFirstName(firstName)) {
@@ -103,16 +102,18 @@ export default function AddHospitalAdmin(props) {
         else{
             dispatch(addUser(user));
             setUserState(true);
-            window.location.href = "/healthMinistry/hospital";
+           // window.location.href = "/healthMinistry/hospital";
     };
     }
     useEffect(() => {
         if(userAddedStatus.userAdded && userState){
+            setUserState(false)
             dispatch(toastAction({ message: "Hospital Admin Added Successfully", type: 'info' }))
-            window.location.href = "/healthMinistry/hospital";
-        }else{
-            dispatch(toastAction({ message: "Hospital Admin Adding Failed", type: 'error' }))
+           // window.location.href = "/healthMinistry/hospital";
         }
+        // else{
+        //     dispatch(toastAction({ message: "Hospital Admin Adding Failed", type: 'error' }))
+        // }
     },[userAddedStatus])
 
     return (
