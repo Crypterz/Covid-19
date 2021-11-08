@@ -77,8 +77,8 @@ function Header() {
                                     <Nav.Link ><span>Hospitals</span></Nav.Link>
                             </LinkContainer></Dropdown.Item> */}
 
-                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/staffs'>
-                                    <Nav.Link ><span>Staffs</span></Nav.Link>
+                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/addHospitalStaff'>
+                                    <Nav.Link ><span>Add Staffs</span></Nav.Link>
                             </LinkContainer></Dropdown.Item>
 
 
