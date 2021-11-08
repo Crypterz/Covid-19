@@ -88,7 +88,7 @@ export default function Hospitals() {
           .map(row => (
             <TableRow key={row._id}>
               <TableCell align="left">{row.name}</TableCell>
-              <TableCell align="left">{row.Contact[0]}</TableCell>
+              <TableCell align="left">0{row.Contact[0]}</TableCell>
               <TableCell align="left">{row.address.district}</TableCell>
               <TableCell align="left">{row.address.city}</TableCell>
               <TableCell align="left">{row.address.province}</TableCell>

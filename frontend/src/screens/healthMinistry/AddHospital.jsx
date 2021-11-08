@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addHospital, getHospitalAddedStatus} from '../../store/entities/hospitals';
 import { toastAction } from '../../store/toastActions';
+import Box from '@mui/material/Box';
 
 export default function AddHospital(props) {
     const validateContact = (contact) => {
@@ -43,63 +44,80 @@ export default function AddHospital(props) {
               province : province
           },
       }
-      dispatch(addHospital(hospital))
-      setUserState(true)
+      if (!validateName(name)) {
+        alert("Hospital Name should not include digits");
+        }
+        else if (!validateContact(contact)) {
+            alert("Enter valid telephone number");
+        }
+        else if (!validateCity(city)) {
+            alert("City should not include digits");
+        }else{
+            dispatch(addHospital(hospital));
+            setUserState(true);
+        }     
     };
 
     useEffect(() => {
         if(hospitalAddedStatus.hospitalAdded && userState){
           setUserState(false)
           dispatch(toastAction({ message: "Hospital Added Successfully", type: 'info' }))
+            window.location.href = "/healthMinistry/hospital";
         }
      },[dispatch, hospitalAddedStatus])
         
     return (
-            <div class="container-fluid">
-                    <div class="col-10 mx-auto banner text-center">
-                    <h3 class="text-capitalize">
-                            <strong class="banner-title">Want to Add new Hospital?</strong></h3></div>
-            <Container >
+           <Container > 
+        <Box sx={{ bgcolor: '#cfe8fc', height: '850px' }}>
+        <div className="col-10 mx-auto banner text-center"><br/>
+            <h3 className="text-capitalize">
+                    <strong className="banner-title">Want to Add NEW HOSPITAL?</strong></h3></div>
                 <Form className="form" onSubmit={submitHandler}>
-                    <Form.Group controlId='name'>
-                    <Form.Label class="float-left" className = 'form-label'>Hospital Name:</Form.Label>
+                    <Form.Group as={Col} controlId='name'>
+                    <Form.Label class="float-left" className = 'form-label'><strong>HOSPITAL NAME:</strong></Form.Label>
+                    <Col sm={12}>
                     <Form.Control 
                         type='text'
                         id='name' 
                         placeholder='Enter Hospital Name'
                         onChange={(e) => setName(e.target.value)}
-                        size='sm'
+                        // size='sm'
                         required
                     />
+                    </Col>
                     </Form.Group>
 
-                    <Form.Group  controlId='contact'>
-                    <Form.Label class="float-left" className = 'form-label' >Contact Number:</Form.Label>
+                    <Form.Group as={Col}  controlId='contact'>
+                    <Form.Label class="float-left" className = 'form-label' ><strong>CONTACT NUMBER:</strong></Form.Label>
+                    <Col sm={12}>
                     <Form.Control 
                         type='number'
                         id='contact'
-                        placeholder="0XX XXX XXXX"  
-                        pattern="(0)[0-9]{2} [0-9]{3} [0-9]{4}" 
-                        size = 'sm'
+                        placeholder="0XXXXXXXXX"  
+                        // size = 'sm'
                         required
                         onChange={(e) => setContact(e.target.value)} 
                     />  
                     <small>*Should start with 0 <br/>*Should consist of 10 digits</small>
+                    </Col>
                     </Form.Group>
 
-                    <Form.Group controlId="formCity">
-                                <Form.Label class="float-left" className = 'form-label'>City:</Form.Label>
+                    <Form.Group as={Col} controlId="formCity">
+                                <Form.Label class="float-left" className = 'form-label'><strong>CITY:</strong></Form.Label>
+                                <Col sm={12}>
                                 <Form.Control
                                 type="text"
                                 id="city"
-                                size = 'sm'
+                                // size = 'sm'
                                 required 
                                 placeholder='Enter City'
                                 onChange={(e) => setCity(e.target.value)}/>
-                                </Form.Group>
-                    <Form.Row>
+                                </Col>
+                    </Form.Group>
+                    
                     <Form.Group  as={Col} controlId="formDistrict">
-                                <Form.Label class="float-left" className = 'form-label'>District:</Form.Label>
+                                <Form.Label class="float-left" className = 'form-label'><strong>DISTRICT:</strong></Form.Label>
+                                <Col sm={12}>
                                 <Form.Control 
                                 as="select" 
                                 id="district" 
@@ -131,10 +149,12 @@ export default function AddHospital(props) {
                                     <option value="Rathnapura">Rathnapura   </option>
                                     <option value="Kegalle">Kegalle </option>
                                     </Form.Control>
+                                </Col>
                             </Form.Group>
 
                             <Form.Group as={Col}  controlId="formProvince">
-                                <Form.Label class="float-left" className = 'form-label' >Province:</Form.Label>
+                                <Form.Label class="float-left" className = 'form-label' ><strong>PROVINCE:</strong></Form.Label>
+                                <Col sm={12}>
                                 <Form.Control 
                                 as="select" 
                                 id="province" 
@@ -152,16 +172,14 @@ export default function AddHospital(props) {
                                     <option value="Sabaragamuwa">Sabaragamuwa Province </option>
                                     
                                     </Form.Control>
+                                </Col>
                                 </Form.Group>
-                            </Form.Row>
-                        <div>
-                        <Button variant="primary" type="submit">Submit</Button>
+                            
+                        <div class="horizontal-center"> 
+                        <Button variant="primary" type="submit">ADD NEW HOSPITAL</Button>
                         </div>
                 </Form>
-            </Container>
-            
-            </div>
-            
-            
+                </Box>
+            </Container>            
         );
     }
