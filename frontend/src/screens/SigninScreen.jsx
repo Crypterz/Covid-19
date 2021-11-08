@@ -107,6 +107,10 @@ export default function SigninScreen(props) {
           </Button>
         </div>
 
+        <div>
+          <Link to={{ pathname :"/forgotPassword" }}>Forgot Password</Link>
+          {/* <a>Forgot Password</a> */}
+        </div>
       </Form>
     </div>
   );

@@ -5,7 +5,7 @@ import { paginate } from '../../utils/paginate';
 import Loader from '../../components/Loader'
 import Pagination from '../../components/Pagination';
 //import { listPatients } from '../../actions/patientActions'
-import { loadAdmittedPatients, getAllAdmittedPatients, getPatientsLoadingStatus/*getAdmittedPatientsLoadingStatus*/} from '../../store/entities/patients';
+import { loadAdmittedPatients, getAllAdmittedPatients, getPatientsLoadingStatus, getAdmittedPatientsLoadingStatus} from '../../store/entities/patients';
 import { useLocation, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -27,16 +27,16 @@ const AdmittedPatients = ({history}) => {
    // const data = objectDestructure (patients);
    // const {medicalHistory, nic, pcrTest, user, _id } = patientsDetails.list;
     console.log(patients)
-    const patientsLoading = useSelector(getPatientsLoadingStatus);
+    const patientsLoading = useSelector(getAdmittedPatientsLoadingStatus);
 
-    const location = useLocation()
-    let { category:passedCategory  } = location
-    if(!passedCategory) passedCategory = 'All'
+  //  const location = useLocation()
+  //  let { category:passedCategory  } = location
+  //  if(!passedCategory) passedCategory = 'All'
 
-    const AllCategories = ['All','Active', 'Recovered', 'Transffered', 'Deaths']
-    const categories = AllCategories.filter(c=> c!== passedCategory)
+   // const AllCategories = ['All','Active', 'Recovered', 'Transffered', 'Deaths']
+   // const categories = AllCategories.filter(c=> c!== passedCategory)
 
-    const [selectedCategory, setSelectedCategory] = useState(passedCategory);
+ //   const [selectedCategory, setSelectedCategory] = useState(passedCategory);
     const [filtered, setFiltered] = useState(patients);
     //console.log(filtered)
 
@@ -56,9 +56,9 @@ const AdmittedPatients = ({history}) => {
         dispatch(loadAdmittedPatients())
 
         const updatedSearchFiltered = getFilteredSearchedPatients(patients, searchKeyword)
-        const updatedFiltered = getFilteredPatients(updatedSearchFiltered, categories, selectedCategory);
-        setFiltered(updatedFiltered);
-        setPaginated(paginate(updatedFiltered, currentPage, pageSize));
+       // const updatedFiltered = getFilteredPatients(updatedSearchFiltered, categories, selectedCategory);
+        setFiltered(updatedSearchFiltered);
+        setPaginated(paginate(updatedSearchFiltered, currentPage, pageSize));
        // getFilteredSearchedPatients(patients, searchKeyword)
        // console.log(searchKeyword)
     },[searchKeyword])
@@ -70,7 +70,7 @@ const AdmittedPatients = ({history}) => {
             {auth.loggedIn ?  */}
             {(typeof(patients) === 'undefined' || patients.length == 0) && patientsLoading && (<Loader></Loader>)}
             <Container>
-                <h3 style={{textAlign:'center', marginBottom:'40px', fontWeight:'700'}}>PATIENTS DETAILS</h3>
+                <h3 style={{textAlign:'center', marginBottom:'40px', fontWeight:'700'}}>ADMITTED PATIENTS</h3>
 
                 <Button 
                     className="btn btn-success"
@@ -156,15 +156,12 @@ const AdmittedPatients = ({history}) => {
 }
 
 function getFilteredPatients(patients, categories, filter){
-    console.log(filter)
-    if(filter === "All") return patients;
-    if(filter === "Active"){
-        const patient = patients.filter(c => c.currentMedicalHistory)
-        console.log(patient)
-        return patient
-    }
+    const patient = patients.filter(c => c.currentMedicalHistory)
+    console.log(patient)
+    return patient
+
   //  const category = categories.find(c => c === filter);
-   return patients;
+   //return patients;
 }
 
 export function getFilteredSearchedPatients(patients, filterBy){

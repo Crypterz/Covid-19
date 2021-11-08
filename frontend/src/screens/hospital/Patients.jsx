@@ -33,7 +33,7 @@ const Patients = ({history}) => {
     let { category:passedCategory  } = location
     if(!passedCategory) passedCategory = 'All'
 
-    const AllCategories = ['All','Active', 'Recovered', 'Transffered', 'Deaths']
+    const AllCategories = ['All','Active']
     const categories = AllCategories.filter(c=> c!== passedCategory)
 
     const [selectedCategory, setSelectedCategory] = useState(passedCategory);

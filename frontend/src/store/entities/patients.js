@@ -206,10 +206,10 @@ export const loadPatient = (patientid) => (dispatch, getState) => {
  
      return dispatch(
          apiCallBegan({
-             url: patientURL + 'patients/admitted',
-             onStart: patientsRequested.type,
-             onSuccess: patientsReceived.type,
-             onError: patientsRequestFailed.type
+             url: patientURL + 'patients/hospital/admitted',
+             onStart: admittedPatientsRequested.type,
+             onSuccess: admittedPatientsReceived.type,
+             onError: admittedPatientsRequestFailed.type
          })
      );
  };
