@@ -39,42 +39,42 @@ exports.getAdmittedPatients = catchAsync(async (req, res,next) => {
             from: "medicalhistories",
             localField:"currentMedicalHistory",
             foreignField: "_id",
-            as: "current"
+            as: "currentMedicalHistory"
             }
         },
         { $lookup: {
             from: "users",
             localField:"user",
             foreignField: "_id",
-            as: "userD"
+            as: "user"
             }
         },
         {
             $unwind:
               {
-                path: '$current',
+                path: '$currentMedicalHistory',
               }
         },
         {
             $unwind:
               {
-                path: '$userD',
+                path: '$user',
               }
         },
         {
-            $match:{"current.hospital": req.user.hospital}
+            $match:{"currentMedicalHistory.hospital": req.user.hospital}
         },
-        {
-            $project:{
-                _id:1,
-                hospital:"$current.hospital",
-                name:"$userD.name",
-                email:"$userD.email",
-                birthday:"$user.birthday",
-                address:"$user.address",
+        // {
+        //     $project:{
+        //         _id:1,
+        //         hospital:"$current.hospital",
+        //         name:"$userD.name",
+        //         email:"$userD.email",
+        //         birthday:"$user.birthday",
+        //         address:"$user.address",
                 
-            }
-        }
+        //     }
+        // }
 
     ])
     console.log(req.user.hospital)
