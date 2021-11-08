@@ -44,9 +44,9 @@ const slice = createSlice({
             users.lastFetch = Date.now();
         },
 
-        userUpdated(user, action){
-            
-        },
+        // userUpdated(user, action){
+        //     console.log(action.payload.data.user)
+        // },
     }
 });
 
@@ -59,6 +59,7 @@ export const {
     userCreateRequested,
     userCreateRequestFailed,
     userCreateRequestSucceeded,
+   // userUpdated,
 } =slice.actions;
 
 const userURL = "/api/v1/";
@@ -94,16 +95,14 @@ export const addUser = (user) => (dispatch) => {
     );
 }
 
-// export const addUser = (user) => (dispatch) => {
+// export const updateUser = (user) => (dispatch) => {
 //     console.log(user)
 //     return dispatch(
 //         apiCallBegan({
-//             url: userURL + 'users/signup',
-//             method: "post",
+//             url: userURL + 'users/update',
+//             method: "patch",
 //             data: user,
-//             onStart: userCreateRequested,
-//             onSuccess: userCreateRequestSucceeded.type,
-//             onError: userCreateRequestFailed
+//             onSuccess: userUpdated.type,
 //         })
 //     );
 // }

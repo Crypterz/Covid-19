@@ -31,6 +31,7 @@ import StaffList from './screens/hospital/staffs/StaffsList';
 import ConfirmData from './screens/healthMinistry/ConfirmData'
 import AdmitPatient from './screens/hospital/AdmitPatient'
 import SearchPCR from './screens/hospital/SerchPCR';
+import AdmittedPatients from './screens/hospital/AdmittedPatients';
 //import Login from './screens/Login'
 
 
@@ -78,6 +79,7 @@ const App = () =>{
             <Route path= '/healthMinistry/hospital' component={Hospitals}/>
             <Route path='/hospital/staffs' component={StaffList}/>
             <Route path='/hospital/searchPCR' component={SearchPCR}/>
+            <Route path='/hospital/admittedPatients' component={AdmittedPatients}/>
 
         {/* </Container> */}
           </switch>

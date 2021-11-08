@@ -8,6 +8,9 @@ const slice = createSlice({
     name: "patients",
     initialState: {
         list: [],
+        admittedPatients: [],
+        admittedPatientsLoading: false,
+        admittedPatientsLastFetch: null,
         loading: false,
         lastFetch: null,
         patientAdded : false,
@@ -46,6 +49,24 @@ const slice = createSlice({
             patients.list = action.payload.data.patients;
             patients.loading = false;
             patients.lastFetch = Date.now();
+           // console.log('srherhtrhjtrjtrjr')
+        },
+
+        admittedPatientsRequested(patients, action){
+            patients.admittedPatientsLoading= true;
+        },
+
+
+        admittedPatientsRequestFailed(patients, action){
+            patients.admittedPatientsLoading = false;
+            
+        },
+
+    // payload: [message: , data: ]
+        admittedPatientsReceived(patients, action){
+            patients.admittedPatients = action.payload.data.patients;
+            patients.admittedPatientsLoading = false;
+            patients.admittedPatientsLastFetch = Date.now();
            // console.log('srherhtrhjtrjtrjr')
         },
 
@@ -106,7 +127,12 @@ const slice = createSlice({
         },
 
         patientDischarged(patients, action){
-
+            console.log(action.payload.data.patient.medicalHistory[0])
+            const { patient, _id } = action.payload.data.patient.medicalHistory[0];
+            const patientIndex = patients.list.findIndex(p => p._id === patient );
+            const histories = patients.list[patientIndex].medicalHistory
+            const historyIndex = histories.findIndex(p => p._id === _id)
+            histories[historyIndex] = action.payload.data.patient.medicalHistory[0]
         }
     },
 });
@@ -129,7 +155,10 @@ export const {
     patientAdmitRequest,
     patientAdmitSuccess,
     patientAdmitFailed,
-    patientDischarged
+    patientDischarged,
+    admittedPatientsReceived,
+    admittedPatientsRequestFailed,
+    admittedPatientsRequested
  } = slice.actions;
                             
 
@@ -169,6 +198,22 @@ export const loadPatient = (patientid) => (dispatch, getState) => {
      );
  };
 
+ export const loadAdmittedPatients = () => (dispatch, getState) => {
+    const { admittedPatientsLastFetch } = getState().entities.patients;
+ 
+     const diffInMinutes = moment().diff(moment(admittedPatientsLastFetch), "minutes");
+     if (diffInMinutes < refreshTime) return;
+ 
+     return dispatch(
+         apiCallBegan({
+             url: patientURL + 'patients/admitted',
+             onStart: patientsRequested.type,
+             onSuccess: patientsReceived.type,
+             onError: patientsRequestFailed.type
+         })
+     );
+ };
+
 export const getAllPatients= createSelector(
     state => state.entities.patients,
     patients => patients,
@@ -177,6 +222,17 @@ export const getAllPatients= createSelector(
 
 export const getPatientsLoadingStatus = createSelector(
     state => state.entities.patients.loading,
+    loading => loading
+);
+
+export const getAllAdmittedPatients= createSelector(
+    state => state.entities.patients.admittedPatients,
+    patients => patients,
+   // console.log(patients)
+);
+
+export const getAdmittedPatientsLoadingStatus = createSelector(
+    state => state.entities.patients.admittedPatientsLoading,
     loading => loading
 );
 
@@ -295,7 +351,7 @@ export const admitPatient = (patient) => (dispatch) => {
     )
 }
 
-export const diachargePatient = (patientId) => (dispatch) => {
+export const dischargePatient = (patientId) => (dispatch) => {
     console.log(patientId)
     return dispatch(
         apiCallBegan({
