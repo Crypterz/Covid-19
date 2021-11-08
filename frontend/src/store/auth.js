@@ -91,7 +91,12 @@ const slice = createSlice({
            auth.wardDelete = true;
            const newWardList = auth.data.user.admin.hospital.wards.filter(p => p.name !== action.payload.data.ward.name)
            auth.data.user.admin.hospital.wards = newWardList
-       }
+       },
+
+        userUpdated(auth, action){
+            auth.data.user.user = action.payload.data.user
+            console.log(action.payload.data)
+        },
     }
 });
 
@@ -112,6 +117,7 @@ export const {
     wardCreateRequested,
     wardCreateRequestFailed,
     wardCreateRequestSucceeded,
+    userUpdated,
     } = slice.actions;
 
 const hospitalURL = "/api/v1/hospital";
@@ -192,6 +198,18 @@ export const deleteWard= (ward, id) => (dispatch) => {
             method: "patch",
             data: ward,
             onSuccess: wardDelete.type,
+        })
+    );
+}
+
+export const updateUser = (user) => (dispatch) => {
+    console.log(user)
+    return dispatch(
+        apiCallBegan({
+            url: 'api/v1/users/update',
+            method: "patch",
+            data: user,
+            onSuccess: userUpdated.type,
         })
     );
 }

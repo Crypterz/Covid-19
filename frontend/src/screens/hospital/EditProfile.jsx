@@ -2,8 +2,11 @@ import React, {useEffect, useState} from 'react'
 import {Container, Button, Card, Row, Col, Nav, Form, FormControl} from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import {  Formik } from 'formik';
+import axios from 'axios';
 import * as Yup from 'yup';
-import  patients, { getPatientById,  updatePatient} from '../../store/entities/patients';
+//import { updateUser } from '../../store/entities/users';
+import { updateUser } from '../../store/auth';
+//import  { getPatientById,  updatePatient} from '../../store/entities/patients';
 import { toastAction } from '../../store/toastActions';
 
 const EditProfile = ({match, history}) => {
@@ -11,28 +14,37 @@ const EditProfile = ({match, history}) => {
     const dispatch = useDispatch()
     const patientId = match.params.id
 
-    const auth = useSelector(state => state.auth);
+   // const auth = useSelector(state => state.auth);
+   // console.log(auth)
 
-    const patient = useSelector(getPatientById(patientId))
+    const userDetails = useSelector(state => state.auth);
+    const { user } = userDetails.data.user
+    const patient = user
 
-    const { address, birthday, contactNo, name } = patient.user
-   // console.log(birthday)
+   // console.log(patient)
+
+   const districts = [{id:'0', name:'Ampara'},{ id:'1', name:'Anuradhapura'},{id:'2',name:'Badulla'},
+   {id:'3', name:'Batticaloa'},{id:'4', name:'Colombo'},{id:'5', name:'Galle'},{id:'6', name:'Gampaha'}, 
+   {id:'7', name:'Hambanthota'},{id:'8', name:'Jaffna'},{id:'9', name:'Kalutara'},{id:'10', name:'Kandy'},
+   {id:'11', name:'Kegalle'},{id:'12', name:'Kilinochchi'},{id:'13', name:'Kurunegala'},{id:'14', name:'Mannar'},
+   {id:'15', name:'Matale'},{id:'16', name:'Matara'},{id:'17', name:'Monaragala'},{id:'18', name:'Mullativu'},
+   {id:'19', name:'Nuwara Eliya'},{id:'20', name:'Polonnaruwa'},{id:'21', name:'Puttalam'},
+   {id:'22', name:'Ratnapura'},{id:'23', name:'Trincomalee'},{id:'24', name:'Vavuniya'},  ]
+
+   const [currentDistrict, setDistrict] = useState()
+   console.log(currentDistrict)
+  
+
+    const { address, birthday, contactNo, name } = patient
     const birthDay = birthday.split("-")
     const dateFormat = birthDay[0]+"-"+birthDay[1]+"-"+birthDay[2][0]+birthDay[2][1]
 
-    const { line1, line2, city} = address
+    const { line1, line2, city, district} = address
+    const districtId = getDistrict(districts, district)
+    //setDistrict(districtId)
+    console.log(districtId)
     const { firstName, lastName} = name
 
-
-    const districts = [{id:'0', name:'Ampara'},{ id:'1', name:'Anuradhapura'},{id:'2',name:'Badulla'},
-    {id:'3', name:'Batticaloa'},{id:'4', name:'Colombo'},{id:'5', name:'Galle'},{id:'6', name:'Gampaha'}, 
-    {id:'7', name:'Hambanthota'},{id:'8', name:'Jaffna'},{id:'9', name:'Kalutara'},{id:'10', name:'Kandy'},
-    {id:'11', name:'Kegalle'},{id:'12', name:'Kilinochchi'},{id:'13', name:'Kurunegala'},{id:'14', name:'Mannar'},
-    {id:'15', name:'Matale'},{id:'16', name:'Matara'},{id:'17', name:'Monaragala'},{id:'18', name:'Mullativu'},
-    {id:'19', name:'Nuwara Eliya'},{id:'20', name:'Polonnaruwa'},{id:'21', name:'Puttalam'},
-    {id:'22', name:'Ratnapura'},{id:'23', name:'Trincomalee'},{id:'24', name:'Vavuniya'},  ]
-
-    const [currentDistrict, setDistrict] = useState(6)
 
     const [ schema, setSchema ] = useState({ 
         first_name : Yup.string().required('First Name is required...'),
@@ -70,29 +82,39 @@ const EditProfile = ({match, history}) => {
         const Result = {
                 name : {
                     firstName: first_name,
-                    lstName : last_name,
+                    lastName : last_name,
                 },
-                contactNo : Tel_number,
-                birthday,
-                address,
+                contactNo : parseInt(Tel_number),
+                birthday: birthday,
+                address : {
+                    line1: line1,
+                    line2: line2,
+                    city: city,
+                    district: patientDistrict 
+                },
               //  city,
               //  patientDistrict ,
         }
         console.log(Result)
-
-        dispatch(updatePatient(Result, patientId));
+        dispatch(updateUser(Result))
+      //  dispatch(updatePatient(Result, patientId));
         //dispatch(toastAction({ message: "Profile Updated Successfully", type: 'info' }))
     }
 
 
     useEffect(() => {
+        // const fetchPatient = async () => {
+        //     const {data} = await axios.get(`http://localhost:8000/api/v1/patients/${patientId}`)
+        //     setPatient(data.data)
+        // }
 
+        // fetchPatient()
     }, [dispatch])
 
     return (
 
             <Container className=' formContainer mt-3'>
-                 {auth.loggedIn ? 
+                 {userDetails.loggedIn ? 
             <Formik
                 validationSchema = {Yup.object().shape(schema)}
                 onSubmit = {submitForm}
@@ -305,4 +327,13 @@ const EditProfile = ({match, history}) => {
 }
 
 export default EditProfile
+
+function getDistrict(districtList, district){
+    if( typeof(district) !== 'undefined'){
+        const value = districtList.filter( p=> p.name === district )
+        console.log(value)
+        return value.id
+    }
+    return ''
+}
 

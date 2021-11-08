@@ -10,6 +10,8 @@ function Header() {
         const { user } = userDetails.data.user
         auth = user
     }
+
+    console.log(userDetails)
     const [userType, setUsertype] = useState('');
 
     useEffect(() => {
@@ -35,7 +37,7 @@ function Header() {
                             <Nav.Link className = 'navbar-item'><span>Log Out</span></Nav.Link>
                         </LinkContainer>}
 
-                        {userDetails.loggedIn && userType === 'patient' && <LinkContainer to = '/hospital/profile/'>
+                        {userDetails.loggedIn && userType === 'patient' && <LinkContainer to = '/hospital/patientProfile'>
                             <Nav.Link className = 'navbar-item'><span>Profile</span></Nav.Link>
                         </LinkContainer>}
 
@@ -72,10 +74,10 @@ function Header() {
                             <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/wards'>
                                     <Nav.Link ><span>Wards</span></Nav.Link>
                             </LinkContainer></Dropdown.Item>
-{/* 
-                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/healthMinistry/hospital'>
-                                    <Nav.Link ><span>Hospitals</span></Nav.Link>
-                            </LinkContainer></Dropdown.Item> */}
+
+                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/admittedPatients'>
+                                    <Nav.Link ><span>Admitted Patients</span></Nav.Link>
+                            </LinkContainer></Dropdown.Item>
 
                             <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/staffs'>
                                     <Nav.Link ><span>Staffs</span></Nav.Link>

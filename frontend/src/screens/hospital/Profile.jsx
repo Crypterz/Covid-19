@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {Container, Button, Card, Row, Col, Nav, Form,FormControl} from 'react-bootstrap'
 import Loader from '../../components/Loader'
 import { useDispatch, useSelector } from 'react-redux';
-import patients, { loadPatients , getPatientById, getAllPatients, getPatientsLoadingStatus, updateTransferPatient, loadPatient} from '../../store/entities/patients';
+import { getPatientById, updateTransferPatient, loadPatients, dischargePatient} from '../../store/entities/patients';
 import {getAllHospitals, loadHospitals} from '../../store/entities/hospitals'
 import { Scrollbars } from 'react-custom-scrollbars';
 import PersonalInfo from '../../components/patientProfile/PersonalInfo'
@@ -17,26 +17,26 @@ const Profile =  ({match, history}) => {
     
     const userDetails = useSelector(state => state.auth);
     const { admin, user } = userDetails.data.user
-    const {wards, _id } = admin.hospital
-    const userHospital_id = _id
+    let wardsDetails = ''
+    let userHospital_id =''
+    if(admin){
+        const {wards, _id } = admin.hospital
+        wardsDetails = wards
+        userHospital_id = _id
+    }
+
     const auth = user
 
-    console.log(userDetails)
     const patients = useSelector(getPatientById(patientId))
-    console.log(patients)
     const hospitals = useSelector(getAllHospitals)
-    console.log(hospitals)
-    //const wardDetails = getWard(hospitals, auth.data.user.hospital_id)
+    console.log(patients)
+
     const currentHospital_id = getCurrentHospitalId(patients)
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
     const [popup, setPopUp] = useState(false);
-  //  console.log(popup)
-
-   // const currentHospital_id = '4';
-   // const userHospital_id = '4'
 
    const [filteredHistory, setFilteredHistory] = useState([])
    const [patientHistory, changeHistory ] = useState(filteredHistory) 
@@ -44,7 +44,7 @@ const Profile =  ({match, history}) => {
 
 
    const setDischargeHandler = () =>{
-       console.log('efewfwef')
+       dispatch(dischargePatient(patientId))
    }
 
     const setDates = (date, type) =>{
@@ -69,7 +69,7 @@ const Profile =  ({match, history}) => {
 
     useEffect(() => {
         if(auth.role === 'patient'){
-            dispatch(loadPatient(patientId))
+            dispatch(loadPatients())
         }else{
           //  dispatch(loadPatients())
             dispatch(loadHospitals())
@@ -110,7 +110,7 @@ const Profile =  ({match, history}) => {
                     <div className="vs-col vs-xs- vs-sm-12 vs-lg-3" style={{margin:'0%',width:'100%', position:'relative'}}>
                             <div className="set-animation from-left animate">
                             {currentHospital_id === userHospital_id ? 
-                                <Actions patients={patients} hospitals={hospitals} wards ={wards} popUpHandler={setPopUp}></Actions> 
+                                <Actions patients={patients} hospitals={hospitals} wards ={wardsDetails} popUpHandler={setPopUp}></Actions> 
                                //<Card>rfergre</Card>
                                 :''
                             }

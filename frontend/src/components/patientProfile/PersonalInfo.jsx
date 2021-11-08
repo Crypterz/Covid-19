@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Button, Card} from 'react-bootstrap'
 
 const PersonalInfo = ({patients, currentHospital, userHospital, id}) => {
-
+    console.log(patients)
     const userDetails = useSelector(state => state.auth);
     const { user } = userDetails.data.user
     const auth = user
@@ -41,7 +41,7 @@ const PersonalInfo = ({patients, currentHospital, userHospital, id}) => {
                             <Button 
                                 type='submit'  
                                 className='btn btn-primary' 
-                                onClick={()=> window.location=`/hospital/editProfile/${id}`}
+                                onClick={()=> window.location=`/hospital/editProfile/${patients._id}`}
                             >Edit Profile</Button>
                         </div>:''}
                 </ul>
@@ -65,8 +65,8 @@ function objectDestructure ( patients, type){
             return patientName;
          }
         if(type === "address"){
-            const { city, line1, line2, province } = address;
-            return (city + "," + line1 + "," + line2 + "," + province)
+            const { city, line1, line2, district } = address;
+            return (city + "," + line1 + "," + line2 + "," + district)
         }
         if(type === "birthday"){
             const date = birthday.split("-")

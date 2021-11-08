@@ -6,6 +6,7 @@ const AppError = require('../utils/appError');
 
 
 exports.getPatient = catchAsync(async (req, res,next) => {
+    console.log(req.params.id)
     const patient=await Patient.findById(req.params.id).populate({
         path:'pcrTest medicalHistory user',
         select: '-__v -name -passwordResetToken'

@@ -41,6 +41,12 @@ export default function SigninScreen(props) {
     const userDetails = useSelector(state => state.auth.data);
     const auth = userDetails
 
+    // let auth = "";
+    // if(userDetails.loggedIn){
+    //   const { user } = userDetails.data.user
+    //   auth = user
+    // }
+
     //console.log(auth.user.role)
     //console.log(admin)
 
@@ -51,11 +57,11 @@ export default function SigninScreen(props) {
           // console.log(auth.user.user)
            // console.log('logged in suceessfully');
             dispatch(toastAction({ message: "Logged in Success...", type: 'info' }));
-            if(auth.user.role === 'hospitalAdmin' || 'hospital user'){
+            if(auth.user.user.role === 'hospitalAdmin' || 'hospital user'){
                window.location ='/hospital/dashboard'
             }
-             if(auth.user.role === 'patient'){
-               window.location =`/hospital/profile/${auth.user._id}`
+             if(auth.user.user.role === 'patient'){
+               window.location =`/hospital/patientProfile/${auth.user.user._id}`
             }
              if(auth.user.user.role === 'admin'){
               window.location ='/healthMinistry/dashboard'
