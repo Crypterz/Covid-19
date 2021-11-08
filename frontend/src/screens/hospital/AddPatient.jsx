@@ -140,7 +140,7 @@ export default function AddPatient(props) {
 
     return (
         <Container fluid > 
-                <Box sx={{ bgcolor: '#cfe8fc', height: '1350px' }}>
+                <Box sx={{ bgcolor: '#cfe8fc', height: '1390px' }}>
                 <div className="col-10 mx-auto banner text-center"><br/>
                     <h3 className="text-capitalize">
                             <strong className="banner-title">Want to Add NEW PATIENT?</strong></h3></div>
