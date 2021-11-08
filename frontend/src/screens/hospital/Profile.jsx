@@ -94,7 +94,7 @@ const Profile =  ({match, history}) => {
 
                     <div className="vs-col vs-xs- vs-sm-12 vs-lg-6"style={{margin:'0%',width:'100%', position:'relative'}}>
                         <div className="set-animation from-left animate">
-                            {patients.currentMedicalHistory ?
+                            {patients.currentMedicalHistory && userHospital_id === currentHospital_id? 
                                 <CurrentInfo patients={objectDestructure(patients, "history").slice(-1)[0]}
                                     userHospital={userHospital_id} currentHospital={currentHospital_id} hospitals={hospitals}
                                 ></CurrentInfo> : 
