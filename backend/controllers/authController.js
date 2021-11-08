@@ -37,6 +37,7 @@ const createSendToken = (user,statusCode, res)=>{
 exports.signup =catchAsync( async (req,res,next)=>{
     // console.log(req.cookie)
         // const newUser=await User.create(req.body)  //if we go this way, any user can change other fields too. ex: type of user
+        req.body
         const newUser = await User.create({
             name:{
                 firstName:req.body.name.firstName,
@@ -101,14 +102,16 @@ exports.signup =catchAsync( async (req,res,next)=>{
 // })
 
 exports.login=catchAsync(async(req, res, next)=>{
-    console.log('auth controller..........')
+    // console.log('auth controller..........')
     console.log(req.body)
     const {email, password}=req.body
+    console.log(req.body)
     if(!email || !password){
         return next(new AppError('Please provide email and password',400))
     }
-    var user=await User.findOne({email:email}).select('+password')
-    // console.log(user)
+    console.log('llllllllll')
+    const user=await User.findOne({email:email}).select('+password')
+    console.log(user)
     // const correct = await user.correctPassword(password, user.password);
     if(!user || !(await user.correctPassword(password, user.password))) {
         return next(new AppError('Incorrect email or password',401))
@@ -125,13 +128,13 @@ exports.login=catchAsync(async(req, res, next)=>{
     }else{
         user={user};
     }
-    console.log(token)
+    // console.log(token)
     res.cookie('jwt',token,{
         expires:new Date(Date.now()+process.env.JWT_COOKIE_EXPIRES_IN*24*60*60*1000),
         // secure:true,     //COOKIE WILL SEND ONLY ENCREPTED CONNECTION HTTPS 
         httpOnly:true        // COKKIES CANT BE MODIFIES BY BROWSER - TO PREVENT CROSS SITE ATTACK
     })
-    res.status(200).json({
+    res.status(201).json({
         status:'success',
         token,
         data:{
