@@ -10,6 +10,8 @@ const slice = createSlice({
         logging: false,
         loggedIn : false,
         wardAdded: false,
+        wardUpdated:false,
+        wardDelete: false
     },
     reducers: {
 
@@ -73,16 +75,22 @@ const slice = createSlice({
         },
 
         wardCreateRequestSucceeded(auth, action){
-           // hospital.loading = false;
             auth.wardAdded = true
-            const wardId = action.payload.data;
-            auth.data.user.admin.hospital = wardId.hospital
+            auth.data.user.admin.hospital.wards.push(action.payload.data.ward) //= wardId.hospital
         },
 
         wardUpdated(auth, action){
-            const wardId = action.payload.data;
-            auth.data.user.admin.hospital = wardId.hospital
-            console.log(wardId)
+            auth.wardUpdated = true
+            //console.log(action.payload.data.ward.totalBeds)
+            const index =  auth.data.user.admin.hospital.wards.findIndex(p => p.name === action.payload.data.ward.name)
+            auth.data.user.admin.hospital.wards[index].totalBeds = action.payload.data.ward.totalBeds
+           
+       },
+
+       wardDelete(auth, action){
+           auth.wardDelete = true;
+           const newWardList = auth.data.user.admin.hospital.wards.filter(p => p.name !== action.payload.data.ward.name)
+           auth.data.user.admin.hospital.wards = newWardList
        }
     }
 });
@@ -100,7 +108,7 @@ export const {
     userLoggedOut,
     authDataUpdated,
     wardUpdated,
-    // wardDelete,
+    wardDelete,
     wardCreateRequested,
     wardCreateRequestFailed,
     wardCreateRequestSucceeded,
@@ -163,11 +171,11 @@ export const addWard = (ward) => (dispatch) => {
     );
 }
 
-export const updateWard= (ward, id) => (dispatch) => {
-    console.log(id)
+export const updateWard= (ward, wardId) => (dispatch) => {
+    console.log(ward)
     return dispatch(
         apiCallBegan({
-            url: hospitalURL + `/ward/${id}`,
+            url: hospitalURL + `/ward/${wardId}`,
             method: "patch",
             data: ward,
             onSuccess: wardUpdated.type,
@@ -176,15 +184,15 @@ export const updateWard= (ward, id) => (dispatch) => {
 
 }
 
-// export const deleteWard= (ward, id) => (dispatch) => {
-//     console.log(ward, id)
-//     return dispatch(
-//         apiCallBegan({
-//             url: hospitalURL + `wards/${id}`,
-//             method: "patch",
-//             data: ward,
-//             onSuccess: wardDelete.type,
-//         })
-//     );
-// }
+export const deleteWard= (ward, id) => (dispatch) => {
+    console.log(ward, id)
+    return dispatch(
+        apiCallBegan({
+            url: hospitalURL + `wards/${id}`,
+            method: "patch",
+            data: ward,
+            onSuccess: wardDelete.type,
+        })
+    );
+}
 

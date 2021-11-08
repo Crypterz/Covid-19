@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { getAllWards, getWardsLoadingStatus, loadWards/*, updateWard,addWard*/, deleteWard} from '../../../store/entities/hospitals';
 import { updateWard, addWard } from "../../../store/auth";
+import { toastAction } from '../../../store/toastActions';
 import { useDispatch, useSelector } from 'react-redux';
 
 import CRUDTable, {
@@ -123,13 +124,15 @@ export default function WardsList() {
   const dispatch = useDispatch()
 
   const userDetails = useSelector(state => state.auth);
-  console.log(userDetails)
   const { admin, user } = userDetails.data.user
   const { wards } = admin.hospital
 
+  const [wardAddState, setWardAddState] = useState(false)
+  const [wardUpdateState, setWardUpdateState] = useState(false)
+  const [wardDeleteState, setWardDeleteState] = useState(false)
+
 
 let count = wards.length;
-console.log(wards)
 const service = {
   fetchItems: payload => {
     const { activePage, itemsPerPage } = payload.pagination;
@@ -170,59 +173,64 @@ const service = {
 const styles = {
   container: { margin: "auto", width: "max-content" }
 };
- // const hospitalsLoading = useSelector(getHospitalLoadingStatus);
 
  function updateCurrentWard(ward){
-   // console.log(ward)
     const wardDetails = {
-       //wardNo: ward.ward_no,
        name: ward.name,
        totalBeds: ward.totalBeds,
-      // admittedPatients: ward.admitted_patients,
-      //description: ward.description
     }
 
-    // count += 1;
-    // wards.push({
-    //   ...ward,
-    //   ward_no: count
-    // });
+    if(ward.totalBeds < ward.admittedPatients){
+       dispatch(toastAction({ message: "No of Beds cannot be lass than admitted patients" , type: 'error'}))
+    }
+    else{
+      dispatch(updateWard(wardDetails, ward._id))
+      setWardUpdateState(true)
+    }
 
-    dispatch(updateWard(wardDetails, ward._id))
-    //update(ward)
     return Promise.resolve(ward)
  }
 
  function addNewWard(ward){
-  // console.log(ward)
    const wardDetails = {
-      //wardNo: ward.ward_no,
       name: ward.name,
       totalBeds: ward.totalBeds,
-     // admittedPatients: ward.admitted_patients,
-     //description: ward.description
    }
    dispatch(addWard(wardDetails))
+   setWardAddState(true)
    return Promise.resolve(ward)
 }
 
 function deleteCurrentWard(ward){
-  // console.log(ward)
    const wardDetails = {
-      //wardNo: ward.ward_no,
       name: ward.name,
       totalBeds: ward.totalBeds,
-     // admittedPatients: ward.admitted_patients,
-     //description: ward.description
    }
-   dispatch(deleteWard(wardDetails, ward.ward_id))
-   //setStatus(true)
-   //window.location.reload()
+
+   if(ward.admittedPatients.length > 0){
+     dispatch(toastAction({ message: "Invalid Action, Cannot delete patient admitted ward" , type: 'error'}))
+   }
+   else{
+   // dispatch(toastAction({ message: "Invalid Action, Cannot delete patient admitted ward" , type: 'info'}))
+    //dispatch(deleteWard(wardDetails, ward.ward_id))
+    //setWardDeleteState(true)
+   }
    return Promise.resolve(ward)
 }
 
  useEffect (() => {
-  // dispatch(loadWards())
+   if(userDetails.wardAdded && wardAddState){
+      setWardAddState(false)
+      dispatch(toastAction({ message: "Ward Addes Successfully, Please Refresh Page..." , type: 'info'}))
+   }
+   if(userDetails.wardUpdated && wardUpdateState){
+    setWardUpdateState(false)
+    dispatch(toastAction({ message: "Ward Updated Successfully, Please Refresh Page..." , type: 'info'}))
+   }
+   if(userDetails.wardDelete && wardDeleteState){
+    setWardDeleteState(false)
+    dispatch(toastAction({ message: "Ward Deleted Successfully, Please Refresh Page..." , type: 'info'}))
+   }
  },[userDetails])
 
 
@@ -286,9 +294,9 @@ return (
         submitText="Delete"
         validate={values => {
           const errors = {};
-          if (!values.ward_no) {
-            errors.ward_no = "Please, provide Ward Number";
-          }
+          // if (!values.ward_no) {
+          //   errors.ward_no = "Please, provide Ward Number";
+          // }
           return errors;
         }}
       />

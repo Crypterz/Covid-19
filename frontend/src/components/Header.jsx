@@ -6,10 +6,8 @@ import {  useSelector } from 'react-redux';
 function Header() {
     const userDetails = useSelector(state => state.auth);
     let auth = "";
-    console.log(userDetails)
     if(userDetails.loggedIn){
         const { user } = userDetails.data.user
-       // auth = userDetails.data.user
         auth = user
     }
     const [userType, setUsertype] = useState('');
