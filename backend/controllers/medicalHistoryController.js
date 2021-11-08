@@ -52,7 +52,8 @@ exports.addDrugs = catchAsync(async (req,res)=>{
     const medicalHistory=await MedicalHistory.findByIdAndUpdate(
         req.params.id,   
         {$push:{drugDetails:{description:req.body.description}}},
-        {upsert: true}
+        {upsert: true},
+        {new:true}
     )
     res.status(200).json({
         status:'success',
@@ -70,7 +71,8 @@ exports.addSymptoms = catchAsync(async (req,res)=>{
     const medicalHistory=await MedicalHistory.findByIdAndUpdate(
         req.params.id,   
         {$push:{symptoms:{description:req.body.description}}},
-        {upsert: true}
+        {upsert: true},
+        {new:true}
     )
     res.status(200).json({
         status:'success',

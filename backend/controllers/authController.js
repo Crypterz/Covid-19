@@ -49,14 +49,13 @@ exports.signup =catchAsync( async (req,res,next)=>{
             passwordConfirm:req.body.passwordConfirm,
             role:req.body.role,
             // nic:req.body.nic,
-
         })
         req.body.user=newUser._id
-        console.log(newUser.role)
+        // console.log(newUser.role)
         if(newUser.role=='patient'){
-            const newPatient=await Patient.create(req.body)
+            await Patient.create(req.body)
         }else if(newUser.role=='hospitalAdmin'){
-            const newAdmin=await Admin.create(req.body)
+            await Admin.create(req.body)
         }
         res.status(201).json({
             status:'success',
