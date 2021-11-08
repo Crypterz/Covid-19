@@ -44,9 +44,10 @@ describe("Admin Login",()=>{
     })
     it("should return 200 response Code",async()=>{
         const response=await authController.login(req,res,next);
-        console.log(response)
-        console.log(res.body)
+        // console.log(response)
+        // console.log(res.body)
         expect(res.statusCode).toBe(200);
         // expect(res._isEndCalled()).toBeTruthy();
     })
 })
+

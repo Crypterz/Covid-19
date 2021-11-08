@@ -11,7 +11,6 @@ describe(endpointUrl, ()=>{
         .set("Accept", "application/json");
         console.log(response.body)
         expect(response.statusCode).toBe(201)
-        
         // expect(response.data.status).toBe('success')
     })
 })

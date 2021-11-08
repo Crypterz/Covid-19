@@ -22,10 +22,37 @@ exports.getPatient = catchAsync(async (req, res,next) => {
 
 exports.getAdmittedPatients = catchAsync(async (req, res,next) => {
     console.log("-----------------------")
-    const patients=await Patient.find({ "currentMedicalHistory": { $ne: null } }).populate({
-        path:'currentMedicalHistory',
-        match:{hospital:req.user.hospital}
-    }).select('-medicalHistory -pcrTest').populate("user")
+    // const patients=await Patient.find({ "currentMedicalHistory": { $ne: null } })
+    // .select('-medicalHistory -pcrTest')
+    // .populate({
+    //     path:'currentMedicalHistory',
+    //     match:{hospital:req.user.hospital}
+    // })
+    // .where({ "currentMedicalHistory": { $ne: null } })
+    // .populate("user")
+
+    const patients=await Patient.aggregate([
+        {
+            $match:{"currentMedicalHistory": { $ne: null }}
+        },
+        { $lookup: {
+            from: "medicalhistories",
+            localField:"currentMedicalHistory",
+            foreignField: "_id",
+            as: "current"
+            }
+        },
+        {
+            $unwind:
+              {
+                path: '$current',
+              }
+        },
+        {
+            $match:{"hospital": req.user.hospital}
+        },
+
+    ])
     console.log(patients)
     if(!patients){
         return next(new AppError("No patient found",404))
