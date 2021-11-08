@@ -1,314 +1,334 @@
-import React, { Component } from 'react';
-import Container from 'react-bootstrap/Container';
-import {Form, Button, Col, FormControl} from 'react-bootstrap';
-import { addUser } from '../../store/entities/users'
-//import {registerPatients} from '../../store/entities/patients'
+import 'bootstrap/dist/css/bootstrap.css';
+import {Form, Button, Container, Col, Row} from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addUser, getUserAddedStatus} from '../../store/entities/users';
 import { toastAction } from '../../store/toastActions';
-import { connect } from 'react-redux'
+import Box from '@mui/material/Box';
 
-//validating empty fields for NHospital
-function validate(first_name, last_name, dob, nic, contact_number, address, city, district) {
-    return {
-        first_name: first_name.length ===0,
-        last_name: last_name.length ===0,
-        dob: dob.length ===0,
-        nic: nic.length ===0,
-        contact_number: contact_number.length ===0,
-        address: address.length ===0,
-        city: city.length ===0,
-        };
-}
 
-//validate tel
-function validate_contactNo(tel) {
-    const reg = /^(0)([0-9]{9})$/; 
-    return reg.test(tel);
-}
-
-//NIC syntax
-function validateNIC(nic) {
-    const regex = /^([0-9]{9})(V|v)$/;
-    const regex2 = /^([0-9]{12})$/;
-
-    if (regex.test(nic)) {
-        return regex.test(nic);
+export default function AddPatient(props) {
+    const current = new Date().toISOString().split("T")[0]
+    console.log(current)
+    const validateFirstName = (firstName) =>{
+        const reg = /^[A-Za-z\b]+$/;
+        return reg.test(firstName)
     }
 
-    else if (regex2.test(nic)) {
-        return regex2.test(nic);
-    }
-}
-
-class AddPatient extends Component {
-    constructor(props){
-        super(props);
-        this.state = {first_name: '',
-                      last_name:'',
-                      dob:'',
-                      nic:'',
-                      contact_number:'',
-                      address:'',
-                      city:'',
-                      district:'',
-
-        // this.state = {name: 'dvdvsv',
-        //               slug: 'efdffve',
-        //               age: 25,
-    };
-
-        this.onChangeFirstName = this.onChangeFirstName.bind(this);
-        this.onChangeLastName = this.onChangeLastName.bind(this);
-        //this.onChangeDob = this.onChangeDob.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.onChangeContactNumber = this.onChangeContactNumber.bind(this);
-        this.onChangeCity = this.onChangeCity.bind(this);
-        this.onChangeNIC = this.onChangeNIC.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-
-       // const auth = useSelector(state => state.auth);
+    const validateLastName = (lastName) =>{
+        const reg = /^[A-Za-z\b]+$/;
+        return reg.test(lastName)
     }
 
-    onChangeFirstName(e) {
-        const re = /^[A-Za-z\b]+$/;
-        if (e.target.value === '' || re.test(e.target.value)) {
-            this.setState({ first_name: e.target.value })
-        }
+    const validateEmail = (email) => {
+        const regexp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return regexp.test(email);
     }
 
-    onChangeLastName(e) {
-        const re = /^[A-Za-z\b]+$/;
-        if (e.target.value === '' || re.test(e.target.value)) {
-            this.setState({ last_name: e.target.value })
-        }
+    const validatePassword = (password) => {
+        const regpw = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+        return regpw.test(password);
+    }
+    const validateContact = (contact) => {
+        const reg = /^(0)([0-9]{9})$/;
+        return reg.test(contact);
     }
 
-
-    onChangeContactNumber(e) {
-        const re = /^[0-9\b]+$/; 
-        if (e.target.value === '' || re.test(e.target.value)) {
-            this.setState({ contact_number: e.target.value })
-        }
+    const validateCity = (city) =>{
+        const reg = /^[A-Za-z\b]+$/;
+        return reg.test(city)
     }
 
-    onChangeCity(e) {
-        const re = /^[A-Za-z\b]+$/;
-        if (e.target.value === '' || re.test(e.target.value)) {
-            this.setState({ city: e.target.value })
-        }
-    }
+    function validateNIC(nic) {
+        const regex = /^([0-9]{9})(V|v)$/;
+        const regex2 = /^([0-9]{12})$/;
     
-    onChangeNIC(e) {
-        this.setState({
-            nic: e.target.value
-        });
-    }
-
-    handleChange(e){
-        this.setState({
-            [e.target.name]: e.target.value
-  });
-    }
-
-    handleSubmit(e){
-        e.preventDefault();
-
-        if(!validate_contactNo(this.state.contact_number)){
-            alert("ENTER VALID CONTACT NUMBER!!!")
+        if (regex.test(nic)) {
+            return regex.test(nic);
         }
-        else if (!validateNIC(this.state.nic)) {
-            alert("Enter valid NIC number");
+    
+        else if (regex2.test(nic)) {
+            return regex2.test(nic);
+        }
+    }
+
+    const dispatch = useDispatch();
+    const userAddedStatus = useSelector(getUserAddedStatus);
+    const [userState, setUserState] = useState(false)
+
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [birthday, setBirthday] = useState('');
+    const [contact, setContact] = useState('');
+    const [line1, setLine1] = useState('');
+    const [line2, setLine2] = useState('');
+    const [city, setCity] = useState('');
+    const [province, setProvince] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordConfirm, setPasswordConfirm] = useState('');
+    const [nicno, setNicno] = useState('');
+    const [person, setPerson] = useState('');
+    console.log(birthday)
+    const submitHandler = (e) => {
+      e.preventDefault();
+      let user= {
+        name: {
+            firstName: firstName,
+            lastName: lastName
+        },
+        email: email,
+        birthday: birthday,
+        contact: contact,
+        address:{
+            line1: line1,
+            line2: line2,
+            city: city,
+            province: province
+        },
+        password: password,
+        passwordConfirm: passwordConfirm,
+        role: 'patient',
+        nic:{
+          nicno: nicno,
+          person: birthday.split('-')[0]
+        },
+        //hospital_id: window.location.pathname.split('/')[3],
+      }
+
+        if (!validateFirstName(firstName)) {
+        alert("First Name should not include digits");
+        }
+        else if (!validateLastName(lastName)) {
+            alert("Last Name should not include digits");
+        }
+        else if (!validateEmail(email)) {
+            alert("Enter valid email address");
+        }
+        else if (!validateContact(contact)) {
+            alert("Enter valid telephone number");
+        }
+        else if (!validateCity(city)) {
+            alert("City should not include digits");
+        }
+        else if (!validatePassword(password)) {
+            alert("Enter valid password");
+        }
+        else if (password != passwordConfirm) {
+            alert("Your passwords don't match");
         }
         else{
-            this.props.registerPatients(this.state);
-        }
-        
+            dispatch(addUser(user));
+            setUserState(true);
+            console.log(user);
+            //window.location.href = "/healthMinistry/hospital";
+    };
     }
-
-    componentDidUpdate() {
-        if(this.props.patients.patientAdded){
-             this.props.addSuccessful();
+    useEffect(() => {
+        if(userAddedStatus.userAdded && userState){
+            dispatch(toastAction({ message: "Patient Added Successfully", type: 'info' }))
+            //window.location.href = "/healthMinistry/hospital";
+        }else{
+            dispatch(toastAction({ message: "Pattient Adding Failed", type: 'error' }))
         }
-         
-     }
+    },[userAddedStatus])
+
+    return (
+        // <Box sx={{ width: 800, height: 1600, backgroundColor: 'primary.main'}}>
+            <div className="container-fluid">
+                    <div className="col-10 mx-auto banner text-center">
+                    <h3 className="text-capitalize">
+                            <strong className="banner-title">Want to Add HOSPITAL ADMIN?</strong></h3></div>
     
-
-    render() {
-        //validating the fields in the nurse form whether filled or not
-        const errors = validate(this.state.first_name,this.state.last_name, this.state.dob, this.state.nic, this.state.contact_number, this.state.address, this.state.city, this.state.district, this.state.small_description);
-        const isDisabled = Object.keys(errors).some(x => errors[x]);
-
-        
-        return (
-            <>
-            {/* {auth.loggedIn ?  */}
-            <div class="container-fluid">
-                <div class="row max-height justify-content-center align-items-center">
-                    <div class="col-10 mx-auto banner text-center">
-                        <h3 class="text-capitalize">
-                            <strong class="banner-title">Want to Register new Patient?</strong></h3>
-                            <div class="card-body register-card-body"></div>
             <Container >
-                
-                <Form >
-                <Form.Row>
-                <Form.Group as={Col} controlId='first_name'>
-                    <Form.Label class="float-left" className = 'form-label'>First Name:</Form.Label>
+                <Form className="form" onSubmit={submitHandler}>
+    
+                    <Form.Group as={Col}  controlId='firstName'>
+                    <Form.Label className = 'form-label' >FIRST NAME:</Form.Label>
+                    <Col sm={10}>
                     <Form.Control 
                         type='text'
-                        name='first_name' 
-                        value={this.state.first_name} 
-                        onChange={this.onChangeFirstName}
-                        placeholder='Enter First Name'
+                        id='firstName' 
+                        placeholder='Enter your First Name'
                         required
-                    />
-                    <FormControl.Feedback type='invalid'>This field is required!</FormControl.Feedback>
+                        size='sm'
+                        onChange={(e) => setFirstName(e.target.value)}
+                    /></Col>
+                    </Form.Group>
+                    
+                    <Form.Group as={Col} controlId='lastName'>
+                    <Form.Label className = 'form-label'>LAST NAME:</Form.Label>
+                    <Col sm={10}>
+                    <Form.Control 
+                        type='text'
+                        id='lastName' 
+                        placeholder='Enter your Last Name'
+                        required
+                        size='sm'
+                        onChange={(e) => setLastName(e.target.value)}
+                    /></Col>
                     </Form.Group>
 
-                    <Form.Group as={Col} controlId='last_name'>
-                    <Form.Label class="float-left" className = 'form-label'>Last Name:</Form.Label>
+                    <Form.Group as={Col} controlId='email'>
+                    <Form.Label class="float-left" className = 'form-label'>EMAIL ADDRESS:</Form.Label>
+                    <Col sm={10}>
                     <Form.Control 
-                        type='text'
-                        name='last_name' 
-                        value={this.state.last_name} 
-                        onChange={this.onChangeLastName}
-                        placeholder='Enter Last Name'
+                        type='email'
+                        id='email' 
+                        placeholder='example@gmail.com'
                         required
-                    />
-                    <FormControl.Feedback type='invalid'>This field is required!</FormControl.Feedback>
+                        size='sm'
+                        onChange={(e) => setEmail(e.target.value)}
+                    /></Col>
                     </Form.Group>
-                    </Form.Row>
-                    <Form.Row>
-                    <Form.Group as={Col} controlId='dob'>
-                    <Form.Label class="float-left" className = 'form-label'>Date of Birth:</Form.Label>
+
+                    <Form.Group as={Col} controlId='birthday'>
+                    <Form.Label class="float-left" className = 'form-label'>DATE OF BIRTH:</Form.Label>
+                    <Col sm={10}>
                     <Form.Control 
                         type='date'
-                        name='dob' 
-                        min="1910-01-01"
-                        max="2021-10-01"
-                        value={this.state.dob} 
-                        onChange={this.handleChange}
+                        id='birthday' 
                         placeholder='Enter Date of Birth'
                         required
-                    />
-                    <FormControl.Feedback type='invalid'>This field is required!</FormControl.Feedback>
+                        size='sm'
+                        max={current}
+                        onChange={(e) => setBirthday(e.target.value)}
+                    /></Col>
                     </Form.Group>
-                    </Form.Row>
-                    <Form.Row>
-                    <Form.Group as={Col}  controlId="formNIC">
-                            <Form.Label class="float-left" className = 'form-label'>NIC Number:</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="nic"
-                                required
-                                value={this.state.nic} 
-                                onChange={this.handleChange}
-                                placeholder='Enter NIC Number'
-                            />
-                    <FormControl.Feedback type='invalid'>This field is required!</FormControl.Feedback>
-                    </Form.Group>
-                    
-                    <Form.Group as={Col} controlId='contact_number'>
-                    <Form.Label class="float-left" className = 'form-label' >Contact Number:</Form.Label>
+
+                    <Form.Group as={Col} controlId='contact'>
+                    <Form.Label class="float-left" className = 'form-label' >CONTACT NUMBER:</Form.Label>
+                    <Col sm={10}>
                     <Form.Control 
-                        type='text'
+                        type='number'
+                        id='contact'
+                        placeholder="0XXXXXXXXX"  
+                        //pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" 
                         required
-                        name='contact_number' 
-                        value={this.state.contact_number} 
-                        onChange={this.onChangeContactNumber}
-                        placeholder='Enter Contact Number'
-                        
+                        size='sm'
+                        onChange={(e) => setContact(e.target.value)} 
                     />
-                    <FormControl.Feedback type='invalid'>This field only takes text!</FormControl.Feedback>
+                    <small>*Should start with 0 <br/>*Should consist of 10 digits</small></Col>
                     </Form.Group>
-                    </Form.Row>
 
-                    <Form.Group  controlId="formAddress">
-                            <Form.Label class="float-left" className = 'form-label'>Address:</Form.Label>
-                            <Form.Control
-                                type="textarea"
-                                name="address"
+                    <Form.Group as={Col} controlId='nicno'>
+                            <Form.Label class="float-left" className = 'form-label' >NIC NUMBER:</Form.Label>
+                            <Col sm={10}>
+                            <Form.Control 
+                                type='text'
+                                id='nicno'
+                                placeholder="Enter NIC Number"  
                                 required
-                                value={this.state.address} 
-                                onChange={this.handleChange}
-                                placeholder='Enter Address'
+                                size='sm'
+                                onChange={(e) => setNicno(e.target.value)} 
                             />
-                    <FormControl.Feedback type='invalid'>This field is required!</FormControl.Feedback>
+                            </Col>
                     </Form.Group>
 
-                    <Form.Row>
-                            <Form.Group as={Col} controlId="formCity">
-                                <Form.Label class="float-left" className = 'form-label'>City:</Form.Label>
+                    <Form.Group as={Col} controlId="line1">
+                                <Form.Label class="float-left" className = 'form-label'>ADDRESS LINE 1:</Form.Label>
+                                <Col sm={10}>
                                 <Form.Control
                                 type="text"
-                                name="city"
-                                required
-                                value={this.state.city} 
-                                placeholder='Enter City'
-                                onChange={this.onChangeCity}
-                    /></Form.Group>
+                                id="line1"
+                                required 
+                                placeholder='Enter Line 1'
+                                size='sm'
+                                onChange={(e) => setLine1(e.target.value)}/></Col>
+                    </Form.Group>
 
-                  <Form.Group  as={Col} controlId="formDistrict">
-                                <Form.Label class="float-left" className = 'form-label'>District:</Form.Label>
+                    <Form.Group as={Col} controlId="line2">
+                                <Form.Label class="float-left" className = 'form-label'>ADDRESS LINE 2:</Form.Label>
+                                <Col sm={10}>
+                                <Form.Control
+                                type="text"
+                                id="line2"
+                                required 
+                                size='sm'
+                                placeholder='Enter Line 2'
+                                onChange={(e) => setLine2(e.target.value)}/></Col>
+                    </Form.Group>
+
+                    <Form.Group as={Col} controlId="formCity">
+                                <Form.Label class="float-left" className = 'form-label'>CITY:</Form.Label>
+                                <Col sm={10}>
+                                <Form.Control
+                                type="text"
+                                id="city"
+                                required 
+                                size='sm'
+                                placeholder='Enter City'
+                                onChange={(e) => setCity(e.target.value)}/></Col>
+                    </Form.Group>
+
+                    <Form.Group as={Col}  controlId="formProvince">
+                                <Form.Label class="float-left" className = 'form-label' >PROVINCE:</Form.Label>
+                                <Col sm={10}>
                                 <Form.Control 
                                 as="select" 
-                                name="district" 
-                                value={this.state.district} 
-                                onChange={this.handleChange}
-                                aria-label="Default select example">
-                                    <option>Select Here </option>
-                                    <option value="Colombo">Colombo</option>
-                                    <option value="Gampaha">Gampaha</option>
-                                    <option value="Kalutara">Kalutara</option>
-                                    <option value="Kandy">Kandy </option>
-                                    <option value="Matale">Matale </option>
-                                    <option value="Nuwera-Eliya">Nuwera-Eliya</option>
-                                    <option value="Galle">Galle </option>
-                                    <option value="Matara">Matara</option>
-                                    <option value="Hambantota">Hambantota </option>
-                                    <option value="Jaffna">Jaffna </option>
-                                    <option value="Mannar">Mannar</option>
-                                    <option value="Vauniya">Vauniya </option>
-                                    <option value="Mulathivu">Mulathivu </option>
-                                    <option value="Kilinochchi">Kilinochchi </option>
-                                    <option value="Batticaloa">Batticaloa</option>
-                                    <option value="Trincomalee">Trincomalee  </option>
-                                    <option value="Kurunegala">Kurunegala   </option>
-                                    <option value="Puttalam">Puttalam  </option>
-                                    <option value="Anuradhapura">Anuradhapura   </option>
-                                    <option value="Polonnaruwa">Polonnaruwa   </option>
-                                    <option value="Badulla">Badulla  </option>
-                                    <option value="Monaragala">Monaragala   </option>
-                                    <option value="Rathnapura">Rathnapura   </option>
-                                    <option value="Kegalle">Kegalle </option>
+                                id="province" 
+                                size='sm'
+                                onChange={(e) => setProvince(e.target.value)}
+                                required>
+                                    <option value="" disabled selected >choose </option>
+                                    <option value="Central">Central Province</option>
+                                    <option value="Eastern">Eastern Province</option>
+                                    <option value="Northern">Northern Province</option>
+                                    <option value="Southern">Southern Province </option>
+                                    <option value="Western">Western Province </option>
+                                    <option value="North Western">North Western Province </option>
+                                    <option value="North Central">North Central Province </option>
+                                    <option value="Uva">Uva Province </option>
+                                    <option value="Sabaragamuwa">Sabaragamuwa Province </option>
                                     
-                                    </Form.Control>
-                            </Form.Group>
+                                    </Form.Control></Col>
+                                </Form.Group>
 
-                            
-                        </Form.Row>
+                    <Form.Group as={Col} controlId="password">
+                                <Form.Label class="float-left" className = 'form-label'>PASSWORD:</Form.Label>
+                                <Col sm={10}>
+                                <Form.Control
+                                type="password"
+                                id="password"
+                                required 
+                                size='sm'
+                                placeholder='Enter Password'
+                                onChange={(e) => setPassword(e.target.value)}/>
+                    <small>*Password should atleast be of 6 characters <br/>
+                           *Should include atleast one simple letter, capital letter, special character and number </small> 
+                           </Col>
+                    </Form.Group>
 
-                    <br/>
-                    <Button variant="primary" disabled={isDisabled} onClick={this.handleSubmit}>Submit</Button>
-                    
+                    <Form.Group as={Col} controlId="passwordConfirm">
+                                <Form.Label class="float-left" className = 'form-label'>RE-ENTER PASSWORD:</Form.Label>
+                                <Col sm={10}>
+                                <Form.Control
+                                type="password"
+                                id="passwordConfirm"
+                                required 
+                                size='sm'
+                                placeholder='Re enter Password'
+                                onChange={(e) => setPasswordConfirm(e.target.value)}/></Col>
+                    </Form.Group>
+
+                    <Form.Group as={Col} controlId='role'>
+                        <Form.Label class="float-left" className = 'form-label'>ROLE:</Form.Label>
+                        <Col sm={10}>
+                        <Form.Control 
+                            type='text'
+                            id='role' 
+                            size='sm'
+                            value='Hospital Admin'
+                        /></Col>
+                    </Form.Group>
+                        <div>
+                        <Button variant="primary" type="submit">ADD HOSPITAL ADMIN</Button>
+                        </div>
+                
                 </Form>
             </Container>
             </div>
-            </div>
-            </div>
-             {/* : window.location('/')}  */}
-            </>
+            // </Box> 
+            
         );
     }
-}
-
-const mapStateToProps = state => ({
-    patients: state.entities.patients,
-});
-
-
-const mapDispatchToProps = dispatch => ({
-    registerPatients: (data) => dispatch(addUser(data)),
-   // addSuccessful: () => dispatch(toastAction({ message: "Patient Added Successfully...", type: 'info' }))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddPatient);
