@@ -9,8 +9,9 @@ describe(endpointUrl, ()=>{
         const response = await request(app).post(endpointUrl)
         .send(admin)
         .set("Accept", "application/json");
-        expect(response.statusCode).toBe(500)
-        console.log(response)
+        console.log(response.body)
+        expect(response.statusCode).toBe(201)
+        
         // expect(response.data.status).toBe('success')
     })
 })

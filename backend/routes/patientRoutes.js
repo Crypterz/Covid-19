@@ -17,11 +17,11 @@ router
   .get(patientController.getPatient)
   .patch(patientController.updatePatient)
 //   .delete(patientController.deletePatient)
-router.get('/admittedpatients', authController.protect, authController.restrictTo('hospitalAdmin'),  patientController.getAdmittedPatients)
+
 
 router.post('/:id/history', authController.protect, authController.restrictTo('hospitalAdmin'), medicalHistoryController.createMedical)
 router.get('/:id/admit', authController.protect, authController.restrictTo('hospitalAdmin'), medicalHistoryController.createMedical)
 router.get('/:patientID/discharge', authController.protect, authController.restrictTo('hospitalAdmin'), medicalHistoryController.discharge)
 router.get('/search/:nic', authController.protect, authController.restrictTo('hospitalAdmin'), patientController.getPatientByNIC)
-
+router.get('/hospital/admitted', authController.protect, authController.restrictTo('hospitalAdmin'),  patientController.getAdmittedPatients)
 module.exports = router;

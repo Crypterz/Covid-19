@@ -20,10 +20,12 @@ exports.getPatient = catchAsync(async (req, res,next) => {
 })
 
 exports.getAdmittedPatients = catchAsync(async (req, res,next) => {
+    console.log("-----------------------")
     const patients=await Patient.find({ "currentMedicalHistory": { $ne: null } }).populate({
         path:'currentMedicalHistory',
         match:{hospital:req.user.hospital}
-    }).select('-medicalHistory -pcrTest')
+    }).select('-medicalHistory -pcrTest').populate("user")
+    console.log(patients)
     if(!patients){
         return next(new AppError("No patient found",404))
     }
