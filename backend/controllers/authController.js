@@ -73,13 +73,11 @@ exports.login=catchAsync(async(req, res, next)=>{
         return next(new AppError('Please provide email and password',400))
     }
     var user=await User.findOne({email:email}).select('+password')
-    console.log('111111111111111111')
 
     // const correct = await user.correctPassword(password, user.password);
     if(!user || !(await user.correctPassword(password, user.password))) {
         return next(new AppError('Incorrect email or password',401))
     }
-    console.log('222222222222222')
     const token = signToken(user._id)
     if(user.role=="hospitalAdmin"){
         const admin =await Admin.findOne({'user':user._id}).populate({
