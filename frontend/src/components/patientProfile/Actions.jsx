@@ -56,12 +56,11 @@ const Actions = ({patients, hospitals, wards, popUpHandler}) => {
         }
         else{
             const wardUpdate = {
-                patientId: patients._id,
-                wardId: getWardId(wards, wardName)
+                ward: getWardId(wards, wardName)
             }
     
             console.log(wardUpdate)
-          //  dispatch(changePatientWard(wardUpdate));
+            dispatch(changePatientWard(wardUpdate, patients._id));
         }
 
     }
