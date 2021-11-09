@@ -2,6 +2,7 @@ const crypto = require('crypto')
 const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt=require('bcryptjs')
+const uniqueValidator = require('mongoose-unique-validator');
 
 const userSchema=new mongoose.Schema({
     name:{
@@ -113,6 +114,6 @@ userSchema.methods.resetToken=function(){
     this.passwordResetExpire=Date.now() + 10*60*1000  //after 10 mins password reset token get expires
     return resetToken;
 }
-
+userSchema.plugin(uniqueValidator);
 const User=mongoose.model('User',userSchema)
 module.exports=User
