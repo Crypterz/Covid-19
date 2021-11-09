@@ -42,7 +42,7 @@ function Header() {
                             <Nav.Link className = 'navbar-item'><span>Profile</span></Nav.Link>
                         </LinkContainer>}
 
-                        {userDetails.loggedIn && userType === 'patient' && <LinkContainer to = {`/resetpassword/${usertoken}`}>
+                        {userDetails.loggedIn && userType === 'patient' && <LinkContainer to = {'/resetpasswordloggedin'}>
                             <Nav.Link className = 'navbar-item'><span>Reset Password</span></Nav.Link>
                         </LinkContainer>}
 
@@ -56,7 +56,7 @@ function Header() {
                                     <Nav.Link ><span>Dashboard</span></Nav.Link>
                             </LinkContainer></Dropdown.Item>
 
-                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to ={`/resetpassword/${usertoken}`}>
+                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = {'/resetpasswordloggedin'}>
                                     <Nav.Link ><span>Reset Password</span></Nav.Link>
                             </LinkContainer></Dropdown.Item>
 
@@ -105,7 +105,7 @@ function Header() {
                                     <Nav.Link ><span>Patients</span></Nav.Link>
                             </LinkContainer></Dropdown.Item>
 
-                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = {`/resetpassword/${usertoken}`}>
+                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = {'/resetpasswordloggedin'}>
                                     <Nav.Link ><span>Reset Password</span></Nav.Link>
                             </LinkContainer></Dropdown.Item>
                         
@@ -160,7 +160,7 @@ function Header() {
                                     <Nav.Link ><span>Dasboard</span></Nav.Link>
                             </LinkContainer></Dropdown.Item>
 
-                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = {`/resetpassword/${usertoken}`}>
+                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = {'/resetpasswordloggedin'}>
                                     <Nav.Link ><span>Reset Password</span></Nav.Link>
                             </LinkContainer></Dropdown.Item>
 

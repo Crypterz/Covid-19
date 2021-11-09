@@ -377,3 +377,14 @@ export const dischargePatient = (patientId) => (dispatch) => {
         })
     )
 }
+
+export const changeWard = (patientId) => (dispatch) => {
+    console.log(patientId)
+    return dispatch(
+        apiCallBegan({
+            url: patientURL + `patients/${patientId}/discharge`,
+            method: "get",
+            onSuccess : patientDischarged,
+        })
+    )
+}

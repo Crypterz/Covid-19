@@ -145,6 +145,19 @@ export const resetPassword = (user, token) => (dispatch) => {
     );
 }
 
+export const resetPasswordLoggedIn = (user, token) => (dispatch) => {
+    console.log(user)
+    return dispatch(
+        apiCallBegan({
+            url: userURL + 'users/updatepassword',
+            method: "patch",
+            data: user,
+            onSuccess: resetPasswordSuccess,
+            onError : resetPasswordFailed
+        })
+    );
+}
+
 export const getUserLoadingStatus = createSelector(
     state => state.entities.userloading,
     loading => loading

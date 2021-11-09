@@ -3,18 +3,22 @@ import { useDispatch } from 'react-redux';
 import {  updateTransferPatient} from '../../store/entities/patients';
 import { Card, Button, Col, Form,} from 'react-bootstrap';
 import PopUp from '../popUp/PopUp';
+import { toastAction } from '../../store/toastActions';
 
 const Actions = ({patients, hospitals, wards, popUpHandler}) => {
-    console.log(hospitals)
+    console.log(patients)
+    const currentMedicalHistory = (patients.medicalHistory)[patients.medicalHistory.length-1]
+    const currentWardId = currentMedicalHistory.ward
+   // console.log(currentMedicalHistory )
     const dispatch = useDispatch()
     const [tranferSt, transferState ] = useState('false');
     const [hospitalName, setTransferHospital] = useState('')
+    const [wardName, setWardName] = useState(wards[0].name)
 
     if(typeof(hospitals) ==! undefined && hospitals.length > 0){
         setTransferHospital(hospitals[0].name)
     }
 
-   // const [popup, setPopUp] = useState(false);
 
     const transferPatient = (TransferState) => {
         const transferUpdate = {
@@ -31,6 +35,22 @@ const Actions = ({patients, hospitals, wards, popUpHandler}) => {
         }else{
            transferState('false')
         }
+    }
+
+    
+    const changeWard = () => {
+        console.log(currentWardId)
+        console.log(getWardId(wards, wardName))
+        if(currentWardId === getWardId(wards, wardName)){
+            dispatch(toastAction({ message: "New ward cannot be current ward...", type: 'error' }));
+        }
+        const wardUpdate = {
+            patientId: patients._id,
+            wardId: getWardId(wards, wardName)
+        }
+
+        console.log(wardUpdate)
+       // dispatch(updateTransferPatient(transferUpdate));
     }
 
     return (
@@ -53,14 +73,16 @@ const Actions = ({patients, hospitals, wards, popUpHandler}) => {
                     <h5>Change Ward</h5>
                     <Form.Group>
                         <Form.Control onChange = {(e) => {
-                            if(e.target.value !== "Select Hospital"){
-                                setTransferHospital(e.target.value);
+                            if(e.target.value !== "Select Ward"){
+                                setWardName(e.target.value);
                             }
                         }} as="select">
                         {wards.map((c,index) => <option selected={index === 0? 'slected': null}>{`${c.name}`}</option>)}
                         </Form.Control>
                     </Form.Group>
-                    <Button>Change Ward</Button>  
+                    <Button
+                        onClick ={ () => changeWard()}
+                    >Change Ward</Button>  
                 </Col> }
             <hr style={{color: '#000000',backgroundColor: '#000000',height: .25,borderColor : '#000000'}}/>
             
@@ -92,3 +114,15 @@ const Actions = ({patients, hospitals, wards, popUpHandler}) => {
 }
 
 export default Actions
+
+
+function getWardId(wards, ward){
+    let id = ""
+    if(typeof(ward) === 'undefined' || ward.length === 0){
+         return id
+    } 
+
+    const wardDetail = wards.filter(p=> p.name === ward)
+    //console.log(wardDetail)
+    return wardDetail[0]._id
+}

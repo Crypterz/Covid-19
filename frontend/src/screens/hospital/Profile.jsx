@@ -42,9 +42,17 @@ const Profile =  ({match, history}) => {
    const [patientHistory, changeHistory ] = useState(filteredHistory) 
    const [findHistory, setfindHistory] = useState(false)
 
+   const [action, setAction ] = useState('')
+
 
    const setDischargeHandler = () =>{
-       dispatch(dischargePatient(patientId))
+       console.log('discharge')
+       //dispatch(dischargePatient(patientId))
+   }
+
+   const setChangeWardHandler = () =>{
+    console.log('changeWard')
+   // dispatch(dischargePatient(patientId))
    }
 
     const setDates = (date, type) =>{
@@ -82,6 +90,12 @@ const Profile =  ({match, history}) => {
             {userDetails.loggedIn ? 
             <div>
                 <h4 style={{textAlign:'center', fontWeight:'700'}}>PATIENT PROFILE</h4>
+                <div>
+                    <Button 
+                        className='btn btn-primary m-2'
+                        onClick= {() => history.push({pathname : '/hospital/PcrView', state: {pcr: patients.pcrTest}})} 
+                    >Pcr Test Results</Button>
+                </div>
                 <div className="vs-row top-content" style={{display:'flex', width:'100%'}}>
                     
                     <div className="vs-col vs-xs- vs-sm-12 vs-lg-3"style={{margin:'0%',width:'100%', position:'relative'}}>
@@ -96,7 +110,7 @@ const Profile =  ({match, history}) => {
                         <div className="set-animation from-left animate">
                             {patients.currentMedicalHistory && userHospital_id === currentHospital_id? 
                                 <CurrentInfo patients={objectDestructure(patients, "history").slice(-1)[0]}
-                                    userHospital={userHospital_id} currentHospital={currentHospital_id} hospitals={hospitals}
+                                    userHospital={userHospital_id} currentHospital={currentHospital_id} hospitals={hospitals} wards={wardsDetails} pcr={patients.pcrTest}
                                 ></CurrentInfo> : 
 
                                 <CurrentInfo patients={""} currentHospital={""}
@@ -169,7 +183,7 @@ const Profile =  ({match, history}) => {
 
 
                     <div className="vs-col vs-xs vs-sm-12 vs-lg-6" style={{marginLeft:'0%',marginRight:'0%',width:'100%'}}>
-                        <History patientHistory={patientHistory} filteredHistory={filteredHistory} hospital={getHospitalName(filteredHistory, hospitals)}></History>
+                        <History patientHistory={patientHistory} filteredHistory={filteredHistory} hospital={getHospitalName(filteredHistory, hospitals)} ward={getWardName(filteredHistory, wardsDetails)}></History>
                     </div>
                     
                     {filteredHistory.length !== 0 &&
@@ -250,6 +264,15 @@ function getHospitalName(filteredhistory, hospitals){
     return hospitalName[0]
 }
 
+function getWardName(filteredhistory, wards){
+    // console.log(filteredhistory)
+     if(filteredhistory.length === 0){
+         return ""
+     }
+     const wardName = wards.filter(p=> p._id === filteredhistory[0].ward)
+     return wardName[0]
+ }
+
 function getCurrentHospitalId(patients){
     let id = ""
     if(typeof(patients) === 'undefined' || patients.length === 0){
@@ -261,3 +284,4 @@ function getCurrentHospitalId(patients){
         return lastHistory.hospital
     }
 }
+

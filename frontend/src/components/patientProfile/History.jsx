@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {Card} from 'react-bootstrap'
 import { loadPatients , getPatientById, getAllPatients, getPatientsLoadingStatus, updateTransferPatient, loadPatient} from '../../store/entities/patients';
 
-const History = ({patientHistory, filteredHistory, hospital}) => {
+const History = ({patientHistory, filteredHistory, hospital, ward}) => {
    // console.log(patientHistory)
    // console.log(filteredHistory)
     console.log(hospital)
@@ -30,7 +30,7 @@ const History = ({patientHistory, filteredHistory, hospital}) => {
                         </li>
                         <li>
                             <div className="field">Ward No:</div>
-                            <div className="value">{patientHistory.ward}</div>
+                            <div className="value">{ward.name}</div>
                         </li>
                         <li>
                             <div className="field">Symptoms:</div>
@@ -97,3 +97,21 @@ function objectDestructure ( histories, type){
 
     return newList
  }
+
+ function getHospitalName(patients, hospitals){
+    if(typeof(hospitals) === 'undefined' || hospitals.length === 0){
+        return ""
+    }
+    const hospitalId = patients.hospital 
+    const hospitalName = hospitals.filter(p => p._id === hospitalId)
+    return hospitalName[0].name
+}
+
+ function getCurrentWardName(wards, wardId){
+    if(typeof(wards) === 'undefined' || wards.length === 0){
+        return ""
+    }
+    const wardname = wards.filter(p=> p._id === wardId)
+    console.log(wardname)
+    return wardname[0].name
+}
