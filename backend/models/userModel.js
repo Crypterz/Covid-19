@@ -29,16 +29,19 @@ const userSchema=new mongoose.Schema({
     },
     address:{
         line1:{
-            type:String
+            type:String,
+            required:true,
         },
         line2:{
             type:String
         },
         city:{
-            type:String
+            type:String,
+            required:true,
         },
         district:{
-            type:String
+            type:String,
+            required:true,
         },
     },
     password:{

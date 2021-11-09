@@ -76,6 +76,16 @@ exports.publicDashBoard= catchAsync(async (req,res,next)=>{
                admittedPatients:{$sum:'$admittedPatients'},
                freeBeds:{$sum:'$freeBeds'},
             }
+        },
+        {
+            $project:{
+                _id:0,
+               nohospital: 1,
+               noWards:1,
+               totalBeds:1,
+               admittedPatients:1,
+               freeBeds:1
+            }
         }
 
     ])

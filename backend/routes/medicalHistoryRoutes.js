@@ -14,7 +14,10 @@ router
   .get(authController.protect, authController.restrictTo('hospitalAdmin'), medicalHistoryController.getMedicalHistory)
   // .patch(medicalHistoryController.addSymtomsDrugs)
 
-  router.patch('/:id/adddrugs',medicalHistoryController.addDrugs)
-  router.patch('/:id/addsymptoms',medicalHistoryController.addSymptoms)
+  router.post('/:id/changehospitalrequest',medicalHistoryController.changeHospital)
+  router.get('/changehospital/pending',medicalHistoryController.changeHospital_GetPending)
+
+  router.patch('/:id/adddrugs',authController.protect, authController.restrictTo('hospitalAdmin'),medicalHistoryController.addDrugs)
+  router.patch('/:id/addsymptoms',authController.protect, authController.restrictTo('hospitalAdmin'),medicalHistoryController.addSymptoms)
 
 module.exports = router;

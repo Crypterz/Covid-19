@@ -170,3 +170,49 @@ exports.discharge = catchAsync(async (req,res,next)=>{
     })
 })
 
+exports.changeHospital = catchAsync(async (req,res,next)=>{
+    const patient=await Patient.findOne(req.params.patientID)
+    if(!patient){
+        return next(new AppError("No atient forun with that ID",404))
+    }
+    if(!patient.currentMedicalHistory){
+        return next(new AppError("Active Medical History not found for this patient",404))
+    }
+    const reqhospital=req.body.hospital;
+    const medicalHistory=await MedicalHistory.findByIdAndUpdate(
+        patient.currentMedicalHistory,   
+        {"changeHospital.hospital":reqhospital,"changeHospital.status":"pending"},
+        {new:true}
+    )
+    res.status(200).json({
+        status:'success',
+        data:{
+            medicalHistory:medicalHistory
+        }
+    })
+})
+
+exports.changeHospital_GetPending = catchAsync(async (req,res,next)=>{
+    const meds=await MedicalHistory.find({'changeHospital.hospital':"618a0a1844a5ad2a20039f5b","changeHospital.status":'pending'})
+    if(!meds){
+        return next(new AppError("No patient change request found",404))
+    }
+    // if(!patient.currentMedicalHistory){
+    //     return next(new AppError("Active Medical History not found for this patient",404))
+    // }
+    // const reqhospital=req.body.hospital;
+    // const medicalHistory=await MedicalHistory.findByIdAndUpdate(
+    //     patient.currentMedicalHistory,   
+    //     {"changeHospital.hospital":reqhospital,"changeHospital.status":"pending"},
+    //     {new:true}
+    // )
+    res.status(200).json({
+        status:'success',
+        data:{
+            medicalHistory:meds
+        }
+    })
+})
+
+exports.changeHospital_accept = catchAsync(async (req,res,next)=>{
+    const meds=await MedicalHistory.findOneAndUpdate({_id:req.params.medID,dischargeDate:{}})

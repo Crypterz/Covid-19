@@ -39,6 +39,16 @@ const medicalHistorySchema=new mongoose.Schema({
     dischargeDate:{
         type:Date,
         default:null
+    },
+    changeHospital:{
+        hospital:{
+            type:mongoose.Schema.ObjectId,
+            ref:'Hospital',
+        },
+        status:{
+            type:String,
+            enum:['pending','accepted','decline'],
+        }
     }
 })
 
