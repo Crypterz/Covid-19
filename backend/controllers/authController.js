@@ -74,7 +74,7 @@ exports.login=catchAsync(async(req, res, next)=>{
     }
     var user=await User.findOne({email:email}).select('+password')
     console.log('111111111111111111')
-    
+
     // const correct = await user.correctPassword(password, user.password);
     if(!user || !(await user.correctPassword(password, user.password))) {
         return next(new AppError('Incorrect email or password',401))
@@ -151,8 +151,6 @@ exports.restrictTo = (...roles)=>{
         next()
     }
 }
-
-
 //1. Get user based on posted email
 //2. genrate random reset token
 //3. send it to the user
@@ -182,7 +180,6 @@ exports.forgotPassword=catchAsync(async(req,res,next)=>{
         await user.save({validateBeforeSave:false})
         return next(new AppError('There was an error in sending mail. Try again later!'),500)
     }
-    
 })
 
 // 1. get user based on the token
@@ -201,8 +198,38 @@ exports.resetPassword= catchAsync(async (req,res,next)=>{
     user.passwordResetExpire=undefined
     await user.save()
     const token=signToken(user._id)
+    res.cookie('jwt',token,{
+        expires:new Date(Date.now()+process.env.JWT_COOKIE_EXPIRES_IN*24*60*60*1000),
+        // secure:true,     //COOKIE WILL SEND ONLY ENCREPTED CONNECTION HTTPS 
+        httpOnly:true        // COKKIES CANT BE MODIFIES BY BROWSER - TO PREVENT CROSS SITE ATTACK
+    })
     res.status(200).json({
         status:'success',
         token
+    })
+})
+
+//get user from collection, check whether the correct passwoer is corect, update password, send new token
+
+exports.updatePassword= catchAsync(async (req,res,next)=>{
+    const user = await User.findById(req.user.id).select('+password');
+    if(!(await user.correctPassword(req.body.passwordCurrent, user.password))){
+        return next(new AppError('Your current password is wrong', 401))
+    }
+    user.password=req.body.password;
+    user.passwordConfirm=req.body.passwordConfirm;
+    await user.save();
+    const token = signToken(user._id)
+    res.cookie('jwt',token,{
+        expires:new Date(Date.now()+process.env.JWT_COOKIE_EXPIRES_IN*24*60*60*1000),
+        // secure:true,     //COOKIE WILL SEND ONLY ENCREPTED CONNECTION HTTPS 
+        httpOnly:true        // COKKIES CANT BE MODIFIES BY BROWSER - TO PREVENT CROSS SITE ATTACK
+    })
+    res.status(200).json({
+        status:'success',
+        token,
+        data:{
+            user
+        }
     })
 })

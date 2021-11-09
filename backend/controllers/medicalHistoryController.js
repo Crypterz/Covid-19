@@ -159,6 +159,7 @@ exports.discharge = catchAsync(async (req,res,next)=>{
     const medicalHistory=await MedicalHistory.findByIdAndUpdate(
         patient.currentMedicalHistory,   
         {"dischargeDate":new Date()},
+        {new:true}
     )
     await Ward.findByIdAndUpdate(medicalHistory.ward,{$pull:{admittedPatients:patient._id}})
     res.status(200).json({
