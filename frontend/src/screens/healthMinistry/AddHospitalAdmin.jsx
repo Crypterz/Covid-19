@@ -6,7 +6,6 @@ import { addUser, getUserAddedStatus} from '../../store/entities/users';
 import { toastAction } from '../../store/toastActions';
 import Box from '@mui/material/Box';
 
-
 export default function AddHospitalAdmin(props) {
     const current = new Date().toISOString().split("T")[0]
 
@@ -72,10 +71,6 @@ export default function AddHospitalAdmin(props) {
           password: password,
           passwordConfirm: passwordConfirm,
           role: 'hospitalAdmin',
-          name: {
-            firstName: firstName,
-            lastName: lastName
-          }, 
           hospital: window.location.pathname.split('/')[3],
       }
 
@@ -110,7 +105,7 @@ export default function AddHospitalAdmin(props) {
         if(userAddedStatus.userAdded && userState){
             setUserState(false)
             dispatch(toastAction({ message: "Hospital Admin Added Successfully", type: 'info' }))
-           // window.location.href = "/healthMinistry/hospital";
+            window.location.href = "/healthMinistry/hospital";
         }
         // else{
         //     dispatch(toastAction({ message: "Hospital Admin Adding Failed", type: 'error' }))
@@ -118,18 +113,17 @@ export default function AddHospitalAdmin(props) {
     },[userAddedStatus])
 
     return (
-        // <Box sx={{ width: 800, height: 1600, backgroundColor: 'primary.main'}}>
-            <div className="container-fluid">
-                    <div className="col-10 mx-auto banner text-center">
-                    <h3 className="text-capitalize">
-                            <strong className="banner-title">Want to Add HOSPITAL ADMIN?</strong></h3></div>
-    
-            <Container >
+        //<div className="container-fluid">    
+        <Container fluid > 
+        <Box sx={{ bgcolor: '#cfe8fc', height: '1200px' }}>
+        <div className="col-10 mx-auto banner text-center">
+            <h3 className="text-capitalize">
+                    <strong className="banner-title">Want to ADD HOSPITAL ADMIN?</strong></h3></div>
                 <Form className="form" onSubmit={submitHandler}>
     
                     <Form.Group as={Col}  controlId='firstName'>
-                    <Form.Label className = 'form-label' >FIRST NAME:</Form.Label>
-                    <Col sm={10}>
+                    <Form.Label className = 'form-label' ><strong>FIRST NAME:</strong></Form.Label>
+                    <Col sm={12}>
                     <Form.Control 
                         type='text'
                         id='firstName' 
@@ -141,8 +135,8 @@ export default function AddHospitalAdmin(props) {
                     </Form.Group>
                     
                     <Form.Group as={Col} controlId='lastName'>
-                    <Form.Label className = 'form-label'>LAST NAME:</Form.Label>
-                    <Col sm={10}>
+                    <Form.Label className = 'form-label'><strong>LAST NAME:</strong></Form.Label>
+                    <Col sm={12}>
                     <Form.Control 
                         type='text'
                         id='lastName' 
@@ -154,8 +148,8 @@ export default function AddHospitalAdmin(props) {
                     </Form.Group>
 
                     <Form.Group as={Col} controlId='email'>
-                    <Form.Label class="float-left" className = 'form-label'>EMAIL ADDRESS:</Form.Label>
-                    <Col sm={10}>
+                    <Form.Label class="float-left" className = 'form-label'><strong>EMAIL ADDRESS:</strong></Form.Label>
+                    <Col sm={12}>
                     <Form.Control 
                         type='email'
                         id='email' 
@@ -167,8 +161,8 @@ export default function AddHospitalAdmin(props) {
                     </Form.Group>
 
                     <Form.Group as={Col} controlId='birthday'>
-                    <Form.Label class="float-left" className = 'form-label'>DATE OF BIRTH:</Form.Label>
-                    <Col sm={10}>
+                    <Form.Label class="float-left" className = 'form-label'><strong>DATE OF BIRTH:</strong></Form.Label>
+                    <Col sm={12}>
                     <Form.Control 
                         type='date'
                         id='birthday' 
@@ -181,8 +175,8 @@ export default function AddHospitalAdmin(props) {
                     </Form.Group>
 
                     <Form.Group as={Col} controlId='contact'>
-                    <Form.Label class="float-left" className = 'form-label' >CONTACT NUMBER:</Form.Label>
-                    <Col sm={10}>
+                    <Form.Label class="float-left" className = 'form-label' ><strong>CONTACT NUMBER:</strong></Form.Label>
+                    <Col sm={12}>
                     <Form.Control 
                         type='number'
                         id='contact'
@@ -192,36 +186,33 @@ export default function AddHospitalAdmin(props) {
                         size='sm'
                         onChange={(e) => setContact(e.target.value)} 
                     />
-                    <small>*Should start with 0 <br/>*Should consist of 10 digits</small></Col>
+                    <small>Should start with 0 | Should consist of 10 digits</small></Col>
                     </Form.Group>
 
                     <Form.Group as={Col} controlId="line1">
-                                <Form.Label class="float-left" className = 'form-label'>ADDRESS LINE 1:</Form.Label>
-                                <Col sm={10}>
-                                <Form.Control
-                                type="text"
-                                id="line1"
-                                required 
-                                placeholder='Enter Line 1'
-                                size='sm'
-                                onChange={(e) => setLine1(e.target.value)}/></Col>
-                    </Form.Group>
-
-                    <Form.Group as={Col} controlId="line2">
-                                <Form.Label class="float-left" className = 'form-label'>ADDRESS LINE 2:</Form.Label>
-                                <Col sm={10}>
-                                <Form.Control
-                                type="text"
-                                id="line2"
-                                required 
-                                size='sm'
-                                placeholder='Enter Line 2'
-                                onChange={(e) => setLine2(e.target.value)}/></Col>
+                                <Form.Label class="float-left" className = 'form-label'><strong>ADDRESS:</strong></Form.Label>
+                                <Col sm={12}>
+                                    <Form.Control
+                                    type="text"
+                                    id="line1"
+                                    required 
+                                    placeholder='Enter Line 1'
+                                    size='sm'
+                                    onChange={(e) => setLine1(e.target.value)}/>
+                                </Col><br/>
+                                <Col sm={12}>
+                                    <Form.Control
+                                    type="text"
+                                    id="line2"
+                                    size='sm'
+                                    placeholder='Enter Line 2'
+                                    onChange={(e) => setLine2(e.target.value)}/>
+                                </Col>
                     </Form.Group>
 
                     <Form.Group as={Col} controlId="formCity">
-                                <Form.Label class="float-left" className = 'form-label'>CITY:</Form.Label>
-                                <Col sm={10}>
+                                <Form.Label class="float-left" className = 'form-label'><strong>CITY:</strong></Form.Label>
+                                <Col sm={12}>
                                 <Form.Control
                                 type="text"
                                 id="city"
@@ -232,8 +223,8 @@ export default function AddHospitalAdmin(props) {
                     </Form.Group>
 
                     <Form.Group as={Col} controlId="password">
-                                <Form.Label class="float-left" className = 'form-label'>PASSWORD:</Form.Label>
-                                <Col sm={10}>
+                                <Form.Label class="float-left" className = 'form-label'><strong>PASSWORD:</strong></Form.Label>
+                                <Col sm={12}>
                                 <Form.Control
                                 type="password"
                                 id="password"
@@ -247,8 +238,8 @@ export default function AddHospitalAdmin(props) {
                     </Form.Group>
 
                     <Form.Group as={Col} controlId="passwordConfirm">
-                                <Form.Label class="float-left" className = 'form-label'>RE-ENTER PASSWORD:</Form.Label>
-                                <Col sm={10}>
+                                <Form.Label class="float-left" className = 'form-label'><strong>RE-ENTER PASSWORD:</strong></Form.Label>
+                                <Col sm={12}>
                                 <Form.Control
                                 type="password"
                                 id="passwordConfirm"
@@ -258,24 +249,13 @@ export default function AddHospitalAdmin(props) {
                                 onChange={(e) => setPasswordConfirm(e.target.value)}/></Col>
                     </Form.Group>
 
-                    <Form.Group as={Col} controlId='role'>
-                        <Form.Label class="float-left" className = 'form-label'>ROLE:</Form.Label>
-                        <Col sm={10}>
-                        <Form.Control 
-                            type='text'
-                            id='role' 
-                            size='sm'
-                            value='Hospital Admin'
-                        /></Col>
-                    </Form.Group>
                         <div>
                         <Button variant="primary" type="submit">ADD HOSPITAL ADMIN</Button>
                         </div>
                 
                 </Form>
+                </Box>
             </Container>
-            </div>
-            // </Box> 
             
         );
     }
