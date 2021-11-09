@@ -173,7 +173,7 @@ const slice = createSlice({
           //  const historyIndex1 = histories1.findIndex(p => p._id === _id)
             const historyIndex2 = histories2.findIndex(p => p._id === _id)
           //  histories1[historyIndex1].ward = action.payload.data.medicalHistory.ward
-            histories2[historyIndex2].ward = action.payload.data.medicalHistory.ward
+            histories2[historyIndex2] = action.payload.data.medicalHistory
         }
 
     },
