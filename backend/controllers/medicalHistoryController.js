@@ -193,7 +193,7 @@ exports.changeHospital = catchAsync(async (req,res,next)=>{
 })
 
 exports.changeHospital_GetPending = catchAsync(async (req,res,next)=>{
-    const meds=await MedicalHistory.find({'changeHospital.hospital':"618a0a1844a5ad2a20039f5b","changeHospital.status":'pending'})
+    const meds=await MedicalHistory.find({'changeHospital.hospital':req.user.hospital,"changeHospital.status":'pending'})
     if(!meds){
         return next(new AppError("No patient change request found",404))
     }
@@ -215,4 +215,53 @@ exports.changeHospital_GetPending = catchAsync(async (req,res,next)=>{
 })
 
 exports.changeHospital_accept = catchAsync(async (req,res,next)=>{
-    const meds=await MedicalHistory.findOneAndUpdate({_id:req.params.medID,dischargeDate:{}})
+    const med=await MedicalHistory.findOneAndUpdate({_id:req.params.medID,dischargeDate:null},{"changeHospital.status":'accepted'});
+    if(!med){
+        return next(new AppError("No active mediacl history found",404))
+    }
+    res.status(200).json({
+        status:'success',
+        data:{
+            medicalHistory:med
+        }
+    })
+})
+
+exports.changeHospital_decline = catchAsync(async (req,res,next)=>{
+    const med=await MedicalHistory.findOneAndUpdate({_id:req.params.medID,dischargeDate:null},{"changeHospital.status":'decline'});
+    if(!med){
+        return next(new AppError("No active mediacl history found",404))
+    }
+    res.status(200).json({
+        status:'success',
+        data:{
+            medicalHistory:med
+        }
+    })
+})
+
+exports.changeWard = catchAsync(async (req,res,next)=>{
+    const patient=await Patient.findOne(req.params.patientID)
+    if(!patient){
+        return next(new AppError("No atient forun with that ID",404))
+    }
+    if(!patient.currentMedicalHistory){
+        return next(new AppError("Active Medical History not found for this patient",404))
+    }
+    const newward=req.body.ward;
+    if(!newward){
+        return next(new AppError("Ward should be provided",500))
+    }
+    const med=await MedicalHistory.findByIdAndUpdate(patient.currentMedicalHistory,{ward:newward})
+    if(!med){
+        return next(new AppError("No active mediacl history found",404))
+    }
+    await Ward.findByIdAndUpdate(newward,{$push:{admittedPatients:patientID}},)
+    await Ward.findByIdAndUpdate(med._id,{$pull:{admittedPatients:patientID}})
+    res.status(200).json({
+        status:'success',
+        data:{
+            medicalHistory:med
+        }
+    })
+})
