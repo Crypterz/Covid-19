@@ -98,7 +98,6 @@ export default function AddHospitalAdmin(props) {
         else{
             dispatch(addUser(user));
             setUserState(true);
-           // window.location.href = "/healthMinistry/hospital";
     };
     }
     useEffect(() => {
@@ -106,8 +105,7 @@ export default function AddHospitalAdmin(props) {
             setUserState(false)
             dispatch(toastAction({ message: "Hospital Admin Added Successfully", type: 'info' }))
             window.location.href = "/healthMinistry/hospital";
-        }
-        // else{
+        }// else{
         //     dispatch(toastAction({ message: "Hospital Admin Adding Failed", type: 'error' }))
         // }
     },[userAddedStatus])
