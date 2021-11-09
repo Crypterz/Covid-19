@@ -161,7 +161,21 @@ const slice = createSlice({
             const histories = patients.list[patientIndex].medicalHistory
             const historyIndex = histories.findIndex(p => p._id === _id)
             histories[historyIndex] = action.payload.data.medicalHistory
+        },
+
+        patientChangeWard(patients, action){
+            console.log(action.payload.data.medicalHistory)
+            const { patient, _id } = action.payload.data.medicalHistory;
+         //   const patientIndex = patients.list.findIndex(p => p._id === patient );
+            const addmittedIndex = patients.admittedPatients.findIndex(p => p._id === patient );
+          //  const histories1 = patients.list[patientIndex].medicalHistory
+            const histories2 = patients.admittedPatients[addmittedIndex].medicalHistory
+          //  const historyIndex1 = histories1.findIndex(p => p._id === _id)
+            const historyIndex2 = histories2.findIndex(p => p._id === _id)
+          //  histories1[historyIndex1].ward = action.payload.data.medicalHistory.ward
+            histories2[historyIndex2].ward = action.payload.data.medicalHistory.ward
         }
+
     },
 });
 
@@ -189,7 +203,8 @@ export const {
     admittedPatientsRequested,
     waitingPatientsReceived,
     waitingPatientsRequestFailed,
-    waitingPatientsRequested
+    waitingPatientsRequested,
+    patientChangeWard
  } = slice.actions;
                             
 
@@ -421,13 +436,14 @@ export const dischargePatient = (patientId) => (dispatch) => {
     )
 }
 
-export const changePatientWard = (patientId) => (dispatch) => {
+export const changePatientWard = (ward, patientId) => (dispatch) => {
     console.log(patientId)
     return dispatch(
         apiCallBegan({
-            url: patientURL + `patients/${patientId}/discharge`,
-            method: "get",
-            onSuccess : patientDischarged,
+            url: patientURL + `med/${patientId}/changeward`,
+            method: "post",
+            data: ward,
+            onSuccess : patientChangeWard,
         })
     )
 }

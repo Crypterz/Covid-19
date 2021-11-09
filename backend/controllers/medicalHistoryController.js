@@ -249,6 +249,7 @@ exports.changeWard = catchAsync(async (req,res,next)=>{
         return next(new AppError("Active Medical History not found for this patient",404))
     }
     const newward=req.body.ward;
+    console.log(newward)
     if(!newward){
         return next(new AppError("Ward should be provided",500))
     }
