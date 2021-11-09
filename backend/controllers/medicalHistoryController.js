@@ -215,9 +215,6 @@ exports.changeHospital_GetPending = catchAsync(async (req,res,next)=>{
 })
 
 exports.changeHospital_accept = catchAsync(async (req,res,next)=>{
-<<<<<<< HEAD
-    const meds=await MedicalHistory.findOneAndUpdate({_id:req.params.medID,dischargeDate:{}})
-=======
     const med=await MedicalHistory.findOneAndUpdate({_id:req.params.medID,dischargeDate:null},{"changeHospital.status":'accepted'});
     if(!med){
         return next(new AppError("No active mediacl history found",404))
@@ -267,5 +264,4 @@ exports.changeWard = catchAsync(async (req,res,next)=>{
             medicalHistory:med
         }
     })
->>>>>>> cc3ccb42c7539047c609c38084b6159d7e09eec3
 })
