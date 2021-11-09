@@ -118,7 +118,7 @@ exports.getAllMedicalHistory = catchAsync(async (req, res, next) => {
         return next(new AppError("patientID cant be null",404))
     }
     console.log(patientID)
-    const med=await MedicalHistory.find({patient:patientID}).populate({
+    const med=await MedicalHistory.find({patient:patientID},{},{ sort: { 'admittedDate' : -1 } }).populate({
         path:'hospital',
         select:'name -_id'
     })  //Patient.findOne({_id:req.params.id})
@@ -241,7 +241,7 @@ exports.changeHospital_decline = catchAsync(async (req,res,next)=>{
 })
 
 exports.changeWard = catchAsync(async (req,res,next)=>{
-    const patient=await Patient.findOne(req.params.patientID)
+    const patient=await Patient.findById(req.params.patientID)
     if(!patient){
         return next(new AppError("No atient forun with that ID",404))
     }
