@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 const FigureOne = ({values}) => {
-    const { overall, recovered, death} = values
+    const { overallData, recoveredData, deathData} = values
     return (
         <div>
             <div style={{justifyContent:'center'}}>
@@ -21,7 +21,7 @@ const FigureOne = ({values}) => {
                         {/* <Link to={{ pathname :"/hospital/patients" ,  category : "All" }}>
                             <h3 style={{fontSize:'14px', color:'#444444'}}>Total Covid Patient</h3>
                         </Link> */}
-                        <h1 style={{color:'#6b85de', float:'left'}}>{formatNumber(overall)}</h1>
+                        <h1 style={{color:'#6b85de', float:'left'}}>{formatNumber(overallData)}</h1>
                     </div>
                 </div>
                 <div className='figures-div' style={{display:'flex'}}>
@@ -35,7 +35,7 @@ const FigureOne = ({values}) => {
                         {/* <Link to={{ pathname :"/hospital/patients" ,  category : "Deaths" }}> */}
                             <h3 style={{fontSize:'14px', color:'#444444'}}>Deaths</h3>
                         {/* </Link> */}
-                        <h1 style={{color:'#ff8c84', float:'left'}}>{formatNumber(death)}</h1>
+                        <h1 style={{color:'#ff8c84', float:'left'}}>{formatNumber(deathData)}</h1>
                     </div>
                 </div>
                 <div className='figures-div' style={{display:'flex'}}>
@@ -48,7 +48,7 @@ const FigureOne = ({values}) => {
                         {/* <Link to={{ pathname :"/hospital/patients" ,  category : "Recovered" }}> */}
                             <h3 style={{fontSize:'14px', color:'#444444'}}>Recovered</h3>
                         {/* </Link> */}
-                        <h1 style={{color:'#7dca53', float:'left'}}>{formatNumber(recovered)}</h1>
+                        <h1 style={{color:'#7dca53', float:'left'}}>{formatNumber(recoveredData)}</h1>
                     </div>
                 </div>
             </div>

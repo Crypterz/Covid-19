@@ -9,6 +9,9 @@ const slice = createSlice({
     initialState: {
         list: [],
         admittedPatients: [],
+        waiting: [],
+        waitingLoading: false,
+        waitingLAstFetch : null,
         admittedPatientsLoading: false,
         admittedPatientsLastFetch: null,
         loading: false,
@@ -70,6 +73,24 @@ const slice = createSlice({
            // console.log('srherhtrhjtrjtrjr')
         },
 
+        waitingPatientsRequested(patients, action){
+            patients.waitingLoading= true;
+        },
+
+
+        waitingPatientsRequestFailed(patients, action){
+            patients.waitingLoading = false;
+            
+        },
+
+    // payload: [message: , data: ]
+        waitingPatientsReceived(patients, action){
+            patients.waiting = action.payload.data.medicalHistory;
+            patients.waitingLoading = false;
+            patients.waitingLAstFetch= Date.now();
+           // console.log('srherhtrhjtrjtrjr')
+        },
+
         patientSymptomsUpdated(patients, action){
             console.log(action.payload.data)
             const { patient, _id } = action.payload.data.medicalHistory;
@@ -89,9 +110,7 @@ const slice = createSlice({
         },
 
         patientTransferUpdated(patients, action){
-            const { patientId, symptoms  } = action.payload.data;
-            const index = patients.list.findIndex(p => p.patientId === patientId );
-            const symptom = patients.list[index].symptoms;
+            console.log(action.payload.data.medicalHistory)
           //  const variantIndex =variants.findIndex(v => v.name === variantName);
           //  variants[variantIndex].countInStock = newCount;
         },
@@ -167,7 +186,10 @@ export const {
     patientDischarged,
     admittedPatientsReceived,
     admittedPatientsRequestFailed,
-    admittedPatientsRequested
+    admittedPatientsRequested,
+    waitingPatientsReceived,
+    waitingPatientsRequestFailed,
+    waitingPatientsRequested
  } = slice.actions;
                             
 
@@ -222,6 +244,27 @@ export const loadPatient = (patientid) => (dispatch, getState) => {
          })
      );
  };
+
+ export const loadWaitingPatients = () => (dispatch, getState) => {
+    const { waitingLAstFetch } = getState().entities.patients;
+ 
+     const diffInMinutes = moment().diff(moment(waitingLAstFetch), "minutes");
+     if (diffInMinutes < refreshTime) return;
+ 
+     return dispatch(
+         apiCallBegan({
+             url: patientURL + 'med/changehospital/pending',
+             onStart: waitingPatientsRequested,
+             onSuccess: waitingPatientsReceived,
+             onError: waitingPatientsRequestFailed
+         })
+     );
+ };
+
+ export const getAllWaitingPatients = createSelector(
+     state => state.entities.patients,
+     patients => patients
+ )
 
 export const getAllPatients= createSelector(
     state => state.entities.patients,
@@ -328,13 +371,13 @@ export const updateDrugsInDB = (drugs, medicalHistoryId) => (dispatch) => {
 
 }
 
-export const updateTransferPatient = (value) => (dispatch) => {
-    console.log(value)
+export const updateTransferPatient = (hospital, patientId) => (dispatch) => {
+    console.log(patientId)
     return dispatch(
         apiCallBegan({
-            url: patientURL + 'patientTransfer',
+            url: patientURL + `med/${patientId}/changehospitalrequest`,
             method: "post",
-            data: value,
+            data: hospital,
             onSuccess: patientTransferUpdated.type,
         })
     );
@@ -378,7 +421,7 @@ export const dischargePatient = (patientId) => (dispatch) => {
     )
 }
 
-export const changeWard = (patientId) => (dispatch) => {
+export const changePatientWard = (patientId) => (dispatch) => {
     console.log(patientId)
     return dispatch(
         apiCallBegan({

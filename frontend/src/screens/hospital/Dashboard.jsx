@@ -16,10 +16,10 @@ const Dashboard = () => {
     // const [active, setActive] = useState('')
     // const [recovered, setRecovered] = useState('')
     // const [death, setDeath] = useState('')
-    const active = ""
-    const death = ""
-    const recovered=""
-    const date = ""
+    let activeData = ""
+    let deathData = ""
+    let recoveredData = ""
+    let dateData = ""
 
     useEffect(() => {
         //dispatch(listPatients())
@@ -51,23 +51,23 @@ const Dashboard = () => {
 
                 if(test.length > 0){
                     const { active, death, recovered, date} = test[0]
-                    active = active
-                    death = death
-                    recovered = recovered
-                    date = date
+                    activeData = active.length
+                    deathData = death.length
+                    recoveredData = recovered.length
+                    dateData = date
                 }
                 
 
                 const valueSet_1 = {
-                    overall : active.length+ death.length+recovered.length,
-                    recovered: recovered.length,
-                    death: death.length
+                    overallData : activeData+ deathData+recoveredData,
+                    recoveredData: recoveredData,
+                    deathData: deathData
                 }
 
                 const valuesSet_2 = {
-                    active: active.length,
-                    staff: '',
-                    transfered: ''
+                    activeData: activeData,
+                    staffData: '',
+                    transferedData: ''
                 }
 
                 setFigureOne(valueSet_1)

@@ -216,3 +216,4 @@ exports.changeHospital_GetPending = catchAsync(async (req,res,next)=>{
 
 exports.changeHospital_accept = catchAsync(async (req,res,next)=>{
     const meds=await MedicalHistory.findOneAndUpdate({_id:req.params.medID,dischargeDate:{}})
+})

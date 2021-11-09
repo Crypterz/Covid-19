@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import { useHistory } from "react-router-dom";
 import { Table, Container, Button, Row, Card} from 'react-bootstrap'
-import { loadPatients, getAllPatients, getPatientsLoadingStatus, updateTransferPatient,
-    updateSelectedTransferPatient} from '../../store/entities/patients';
+import {  getPatientsLoadingStatus, updateTransferPatient,
+    updateSelectedTransferPatient, getAllWaitingPatients, loadWaitingPatients} from '../../store/entities/patients';
 import Loader from '../../components/Loader'
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -14,8 +14,9 @@ const AcceptanceWaiting = ({}) => {
     const auth = useSelector(state => state.auth);
     const [userType, setUserType] = useState('')
 
-    const patientsDetails = useSelector(getAllPatients);
-    const patientsList = patientsDetails.list
+    const patientsDetails = useSelector(getAllWaitingPatients);
+    const patientsList = patientsDetails.waiting
+    console.log(patientsList)
     const [patients, setPatients] = useState([...patientsList]);
     const [patientState, setPatientState] = useState([...patientsList]);
     const [selected, setSelected] = useState([]);
@@ -34,7 +35,7 @@ const AcceptanceWaiting = ({}) => {
             window.location='/'
         }
         setUserType(auth.data.user.role)
-        dispatch(loadPatients())
+        dispatch(loadWaitingPatients())
 
         setPatientState(
             patientsList.map( p=>{
