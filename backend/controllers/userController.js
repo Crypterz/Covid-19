@@ -4,7 +4,9 @@ const catchAsync= require('./../utils/catchAsync');
 const AppError = require('../utils/appError');
 
 exports.updateUserInformation=catchAsync(async (req,res)=>{
+    console.log('=======================================')
     console.log(req.body)
+    console.log('----------------------------------------------------')
     const user=await User.findByIdAndUpdate(req.user.id,req.body,{
         new:true,
         runValidators:true
