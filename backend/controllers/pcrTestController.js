@@ -145,19 +145,21 @@ exports.getAllPCRTest_Patient = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.createPCRTest= catchAsync(async (req,res)=>{
+exports.createPCRTest= catchAsync(async (req,res,next)=>{
+  console.log(req.body)
     const d = new Date()
     const today=`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`.toString()
-    req.body.createdBy=req.user._id
+    req.body.createdBy=req.user.id
     req.body.hospital=req.user.hospital
     req.body.sendStatus="fail"
     const message=`Your PCR Text Result is ${req.body.result}`
-    // if(req.body.contactNumber){
-    //     const msg=await sendMessage(message,req.body.contactNumber)
-    //     if(msg.status=="success"){
-    //         req.body.sendStatus="success"
-    //     }
-    // }
+    if(req.body.contactNumber){
+        const msg=await sendMessage(message,req.body.contactNumber)
+        if(msg.status=="success"){
+            req.body.sendStatus="success"
+        }
+    }
+    console.log('ppppppppppppppppppp')
     const newTest=await PCRTest.create(req.body)
     await HospitalRecord.findOneAndUpdate(
         {hospital:req.user.hospital,date:today},

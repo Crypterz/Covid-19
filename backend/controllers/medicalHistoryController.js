@@ -258,7 +258,7 @@ exports.changeWard = catchAsync(async (req,res,next)=>{
         return next(new AppError("No active mediacl history found",404))
     }
     await Ward.findByIdAndUpdate(newward,{$push:{admittedPatients:patientID}},)
-    await Ward.findByIdAndUpdate(med._id,{$pull:{admittedPatients:patientID}})
+    await Ward.findByIdAndUpdate(med.ward,{$pull:{admittedPatients:patientID}})
     res.status(200).json({
         status:'success',
         data:{
