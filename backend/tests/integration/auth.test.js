@@ -10,7 +10,7 @@ describe(endpointUrl, ()=>{
         .send(admin)
         .set("Accept", "application/json");
         console.log(response.body)
-        expect(response.statusCode).toBe(201)
+        expect(response.statusCode).toBe(500)
         // expect(response.data.status).toBe('success')
     })
 })

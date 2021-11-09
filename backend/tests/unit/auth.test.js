@@ -29,7 +29,6 @@ describe("AuthController",()=>{
     })
 })
 
-
 userModel.findOne = jest.fn()
 describe("Admin Login",()=>{
     beforeEach(()=>{ 
@@ -51,3 +50,21 @@ describe("Admin Login",()=>{
     })
 })
 
+userModel.findOne = jest.fn()
+describe("user forgot password",()=>{
+    beforeEach(()=>{ 
+        req.body={"email":"dakshitha.sur@gmail.com"};
+    })
+    it("should have a forgot password function",()=>{
+        expect(typeof authController.forgotPassword).toBe("function")
+    })
+    it("should call userModel.findOne",()=>{
+        authController.forgotPassword(req,res,next);
+        expect(userModel.findOne).toBeCalled();
+    })
+    it("should return 200 response Code",async()=>{
+        const response=await authController.forgotPassword(req,res,next);
+        expect(res.statusCode).toBe(200);
+        expect(res._isEndCalled()).toBeTruthy();
+    })
+})
