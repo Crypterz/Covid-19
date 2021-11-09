@@ -51,10 +51,8 @@ const slice = createSlice({
 
         pcrStatusChange(pcr, action){
             const index = pcr.list.findIndex(p => p._id === action.payload.data.test._id);
-            console.log(index)
+           // console.log(index)
             pcr.list[index].result =  action.payload.data.test.result
-
-            console.log(action.payload.data.test)
         },
 
         

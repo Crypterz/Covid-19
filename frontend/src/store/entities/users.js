@@ -11,6 +11,8 @@ const slice = createSlice({
         loading: false,
         lastFetch: null,
         userAdded: false,
+        isEmailSent: false,
+        isPasswordReset: false,
     },
 
     reducers: {
@@ -45,7 +47,21 @@ const slice = createSlice({
         },
 
         sendMAilSuccess(users, action){
-            
+            users.isEmailSent = true 
+        },
+
+        sendMailFailed(users, action){
+            users.isEmailSent = false
+        },
+
+        resetPasswordSuccess(users, action){
+            users.isPasswordReset = true
+            console.log(action.payload.status)
+        },
+
+        resetPasswordFailed(users, action){
+            users.isPasswordReset = false
+            console.log(action.payload.status)
         }
 
         // userUpdated(user, action){
@@ -63,7 +79,10 @@ export const {
     userCreateRequested,
     userCreateRequestFailed,
     userCreateRequestSucceeded,
-    sendMAilSuccess
+    sendMAilSuccess,
+    sendMailFailed,
+    resetPasswordSuccess,
+    resetPasswordFailed
    // userUpdated,
 } =slice.actions;
 
@@ -108,6 +127,33 @@ export const forgotPassword = (user) => (dispatch) => {
             method: "post",
             data: user,
             onSuccess: sendMAilSuccess,
+            onError: sendMailFailed,
+        })
+    );
+}
+
+export const resetPassword = (user, token) => (dispatch) => {
+    console.log(user)
+    return dispatch(
+        apiCallBegan({
+            url: userURL + `users/resetpassword/${token}`,
+            method: "patch",
+            data: user,
+            onSuccess: resetPasswordSuccess,
+            onError : resetPasswordFailed
+        })
+    );
+}
+
+export const resetPasswordLoggedIn = (user, token) => (dispatch) => {
+    console.log(user)
+    return dispatch(
+        apiCallBegan({
+            url: userURL + 'users/updatepassword',
+            method: "patch",
+            data: user,
+            onSuccess: resetPasswordSuccess,
+            onError : resetPasswordFailed
         })
     );
 }
@@ -125,4 +171,14 @@ export const getUserAddedStatus = createSelector(
 export const getAllUsers = createSelector(
     state => state.entities.user,
     user => user.list
+);
+
+export const getEmailSentState = createSelector(
+    state => state.entities.user,
+    isEmailSent =>isEmailSent
+);
+
+export const getPasswordResetState = createSelector(
+    state => state.entities.user,
+    isPasswordReset =>isPasswordReset
 );

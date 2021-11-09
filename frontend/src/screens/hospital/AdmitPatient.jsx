@@ -2,13 +2,16 @@ import React, {useEffect, useState, Component} from 'react'
 import { Container, Button, FormControl, InputGroup, Row, Card, Form} from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import { toastAction } from '../../store/toastActions';
-import { loadPatients, getAllPatients, getPatientsLoadingStatus, admitPatient } from '../../store/entities/patients';
+import { loadPatients, getAllPatients, getPatientsLoadingStatus, admitPatient, getPatientAdmitState } from '../../store/entities/patients';
 
 const AdmitPatient = ({history}) => {
     const dispatch = useDispatch()
 
     const patientsDetails = useSelector(getAllPatients);
     const patients = patientsDetails.list;
+
+    const patientAdmitSate = useSelector(getPatientAdmitState)
+    const [submitState, setSubmitSate] = useState(false)
    // console.log(patients)
 
     const auth = useSelector(state => state.auth);
@@ -44,6 +47,7 @@ const AdmitPatient = ({history}) => {
                     ward : getWardId(wards, ward)
                 }
                 dispatch(admitPatient(patientDetails))
+                setSubmitSate(true)
                 console.log(patientDetails)
             }
             else{
@@ -52,6 +56,7 @@ const AdmitPatient = ({history}) => {
                     ward : getWardId(wards, ward)
                 }
                dispatch(admitPatient(patientDetails))
+               setSubmitSate(true)
                console.log(patientDetails)
             }
            
@@ -76,8 +81,13 @@ const AdmitPatient = ({history}) => {
         if(!auth.loggedIn){
            history.push('/')
         }
+
+        if(patientAdmitSate.medicalHistory && submitState){
+            setSubmitSate(false)
+            dispatch(toastAction({ message: "Patient admitted successfully", type: 'info' }))
+        }
         dispatch(loadPatients())
-    },[dispatch, searchKeyword])
+    },[dispatch,patientAdmitSate, searchKeyword])
 
 
     return (

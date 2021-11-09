@@ -2,8 +2,9 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import {Card, Button} from 'react-bootstrap';
 
-const CurrentInfo = ({patients, userHospital, currentHospital,  hospitals}) => {
+const CurrentInfo = ({patients, userHospital, currentHospital,  hospitals, wards, pcr}) => {
 
+   // console.log(pcr)
     const userDetails = useSelector(state => state.auth);
     const { user } = userDetails.data.user
     const auth = user
@@ -24,7 +25,7 @@ const CurrentInfo = ({patients, userHospital, currentHospital,  hospitals}) => {
 
                         <li>
                             <div className="field">Ward No:</div>
-                            <div className="value">{patients.ward}</div>
+                            <div className="value">{getCurrentWardName(wards, patients.ward)}</div>
                         </li>
                         <li>
                             <div className="field">Symptoms:</div>
@@ -118,3 +119,12 @@ function objectDestructure ( histories, type){
      const hospitalName = hospitals.filter(p => p._id === hospitalId)
      return hospitalName[0].name
  }
+
+ function getCurrentWardName(wards, wardId){
+    if(typeof(wards) === 'undefined' || wards.length === 0){
+        return ""
+    }
+    const wardname = wards.filter(p=> p._id === wardId)
+   // console.log(wardname)
+    return wardname[0].name
+}

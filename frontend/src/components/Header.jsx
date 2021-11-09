@@ -5,6 +5,7 @@ import {  useSelector } from 'react-redux';
 
 function Header() {
     const userDetails = useSelector(state => state.auth);
+    const usertoken = userDetails.token
     let auth = "";
     if(userDetails.loggedIn){
         const { user } = userDetails.data.user
@@ -41,6 +42,10 @@ function Header() {
                             <Nav.Link className = 'navbar-item'><span>Profile</span></Nav.Link>
                         </LinkContainer>}
 
+                        {userDetails.loggedIn && userType === 'patient' && <LinkContainer to = {'/resetpasswordloggedin'}>
+                            <Nav.Link className = 'navbar-item'><span>Reset Password</span></Nav.Link>
+                        </LinkContainer>}
+
                         
                         {userDetails.loggedIn && userType === 'hospitalAdmin' && <Dropdown className="my-2 dropdown">
                         {/* {auth.loggedIn &&  <Dropdown className="my-2 dropdown"> */}
@@ -51,12 +56,16 @@ function Header() {
                                     <Nav.Link ><span>Dashboard</span></Nav.Link>
                             </LinkContainer></Dropdown.Item>
 
+                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = {'/resetpasswordloggedin'}>
+                                    <Nav.Link ><span>Reset Password</span></Nav.Link>
+                            </LinkContainer></Dropdown.Item>
+
+                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/admittedPatients'>
+                                    <Nav.Link ><span>Admitted Patients</span></Nav.Link>
+                            </LinkContainer></Dropdown.Item>
+
                             <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/patients'>
                                     <Nav.Link ><span>Patients</span></Nav.Link>
-                            </LinkContainer></Dropdown.Item>
-                            
-                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/acceptanceWaiting'>
-                                    <Nav.Link ><span>Acceptance Waiting</span></Nav.Link>
                             </LinkContainer></Dropdown.Item>
 
                             <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/addPcrResults'>
@@ -70,13 +79,13 @@ function Header() {
                             <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/searchPCR'>
                                     <Nav.Link ><span>Search PCR</span></Nav.Link>
                             </LinkContainer></Dropdown.Item>
+                            
+                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/acceptanceWaiting'>
+                                    <Nav.Link ><span>Acceptance Waiting</span></Nav.Link>
+                            </LinkContainer></Dropdown.Item>
 
                             <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/wards'>
                                     <Nav.Link ><span>Wards</span></Nav.Link>
-                            </LinkContainer></Dropdown.Item>
-
-                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/admittedPatients'>
-                                    <Nav.Link ><span>Admitted Patients</span></Nav.Link>
                             </LinkContainer></Dropdown.Item>
 
                             <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/addHospitalStaff'>
@@ -94,6 +103,10 @@ function Header() {
                         <Dropdown.Menu  className='dropdown-menu'>
                             <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/hospital/patients'>
                                     <Nav.Link ><span>Patients</span></Nav.Link>
+                            </LinkContainer></Dropdown.Item>
+
+                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = {'/resetpasswordloggedin'}>
+                                    <Nav.Link ><span>Reset Password</span></Nav.Link>
                             </LinkContainer></Dropdown.Item>
                         
 
@@ -145,6 +158,10 @@ function Header() {
                             
                         <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/healthMinistry/dashboard'>
                                     <Nav.Link ><span>Dasboard</span></Nav.Link>
+                            </LinkContainer></Dropdown.Item>
+
+                            <Dropdown.Item  ><LinkContainer className="dropdown-item" to = {'/resetpasswordloggedin'}>
+                                    <Nav.Link ><span>Reset Password</span></Nav.Link>
                             </LinkContainer></Dropdown.Item>
 
                             <Dropdown.Item  ><LinkContainer className="dropdown-item" to = '/healthMinistry/hospital'>

@@ -14,7 +14,7 @@ const SearchPCR = ({history}) => {
    // console.log(auth)
 
     const pcrList = useSelector(getAllPcrs);
-   // console.log(pcrList)
+    console.log(pcrList)
 
     const pcrLoading = useSelector(getPcrLoadingStatus);
     const [filtered, setFiltered] = useState(pcrList);
