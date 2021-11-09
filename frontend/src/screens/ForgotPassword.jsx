@@ -1,13 +1,18 @@
 import React, {useEffect, useState} from 'react'
 import {Container, Button, Card, Row, Col, Nav, Form, FormControl} from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
-import { forgotPassword } from '../store/entities/users'
+import { forgotPassword, getEmailSentState } from '../store/entities/users'
 import {  Formik } from 'formik';
 import * as Yup from 'yup';
+import { toastAction } from './../store/toastActions';
 
 const ForgotPassword = () => {
 
     const dispatch = useDispatch()
+
+    const emailSentState = useSelector(getEmailSentState);
+
+    const [submitState, setSubmitState] = useState(false)
 
     const [ schema, setSchema ] = useState({ 
         email : Yup.string().required('email is required...').matches(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i, "Invalid Email. EX :- john@gmail.com"),
@@ -25,9 +30,16 @@ const ForgotPassword = () => {
         }
 
         dispatch(forgotPassword(result))
+        setSubmitState(true)
 
-        console.log(result)
     }
+
+    useEffect(() => {
+        if(emailSentState.isEmailSent && submitState){
+            setSubmitState(false)
+            dispatch(toastAction({ message: "Email sent Successfully...", type: 'info' }));
+        }
+    },[emailSentState ]);
 
     return (
         

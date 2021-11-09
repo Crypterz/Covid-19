@@ -33,6 +33,7 @@ import AdmitPatient from './screens/hospital/AdmitPatient'
 import SearchPCR from './screens/hospital/SerchPCR';
 import AdmittedPatients from './screens/hospital/AdmittedPatients';
 import ForgotPassword from './screens/ForgotPassword';
+import ResetPassword from './screens/ResetPassword';
 //import Login from './screens/Login'
 
 
@@ -82,6 +83,7 @@ const App = () =>{
             <Route path='/hospital/searchPCR' component={SearchPCR}/>
             <Route path='/hospital/admittedPatients' component={AdmittedPatients}/>
             <Route path='/forgotPassword' component={ForgotPassword}/>
+            <Route path='/resetpassword/:token' component={ResetPassword}/>
 
         {/* </Container> */}
           </switch>

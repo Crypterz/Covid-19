@@ -104,20 +104,29 @@ const slice = createSlice({
            /// patients.list[index] = action.payload.data.patient;
         },
 
-        patientsAdmitRequest(patients, action){
+        patientAdmitRequest(patients, action){
            // patients.loading = true;
         },
 
 
-        patientsAdmitFailed(patients, action){
+        patientAdmitFailed(patients, action){
             console.log(action.payload.data)
             patients.medicalHistory = false;
             
         },
 
     // payload: [message: , data: ]
-        patientsAdmitSuccess(patients, action){
+        patientAdmitSuccess(patients, action){
+            patients.medicalHistory = true;
             console.log(action.payload.data)
+            const { patient, _id } = action.payload.data.test;
+            const patientIndex = patients.list.findIndex(p => p._id === patient );
+            const histories = patients.list[patientIndex].medicalHistory
+            histories.push(action.payload.data.test)
+            patients.admittedPatients.push(patients.list[patientIndex])
+         ///   const historyIndex = histories.findIndex(p => p._id === _id)
+         //   histories[historyIndex] = action.payload.data.medicalHistory
+           // patients.admittedPatients.push(action.payload.data.)
            // patients.medicalHistory = true
             //patients.list = action.payload.data.patients;
         },
@@ -127,12 +136,12 @@ const slice = createSlice({
         },
 
         patientDischarged(patients, action){
-            console.log(action.payload.data.patient.medicalHistory[0])
-            const { patient, _id } = action.payload.data.patient.medicalHistory[0];
+            console.log(action.payload.data.medicalHistory)
+            const { patient, _id } = action.payload.data.medicalHistory;
             const patientIndex = patients.list.findIndex(p => p._id === patient );
             const histories = patients.list[patientIndex].medicalHistory
             const historyIndex = histories.findIndex(p => p._id === _id)
-            histories[historyIndex] = action.payload.data.patient.medicalHistory[0]
+            histories[historyIndex] = action.payload.data.medicalHistory
         }
     },
 });
@@ -236,6 +245,11 @@ export const getAdmittedPatientsLoadingStatus = createSelector(
     loading => loading
 );
 
+export const getPatientAdmitState = createSelector(
+    state => state.entities.patients,
+    medicalHistory => medicalHistory
+);
+
 export const getPatientById = patientId =>
     createSelector(
         state => state.entities.patients.list,
@@ -246,6 +260,8 @@ export const getPatientById = patientId =>
         },
 
 );
+
+
 
 // export const getPatientByNIC = (nic) => (dispatch) => {
 //      return dispatch(
@@ -355,7 +371,7 @@ export const dischargePatient = (patientId) => (dispatch) => {
     console.log(patientId)
     return dispatch(
         apiCallBegan({
-            url: patientURL + `patients/${patientId}`,
+            url: patientURL + `patients/${patientId}/discharge`,
             method: "get",
             onSuccess : patientDischarged,
         })
