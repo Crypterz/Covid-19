@@ -304,6 +304,8 @@ const PatientProfile =  ({match, history}) => {
         const fetchPatient = async () => {
             const {data} = await axios.get(`http://localhost:8000/api/v1/patients/${patientId}`)
             setPatients(data.data)
+
+            console.log(data)
         }
 
         fetchPatient()

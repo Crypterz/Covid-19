@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {Container, Button, Card, Row, Col, Nav, Form,FormControl} from 'react-bootstrap'
 import Loader from '../../components/Loader'
 import { useDispatch, useSelector } from 'react-redux';
-import { getPatientById, updateTransferPatient, loadPatients, dischargePatient} from '../../store/entities/patients';
+import { getPatientById, updateTransferPatient, loadPatients, dischargePatient, changePatientWard} from '../../store/entities/patients';
 import {getAllHospitals, loadHospitals} from '../../store/entities/hospitals'
 import { Scrollbars } from 'react-custom-scrollbars';
 import PersonalInfo from '../../components/patientProfile/PersonalInfo'
@@ -50,9 +50,10 @@ const Profile =  ({match, history}) => {
        //dispatch(dischargePatient(patientId))
    }
 
-   const setChangeWardHandler = () =>{
-    console.log('changeWard')
-   // dispatch(dischargePatient(patientId))
+   const setChangeWardHandler = (ward, patientId) =>{
+      console.log(ward)
+     dispatch(changePatientWard(ward, patientId))
+    // window.location.reload(false)
    }
 
     const setDates = (date, type) =>{
@@ -124,7 +125,7 @@ const Profile =  ({match, history}) => {
                     <div className="vs-col vs-xs- vs-sm-12 vs-lg-3" style={{margin:'0%',width:'100%', position:'relative'}}>
                             <div className="set-animation from-left animate">
                             {currentHospital_id === userHospital_id ? 
-                                <Actions patients={patients} hospitals={hospitals} wards ={wardsDetails} popUpHandler={setPopUp}></Actions> 
+                                <Actions patients={patients} hospitals={hospitals} wards ={wardsDetails} popUpHandler={setPopUp} wardHandler={setChangeWardHandler}></Actions> 
                                //<Card>rfergre</Card>
                                 :''
                             }

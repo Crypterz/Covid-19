@@ -59,7 +59,7 @@ const AddPcrResults = ({history}) => {
                     contactNumber : parseInt(Tel_number),
                     nic : {
                         nicno:NIC_number,
-                        birthYear : birth_year
+                        person : birth_year
                     },
                     result : selectedResult,
                 }

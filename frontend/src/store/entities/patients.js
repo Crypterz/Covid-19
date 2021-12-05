@@ -164,16 +164,17 @@ const slice = createSlice({
         },
 
         patientChangeWard(patients, action){
-            console.log(action.payload.data.medicalHistory)
+            console.log(action.payload.data.medicalHistory.ward)
             const { patient, _id } = action.payload.data.medicalHistory;
-         //   const patientIndex = patients.list.findIndex(p => p._id === patient );
-            const addmittedIndex = patients.admittedPatients.findIndex(p => p._id === patient );
-          //  const histories1 = patients.list[patientIndex].medicalHistory
-            const histories2 = patients.admittedPatients[addmittedIndex].medicalHistory
-          //  const historyIndex1 = histories1.findIndex(p => p._id === _id)
-            const historyIndex2 = histories2.findIndex(p => p._id === _id)
-          //  histories1[historyIndex1].ward = action.payload.data.medicalHistory.ward
-            histories2[historyIndex2].ward = action.payload.data.medicalHistory.ward
+            const patientIndex = patients.list.findIndex(p => p._id === patient );
+         //   const addmittedIndex = patients.admittedPatients.findIndex(p => p._id === patient );
+            const histories1 = patients.list[patientIndex].medicalHistory
+          //  const histories2 = patients.admittedPatients[addmittedIndex].currentMedicalHistory
+            const historyIndex1 = histories1.findIndex(p => p._id === _id)
+           // const historyIndex2 = histories2.findIndex(p => p._id === _id)
+           // histories1[historyIndex1].ward = action.payload.data.medicalHistory.ward
+            patients.list[patientIndex].medicalHistory[historyIndex1].ward =  action.payload.data.medicalHistory.ward
+           // patients.admittedPatients[addmittedIndex].currentMedicalHistory.ward = action.payload.data.medicalHistory.ward
         }
 
     },

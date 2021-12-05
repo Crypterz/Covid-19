@@ -31,7 +31,7 @@ const EditProfile = ({match, history}) => {
    {id:'19', name:'Nuwara Eliya'},{id:'20', name:'Polonnaruwa'},{id:'21', name:'Puttalam'},
    {id:'22', name:'Ratnapura'},{id:'23', name:'Trincomalee'},{id:'24', name:'Vavuniya'},  ]
 
-   const [currentDistrict, setDistrict] = useState()
+   const [currentDistrict, setDistrict] = useState('Ampara')
    console.log(currentDistrict)
   
 
