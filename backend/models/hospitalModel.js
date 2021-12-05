@@ -29,23 +29,7 @@ const hospitalSchema =new mongoose.Schema({
             ref:'Ward'
         }
     ]
-    // wards:[{
-    //     name:{
-    //         type:String,
-    //         required:[true,'Ward must have a name']
-    //     },
-    //     totalBeds:{
-    //         type: Number,
-    //         default:0
-    //         // required:[true,'Ward must have beds count']
-    //     },
 
-    //     admittedPatients:{
-    //         type: Number,
-    //         default :0
-    //         // required:[true,'Ward must have admitted patient count']
-    //     }
-    // }]
 })
 
 const Hospital=mongoose.model('Hospital',hospitalSchema)

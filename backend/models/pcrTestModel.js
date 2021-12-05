@@ -12,11 +12,6 @@ const pcrTestSchema =new mongoose.Schema({
         required:[true,'A user should enter last name'],
        }
     },
-    // nic:{
-    //     type:String,
-    //     required:[true,'A patient must have a nic number'],
-    //     unique:false
-    // },
     result:{
         type:String,
         enum:['positive','negative']

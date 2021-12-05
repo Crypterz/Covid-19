@@ -47,6 +47,10 @@ app.use('/api/v1/hospital',HospitalRouter)
 app.use('/api/v1/med',medicalHistoryRouter)
 app.use('/api/v1/dashboard',dashBoardRouter)
 
+if(process.env.NODE_ENV==='production'){
+    app.use(express.static(path.join(__dirname,'/frontend/build')))
+}
+
 app.all('*',(req,res,next)=>{
     // res.status(404).json({
     //     status:'fail',

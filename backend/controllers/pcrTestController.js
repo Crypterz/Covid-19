@@ -12,32 +12,6 @@ const dashBoardController = require('./dashBoardController')
 const Patient=require('./../models/patientModel')
 const DashBoard=require('./../models/dashBoardModel')
 
-// exports.getAllTest = async (req, res) => {
-//     //console.log(req.body)
-//     try{
-//         const features=new APIfunctions(PCRTest.find(),req.query).filter().sort().select()
-//         // const tests=await features.query
-//         // res.status(200).json({
-//         // status: 'success',
-//         // requestedAt: req.requestTime,
-//         // results: tests.length,
-//         // data: {tests}
-//         const pcr=await features.query
-//         res.status(200).json({
-//         status: 'success',
-//         requestedAt: req.requestTime,
-//         results: pcr.length,
-//         data: {pcr}
-        
-//     });
-//     }catch(err){                 //if schema doesnt stisfy error may occur VALIDATION ERROR
-//         res.status(404).json({
-//             status:'fail',
-//             message:err
-//         })
-//     }
-// };
-
 exports.getAllPCRTest_hospital = catchAsync(async (req, res, next) => {
     const hospital=req.user.hospital
     const tests=await PCRTest.find({'hospital':req.user.hospital})
@@ -49,27 +23,6 @@ exports.getAllPCRTest_hospital = catchAsync(async (req, res, next) => {
     data: {tests}
     });
 })
-
-// exports.getAllPCRTest_Patient = catchAsync(async (req, res, next) => {
-//     let patientID;
-//     if(req.params.id){
-//         patientID=req.params.id
-//     }else{
-//         patientID=await Patient.findOne({user:req.user._id}).select('user');
-//     }
-//     if(patientID==null){
-//         return next(new AppError("patientID cant be null",404))
-//     }
-//     const tests=await Patient.find({user:req.user._id}).select('pcrTest').populate({path:'pcrTest',populate:{path:'hospital'}})
-//     console.log(tests)
-//     if(!tests){
-//         return next(new AppError("No PCR Tests found with that ID",404)) 
-//     }
-//     res.status(200).json({
-//     status: 'success',
-//     data: {tests}
-//     });
-// })
 
 exports.getAllPCRTest_Patient = catchAsync(async (req, res, next) => {
   var tests = await Patient.aggregate([

@@ -16,26 +16,9 @@ const signToken = id =>{
         expiresIn:process.env.JWT_EXPIRES_IN
     })
 }
-// const createSendToken = (user,statusCode, res)=>{
-//     console.log(user)
-//     const token = signToken(user._id)
-//     console.log(token)
-//     res.cookie('jwt',token,{
-//         expires:new Date(Date.now()+process.env.JWT_COOKIE_EXPIRES_IN*24*60*60*1000),
-//         // secure:true,     //COOKIE WILL SEND ONLY ENCREPTED CONNECTION HTTPS 
-//         httpOnly:true        // COKKIES CANT BE MODIFIES BY BROWSER - TO PREVENT CROSS SITE ATTACK
-//     })
-//     res.status(statusCode).json({
-//         status:'success',
-//         token,
-//         data:{
-//             user
-//         }
-//     })
-// }
+
 
 exports.signup =catchAsync( async (req,res,next)=>{
-    // console.log(req.cookie)
         // const newUser=await User.create(req.body)  //if we go this way, any user can change other fields too. ex: type of user
         req.body
         const newUser = await User.create({

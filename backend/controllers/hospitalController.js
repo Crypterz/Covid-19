@@ -32,27 +32,6 @@ exports.createHospital= catchAsync(async (req,res)=>{
     })
 })
 
-// exports.createWard= catchAsync(async (req,res)=>{
-//     const hospital=req.user.hospital
-//     console.log(hospital)
-//     const updatedHospital=await Hospital.findByIdAndUpdate(
-//         hospital,   
-//         {$push:{
-//             wards:{
-//                 name:req.body.name,
-//                 totalBeds:req.body.totalBeds,
-//             }
-//         }},
-//         // {upsert: true},
-//         {new: true}
-//     )
-//     res.status(201).json({
-//         status:'success',
-//         data:{
-//             hospital:updatedHospital
-//         }
-//     })
-// })
 
 exports.createWard= catchAsync(async (req,res)=>{
     req.body.hospital=req.user.hospital
@@ -64,24 +43,6 @@ exports.createWard= catchAsync(async (req,res)=>{
             ward:newWard
         }
     })
-    // console.log(hospital)
-    // const updatedHospital=await Hospital.findByIdAndUpdate(
-    //     hospital,   
-    //     {$push:{
-    //         wards:{
-    //             name:req.body.name,
-    //             totalBeds:req.body.totalBeds,
-    //         }
-    //     }},
-    //     // {upsert: true},
-    //     {new: true}
-    // )
-    // res.status(201).json({
-    //     status:'success',
-    //     data:{
-    //         hospital:updatedHospital
-    //     }
-    // })
 })
 exports.updateWard= catchAsync(async (req,res)=>{
     const ward=await Ward.findByIdAndUpdate(req.params.wardID,req.body,{

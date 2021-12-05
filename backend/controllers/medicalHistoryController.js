@@ -197,15 +197,6 @@ exports.changeHospital_GetPending = catchAsync(async (req,res,next)=>{
     if(!meds){
         return next(new AppError("No patient change request found",404))
     }
-    // if(!patient.currentMedicalHistory){
-    //     return next(new AppError("Active Medical History not found for this patient",404))
-    // }
-    // const reqhospital=req.body.hospital;
-    // const medicalHistory=await MedicalHistory.findByIdAndUpdate(
-    //     patient.currentMedicalHistory,   
-    //     {"changeHospital.hospital":reqhospital,"changeHospital.status":"pending"},
-    //     {new:true}
-    // )
     res.status(200).json({
         status:'success',
         data:{

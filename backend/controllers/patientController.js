@@ -21,15 +21,6 @@ exports.getPatient = catchAsync(async (req, res,next) => {
 })
 
 exports.getAdmittedPatients = catchAsync(async (req, res,next) => {
-    // console.log("-----------------------")
-    // const patients=await Patient.find({ "currentMedicalHistory": { $ne: null } })
-    // .select('-medicalHistory -pcrTest')
-    // .populate({
-    //     path:'currentMedicalHistory',
-    //     match:{hospital:req.user.hospital}
-    // })
-    // .where({ "currentMedicalHistory": { $ne: null } })
-    // .populate("user")
 
     const patients=await Patient.aggregate([
         {
@@ -131,36 +122,5 @@ exports.updatePatient=catchAsync(async (req,res)=>{
     });
 })
 
-// exports.deletePatient=async (req,res)=>{
-//     try{
-//         const patient = await Patient.findByIdAndDelete(req.params.id)
-//         if(!patient){
-//             return next(new AppError("No patient found with that ID",404))    //used return statement to avoid executing code below
-//         }
-//         res.status(204).json({
-//             status:'success',
-//             data:null
-//         })
-//     }catch(err){                 //if schema doent stisfy error may occur VALIDATIO ERROR
-//         res.status(404).json({
-//             status:'fail',
-//             message:err
-//         })
-//     }
-// }
-
-
-// exports.getPatientStats = async (req, res)=>{
-//     try{
-//         const stats= Patient.aggregate([
-//             $match:{}
-//         ])
-//     }catch(err){
-//         res.status(404).json({
-//             status:'fail',
-//             message:err
-//         })
-//     }
-// }
 
 
