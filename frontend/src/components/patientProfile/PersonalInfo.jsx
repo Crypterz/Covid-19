@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { Button, Card} from 'react-bootstrap'
 
 const PersonalInfo = ({patients, currentHospital, userHospital, id}) => {
-    console.log(patients)
     const userDetails = useSelector(state => state.auth);
     const { user } = userDetails.data.user
     const auth = user

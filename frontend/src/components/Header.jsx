@@ -12,7 +12,6 @@ function Header() {
         auth = user
     }
 
-    console.log(userDetails)
     const [userType, setUsertype] = useState('');
 
     useEffect(() => {

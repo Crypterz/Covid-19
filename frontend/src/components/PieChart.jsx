@@ -4,8 +4,8 @@ import ReactApexChart from "react-apexcharts";
 
 const PieChart = ({values}) => {
   console.log(values)
-  const firstValue = 50;
-  const secondValue = 50;
+  const firstValue = 6;
+  const secondValue = 120;
  // const { firstValue, secondValue} = values
     const series = [firstValue,secondValue];
     const options = {

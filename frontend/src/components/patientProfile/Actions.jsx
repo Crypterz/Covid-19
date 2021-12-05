@@ -5,8 +5,7 @@ import { Card, Button, Col, Form,} from 'react-bootstrap';
 import PopUp from '../popUp/PopUp';
 import { toastAction } from '../../store/toastActions';
 
-const Actions = ({patients, hospitals, wards, popUpHandler}) => {
-    console.log(patients)
+const Actions = ({patients, hospitals, wards, popUpHandler, wardHandler}) => {
     const currentMedicalHistory = (patients.medicalHistory)[patients.medicalHistory.length-1]
     const currentWardId = currentMedicalHistory.ward
     const currentHospitalId = currentMedicalHistory.hospital
@@ -59,8 +58,10 @@ const Actions = ({patients, hospitals, wards, popUpHandler}) => {
                 ward: getWardId(wards, wardName)
             }
     
-            console.log(wardUpdate)
-            dispatch(changePatientWard(wardUpdate, patients._id));
+          //  console.log(wardUpdate)
+            wardHandler(wardUpdate, patients._id)
+            //dispatch(changePatientWard(wardUpdate, patients._id));
+           // window.location.reload(false)
         }
 
     }

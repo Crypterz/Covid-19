@@ -3,9 +3,9 @@ import {Card} from 'react-bootstrap'
 import { loadPatients , getPatientById, getAllPatients, getPatientsLoadingStatus, updateTransferPatient, loadPatient} from '../../store/entities/patients';
 
 const History = ({patientHistory, filteredHistory, hospital, ward}) => {
-   // console.log(patientHistory)
-   // console.log(filteredHistory)
-    console.log(hospital)
+    console.log(patientHistory)
+    console.log(ward)
+   // console.log(hospital)
     // const dispatch = useDispatch()
     // const patientDetails = useSelector(getAllPatients);
     // const patient = patientDetails.list
@@ -30,7 +30,7 @@ const History = ({patientHistory, filteredHistory, hospital, ward}) => {
                         </li>
                         <li>
                             <div className="field">Ward No:</div>
-                            <div className="value">{ward.name}</div>
+                            <div className="value">{}</div>
                         </li>
                         <li>
                             <div className="field">Symptoms:</div>

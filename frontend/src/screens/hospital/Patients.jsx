@@ -13,20 +13,10 @@ import { useDispatch, useSelector } from 'react-redux';
 const Patients = ({history}) => {
     const dispatch = useDispatch()
 
-   // const auth = useSelector(state => state.auth);
-
     const userDetails = useSelector(state => state.auth);
-  // console.log(userDetails)
-    // const { user } = userDetails.data.user
-    // const auth = user
-
-  //  console.log(auth)
 
     const patientsDetails = useSelector(getAllPatients);
     const patients = patientsDetails.list;
-   // const data = objectDestructure (patients);
-   // const {medicalHistory, nic, pcrTest, user, _id } = patientsDetails.list;
-    console.log(patients)
     const patientsLoading = useSelector(getPatientsLoadingStatus);
 
     const location = useLocation()
@@ -38,19 +28,17 @@ const Patients = ({history}) => {
 
     const [selectedCategory, setSelectedCategory] = useState(passedCategory);
     const [filtered, setFiltered] = useState(patients);
-    //console.log(filtered)
+
 
     const pageSize = 5;
     const [currentPage, setCurrentPage] = useState(1);
     let [paginated, setPaginated] = useState(patients);
-    //console.log(paginated)
 
     const [searchKeyword, setSearchKeyword ] = useState('');
 
 
     useEffect(() => {
         if(!userDetails.loggedIn){
-           // window.location('/')
            history.push('/')
         }
         dispatch(loadPatients())
@@ -59,15 +47,11 @@ const Patients = ({history}) => {
         const updatedFiltered = getFilteredPatients(updatedSearchFiltered, categories, selectedCategory);
         setFiltered(updatedFiltered);
         setPaginated(paginate(updatedFiltered, currentPage, pageSize));
-       // getFilteredSearchedPatients(patients, searchKeyword)
-       // console.log(searchKeyword)
     },[searchKeyword])
 
 
     return (
         <>
-            {/* {auth.loggedIn && patientsLoading && (<Loader></Loader>)}
-            {auth.loggedIn ?  */}
             {(typeof(patients) === 'undefined' || patients.length == 0) && patientsLoading && (<Loader></Loader>)}
             <Container>
                 <h3 style={{textAlign:'center', marginBottom:'40px', fontWeight:'700'}}>PATIENTS DETAILS</h3>
@@ -123,7 +107,6 @@ const Patients = ({history}) => {
                             <td>{(objectDestructure(p , "age"))}</td>
                             <td>{(objectDestructure(p , "tel"))}</td>
                             <td>{(objectDestructure(p , "address"))}</td>
-                            {/* <td>{p.name}</td> */}
                             <td>
                                 <Button 
                                     value = {p._id}
@@ -149,7 +132,6 @@ const Patients = ({history}) => {
             />
 
             </Container>
-            {/* : history.push('/')} */}
 
         </>
     )
@@ -163,23 +145,14 @@ function getFilteredPatients(patients, categories, filter){
         console.log(patient)
         return patient
     }
-  //  const category = categories.find(c => c === filter);
    return patients;
 }
 
 export function getFilteredSearchedPatients(patients, filterBy){
-  //  console.log(patients)
-   // console.log(filterBy)
     if(typeof(patients) === 'undefined' || patients.length === 0){
        return {}
     }
-    //return patients
-    //return patients.filter(p => p.user)
     return patients.filter(p => objectDestructure(p, "name").toLowerCase().includes(filterBy) || getNic(p).includes(filterBy.toString()));
-    //return patients.filter(p => p.name.toLowerCase().includes(filterBy) //||
-        //p.description.toLowerCase().includes(filterBy.toLowerCase())
-       // console.log(p.name.toLowerCase())
-    //);
 }
 
 export function objectDestructure ( patients, type){
